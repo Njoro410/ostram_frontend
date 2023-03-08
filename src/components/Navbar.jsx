@@ -9,10 +9,10 @@ import {
 } from "@mui/icons-material";
 import FlexBetween from "../components/FlexBetween";
 import { useDispatch } from "react-redux";
-import { setMode } from "../state/themeSlice";
+import { setMode } from "../features/theme/themeSlice";
 import { AppBar, InputBase, Toolbar, useTheme, IconButton } from "@mui/material";
 
-const Navbar = () => {
+const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
@@ -27,7 +27,7 @@ const Navbar = () => {
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* Left side */}
         <FlexBetween>
-          <IconButton onClick={() => console.log("open/close sidebar")}>
+          <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <MenuIcon />
           </IconButton>
           <FlexBetween
