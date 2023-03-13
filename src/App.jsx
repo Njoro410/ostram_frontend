@@ -7,7 +7,7 @@ import { themeSettings } from "./theme";
 import Dashboard from "./views/dashboard";
 import Layout from "./views/layout";
 import Login from "./pages/Login";
-// import RequireAuth from "./features/auth/RequireAuth";
+import RequireAuth from "./features/auth/RequireAuth";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -18,15 +18,16 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<Layout />}>
-              {/* public routes */}
+            {/* public routes */}
 
-              <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login />} />
 
-              {/* protected routes */}
-              {/* <Route element={<RequireAuth />}> */}
+            {/* protected routes */}
+            
+              <Route element={<RequireAuth />}>
+              <Route path="/" element={<Layout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
-              {/* </Route> */}
+              </Route>
             </Route>
           </Routes>
         </ThemeProvider>
