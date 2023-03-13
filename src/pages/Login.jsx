@@ -8,8 +8,8 @@ import { useLoginMutation } from "../features/auth/authApiSlice";
 const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
-  const [email, setEmail] = useState("admin1@test.com");
-  const [pwd, setPwd] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
 
@@ -51,9 +51,9 @@ const Login = () => {
     }
   };
 
-  const handleEmailInput = (e) => setEmail("admin1@test.com");
+  const handleEmailInput = (e) => setEmail(e.target.value);
 
-  const handlePwdInput = (e) => setPwd("123456");
+  const handlePwdInput = (e) => setPwd(e.target.value);
 
   const content = isLoading ? (
     <h1>Loading...</h1>
