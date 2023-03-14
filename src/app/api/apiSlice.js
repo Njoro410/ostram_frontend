@@ -6,8 +6,10 @@ const baseQuery = fetchBaseQuery({
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.token
-        if (token) {
+        const csrfToken  = getState().auth.csrftoken
+        if (token && csrfToken) {
             headers.set("Authorization", `Bearer ${token}`)
+            headers.set('csrftoken', csrfToken)
         }
         // headers.set('Content-Type', 'application/json');
 
@@ -18,7 +20,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
 
-    if (result?.error?.originalStatus === 401) {
+    if (result?.error?.originalStatus === 403) {
         console.log('sending refresh token')
         // send refresh token to get new access token 
         const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions)
