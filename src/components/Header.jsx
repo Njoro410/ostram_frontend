@@ -1,7 +1,7 @@
 import { Typography, Box, useTheme } from "@mui/material";
 import React from "react";
 
-const Header = ({ title, subtitle }) => {
+const Header = ({ title, subtitle, user, token, csrf }) => {
   const theme = useTheme();
   return (
     <Box>
@@ -16,6 +16,13 @@ const Header = ({ title, subtitle }) => {
       <Typography variant="h5" color={theme.palette.secondary[300]}>
         {subtitle}
       </Typography>
+      <Typography variant="h5" color={theme.palette.secondary[300]}>
+        user is: {user}
+      </Typography>
+      <Typography variant="h5" color={theme.palette.secondary[300]}>
+        {token}
+      </Typography>
+
     </Box>
   );
 };
