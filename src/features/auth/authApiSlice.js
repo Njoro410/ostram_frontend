@@ -1,8 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { setCSRFToken } from '../../features/auth/authSlice'
-import { useCSRFToken } from "../hooks/useCSRFToken";
-
-const csrfToken = useCSRFToken();
+import { setCSRFToken } from "./authSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
@@ -13,47 +10,25 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: credentials,
                 headers: {
                     "Content-Type": "application/json"
-                  },
-            })
-        }),
-        onfulfilled: (response) => {
-            const csrftoken = response.headers.get('csrftoken');
-            if (csrftoken) {
-      
-              store.dispatch(setCSRFToken(csrftoken));
+                },
+            }),
+            transformResponse: async (response, meta) => {
+                // Extract the value of the "X-CSRF-Token" header from the response
+                const token = meta.response.headers.get('x-csrftoken')
+
+                const data = await response;
+                // Return an object containing the parsed response data and the token value
+                return { data, token };
+               
+
             }
-          },
-    }),
-    refreshTokens: builder.mutation({
-        query: () => ({
-          url: '/auth/refresh-tokens',
-          method: 'POST',
-          headers: {
-            'X-CSRFToken': csrfToken,
-          },
         }),
-      }),
-    // }),
-    onError: (error) => {
-      if (error.status === 403) {
-        // Refresh the CSRF token
-        fetch('/auth/login/', { credentials: 'include' })
-          .then((response) => {
-            const csrftoken = response.headers.get('csrftoken');
-            if (csrftoken) {
-              // Update the authentication slice with the new CSRF token
-              store.dispatch(setCSRFToken(csrftoken));
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    },
+    })
 })
+
 
 
 
 export const {
     useLoginMutation
-} = authApiSlice
+} = authApiSlice;
