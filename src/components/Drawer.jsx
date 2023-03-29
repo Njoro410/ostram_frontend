@@ -8,11 +8,28 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { IconButton, Typography } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import {
+  SettingsOutlined,
+  ChevronLeft,
+  ChevronRightOutlined,
+  HomeOutlined,
+  ShoppingCartOutlined,
+  Groups2Outlined,
+  ReceiptLongOutlined,
+  PublicOutlined,
+  PointOfSaleOutlined,
+  TodayOutlined,
+  CalendarMonthOutlined,
+  AdminPanelSettingsOutlined,
+  TrendingUpOutlined,
+  PieChartOutlined,
+} from "@mui/icons-material";
+import { useLocation, useNavigate } from "react-router-dom";
+import FlexBetween from "./FlexBetween";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const drawerWidth = 240;
 
@@ -63,76 +80,177 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function DrawerComponent({ open, handleDrawerClose }) {
+const navItems = [
+  {
+    text: "Dashboard",
+    icon: <HomeOutlined />,
+  },
+  {
+    text: "Client Facing",
+    icon: null,
+  },
+  {
+    text: "Products",
+    icon: <ShoppingCartOutlined />,
+  },
+  {
+    text: "Customers",
+    icon: <Groups2Outlined />,
+  },
+  {
+    text: "Transactions",
+    icon: <ReceiptLongOutlined />,
+  },
+  {
+    text: "Geography",
+    icon: <PublicOutlined />,
+  },
+  {
+    text: "Sales",
+    icon: null,
+  },
+  {
+    text: "Overview",
+    icon: <PointOfSaleOutlined />,
+  },
+  {
+    text: "Daily",
+    icon: <TodayOutlined />,
+  },
+  {
+    text: "Monthly",
+    icon: <CalendarMonthOutlined />,
+  },
+  {
+    text: "Breakdown",
+    icon: <PieChartOutlined />,
+  },
+  {
+    text: "Management",
+    icon: null,
+  },
+  {
+    text: "Admin",
+    icon: <AdminPanelSettingsOutlined />,
+  },
+  {
+    text: "Performance",
+    icon: <TrendingUpOutlined />,
+  },
+];
+
+export default function DrawerComponent({
+  open,
+  handleDrawerClose,
+  isNonMobile,
+}) {
   const theme = useTheme();
+  const { pathname } = useLocation();
+  const [active, setActive] = React.useState("");
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    setActive(pathname.substring(1));
+  }, [pathname]);
 
   return (
-    <Drawer variant="permanent" open={open}>
+    <Drawer
+      variant="permanent"
+      open={open}
+      sx={{
+        "& .MuiDrawer-paper": {
+          color: theme.palette.secondary[200],
+          backgroundColor: theme.palette.background.alt,
+          boxSixing: "border-box",
+          borderWidth: isNonMobile ? 0 : "2px",
+          flexShrink: 0,
+        },
+      }}
+    >
       <DrawerHeader>
-        <IconButton
-          sx={{
-            marginLeft: 5,
-            ...(!open && { display: "none" }),
-          }}
-          onClick={handleDrawerClose}
-        >
-          {theme.direction === "rtl" ? (
-            <ChevronRightIcon />
-          ) : (
-            <ChevronLeftIcon />
-          )}
-        </IconButton>
+        <Box>
+          <FlexBetween color={theme.palette.secondary.main}>
+            <Box display="flex" alignItems="center" gap="1.5rem">
+              <Typography variant="h4" fontWeight="bold">
+                Ostram Sacco
+              </Typography>
+
+              {!isNonMobile && (
+                <IconButton onClick={handleDrawerClose}>
+                  <ChevronLeft />
+                </IconButton>
+              )}
+            </Box>
+          </FlexBetween>
+        </Box>
       </DrawerHeader>
-      <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+    
+      <Scrollbars
+        autoHide
+        autoHideTimeout={1000}
+        autoHideDuration={200}
+        autoHeight={false}
+        style={{ width: 240 }}
+      >
+        <Box>
+          <List>
+            {navItems.map(({ text, icon }) => {
+              if (!icon) { 
+                return (
+                  <Typography key={text} sx={{ m: open ? "2.25rem 0 1rem 3rem" : "", opacity: open ? 1 : 0 }}>
+                    {text}
+                  </Typography>
+                );
+              }
+              const lcText = text.toLowerCase();
+
+              return (
+                <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                  <ListItemButton
+                    onClick={() => {
+                      navigate(`/${lcText}`);
+                      setActive(lcText);
+                    }}
+                    sx={{
+                      backgroundColor:
+                        active === lcText
+                          ? theme.palette.secondary[300]
+                          : "transparent",
+                      color:
+                        active === lcText
+                          ? theme.palette.primary[600]
+                          : theme.palette.secondary[100],
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    <Divider />
+                    <ListItemIcon
+                      sx={{
+                        color:
+                          active === lcText
+                            ? theme.palette.primary[600]
+                            : theme.palette.secondary[200],
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {icon}
+                    </ListItemIcon>
+                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                    {active === lcText && (
+                      <ChevronRightOutlined sx={{ ml: "auto" }} />
+                    )}
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+          
+        </Box>
+      </Scrollbars>
     </Drawer>
   );
 }
