@@ -3,8 +3,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { useState } from "react";
-import Appbar from "../../components/Appbar";
-import MyAppBar from "../../components/Appbar";
 import DrawerComponent from "../../components/Drawer";
 import AppBarComponent from "../../components/Appbar";
 
@@ -36,8 +34,7 @@ const Layout = () => {
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         /> */}
-        {/* <Appbar /> */}
-        <AppBarComponent open={open} handleDrawerOpen={handleDrawerOpen} />
+        <AppBarComponent isNonMobile={isNonMobile} open={open} handleDrawerOpen={handleDrawerOpen} />
         <Outlet />
       </Box>
     </Box>
