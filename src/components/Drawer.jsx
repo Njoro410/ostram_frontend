@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -12,20 +12,20 @@ import { IconButton, Typography } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
-  SettingsOutlined,
   ChevronLeft,
   ChevronRightOutlined,
   HomeOutlined,
-  ShoppingCartOutlined,
   Groups2Outlined,
-  ReceiptLongOutlined,
-  PublicOutlined,
-  PointOfSaleOutlined,
-  TodayOutlined,
-  CalendarMonthOutlined,
-  AdminPanelSettingsOutlined,
-  TrendingUpOutlined,
-  PieChartOutlined,
+  FolderOpenOutlined,
+  PersonAddOutlined,
+  LocalPoliceOutlined,
+  SavingsOutlined,
+  AccountBalanceWalletOutlined,
+  AddBoxOutlined,
+  AddCardOutlined,
+  FormatListNumberedOutlined,
+  PlaylistAddCheckOutlined,
+  CalculateOutlined
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
@@ -86,56 +86,64 @@ const navItems = [
     icon: <HomeOutlined />,
   },
   {
-    text: "Client Facing",
+    text: "Members",
     icon: null,
   },
   {
-    text: "Products",
-    icon: <ShoppingCartOutlined />,
-  },
-  {
-    text: "Customers",
+    text: "View Members",
     icon: <Groups2Outlined />,
   },
   {
-    text: "Transactions",
-    icon: <ReceiptLongOutlined />,
+    text: "Member Registration",
+    icon: <PersonAddOutlined />,
   },
   {
-    text: "Geography",
-    icon: <PublicOutlined />,
+    text: "Member File",
+    icon: <FolderOpenOutlined />,
   },
   {
-    text: "Sales",
+    text: "CRB Information",
+    icon: <LocalPoliceOutlined />,
+  },
+  {
+    text: "Accounts",
     icon: null,
   },
   {
-    text: "Overview",
-    icon: <PointOfSaleOutlined />,
+    text: "Savings Account",
+    icon: <SavingsOutlined />,
   },
   {
-    text: "Daily",
-    icon: <TodayOutlined />,
+    text: "Deposits Account",
+    icon: <AccountBalanceWalletOutlined />,
   },
   {
-    text: "Monthly",
-    icon: <CalendarMonthOutlined />,
+    text: "Add Contributions",
+    icon: <AddBoxOutlined />,
   },
   {
-    text: "Breakdown",
-    icon: <PieChartOutlined />,
-  },
-  {
-    text: "Management",
+    text: "Loans",
     icon: null,
   },
   {
-    text: "Admin",
-    icon: <AdminPanelSettingsOutlined />,
+    text: "Apply Loan",
+    icon: <AddCardOutlined />,
   },
   {
-    text: "Performance",
-    icon: <TrendingUpOutlined />,
+    text: "Loan List",
+    icon: <FormatListNumberedOutlined />,
+  },
+  {
+    text: "Apps",
+    icon: null,
+  },
+  {
+    text: "TODO List",
+    icon: <PlaylistAddCheckOutlined />,
+  },
+  {
+    text: "Loan Calculator",
+    icon: <CalculateOutlined />,
   },
 ];
 
@@ -146,12 +154,12 @@ export default function DrawerComponent({
 }) {
   const theme = useTheme();
   const { pathname } = useLocation();
-  const [active, setActive] = React.useState("");
+  const [active, setActive] = useState("");
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setActive(pathname.substring(1));
-  }, [pathname]);
+  }, []);
 
   return (
     <Drawer
