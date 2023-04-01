@@ -10,8 +10,8 @@ const Copyright = () => {
           align="center"
         >
           {"Copyright © "}
-          <Link color="inherit" href="https://mui.com/">
-            Your Website
+          <Link color="inherit" href="www.ostramsacco.co.ke">
+            Ostram Saccco
           </Link>{" "}
           {new Date().getFullYear()}
           {"."}
