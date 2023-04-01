@@ -1,99 +1,218 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useState } from 'react';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginValidationSchema } from "../utils/validationSchema";
+import Copyright from "../components/Copyright";
+import {
+  useTheme,
+  Button,
+  TextField,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import Logo from "../assets/ostlogo.png";
+
 import { useNavigate } from "react-router-dom";
-
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../features/auth/authSlice";
+import { setCSRFToken, setCredentials } from "../features/auth/authSlice";
 import { useLoginMutation } from "../features/auth/authApiSlice";
+import toast, { Toaster } from "react-hot-toast";
+import LoadingButton from "@mui/lab/LoadingButton";
 
-const Login = () => {
-  const userRef = useRef();
-  const errRef = useRef();
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [errMsg, setErrMsg] = useState("");
-  const navigate = useNavigate();
-
+export default function SignIn() {
+  const theme = useTheme();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState('');
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(loginValidationSchema),
+  });
 
-  useEffect(() => {
-    setErrMsg("");
-  }, [email, pwd]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmitHandler = async (data,e) => {
+    e.preventDefault()
     try {
+      const userData = await login(data).unwrap();
       
-      const info = JSON.stringify({ email, password: pwd });
-      const userData = await login(info).unwrap();
-      console.log(userData);
-      dispatch(setCredentials({ ...userData, email }));
-      setEmail("");
-      setPwd("");
+      dispatch(setCredentials({ ...userData.data }));
+      dispatch(setCSRFToken(userData.token));
+      reset();
       navigate("/dashboard");
     } catch (err) {
-      if (!err?.originalStatus) {
-        // isLoading: true until timeout occurs
-        setErrMsg("No Server Response");
-      } else if (err.originalStatus === 400) {
-        setErrMsg("Missing Username or Password");
-      } else if (err.originalStatus === 401) {
-        setErrMsg("Unauthorized");
+      if (err.status === 400) { 
+        toast.error(err.data.message, {
+          duration: 8000,
+          position: "top-right",
+  
+          // Change colors of success/error/loading icon
+          iconTheme: {
+            primary: "#f70707",
+            secondary: "#fff",
+          },
+  
+          // Aria
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
+        });
       } else {
-        setErrMsg("Login Failed");
+        toast.error("No server response", {
+          duration: 8000,
+          position: "top-right",
+  
+          // Change colors of success/error/loading icon
+          iconTheme: {
+            primary: "#f70707",
+            secondary: "#fff",
+          },
+  
+          // Aria
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
+        });
       }
-      errRef.current.focus();
+
     }
   };
 
-  const handleEmailInput = (e) => setEmail(e.target.value);
-
-  const handlePwdInput = (e) => setPwd(e.target.value);
-
-  const content = isLoading ? (
-    <h1>Loading...</h1>
-  ) : (
-    <section className="login">
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
+  return (
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: "7rem",
+        }}
       >
-        {errMsg}
-      </p>
-
-      <h1>Employee Login</h1>
-
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          ref={userRef}
-          value={email}
-          onChange={handleEmailInput}
-          autoComplete="off"
-          required
+        <Box
+          component="img"
+          sx={{
+            height: 233,
+            width: 350,
+            maxHeight: { xs: 233, md: 167 },
+            maxWidth: { xs: 350, md: 250 },
+          }}
+          alt="Ostram Logo"
+          src={Logo}
         />
 
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          onChange={handlePwdInput}
-          value={pwd}
-          required
-        />
-        <button>Sign In</button>
-      </form>
-    </section>
+        <Typography component="h1" variant="h5" sx={{ fontWeight: "bold" }}>
+          Staff Sign in
+        </Typography>
+        <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmitHandler)}
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            {...register("email")}
+            error={errors.email ? true : false}
+            helperText={errors.email?.message}
+            sx={{
+              "& label": {
+                color: theme.palette.secondary[500],
+                "&.Mui-focused": {
+                  color: theme.palette.secondary[500],
+                },
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: theme.palette.secondary[500],
+                },
+                "&:hover fieldset": {
+                  borderColor: "green",
+                },
+              },
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            {...register("password")}
+            error={errors.password ? true : false}
+            helperText={errors.password?.message}
+            sx={{
+              "& label": {
+                color: theme.palette.secondary[500],
+                "&.Mui-focused": {
+                  color: theme.palette.secondary[500],
+                },
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: theme.palette.secondary[500],
+                },
+                "&:hover fieldset": {
+                  borderColor: "green",
+                },
+              },
+            }}
+          />
+          {!isLoading ? (
+            <Button
+              type="submit"
+              {...(errors.email || errors.password ? {disabled:true}:{})}
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: theme.palette.secondary[500],
+                color: "black",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: theme.palette.secondary[100],
+                },
+              }}
+            >
+              Sign In
+            </Button>
+          ) : (
+            <LoadingButton loading fullWidth variant="contained">
+              <span>Submit</span>
+            </LoadingButton>
+          )}
+        </Box>
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Toaster />
+    </Container>
   );
-
-  return content;
-};
-export default Login;
+}
