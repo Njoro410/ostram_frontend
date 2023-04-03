@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -8,7 +8,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import FlexBetween from "./FlexBetween";
 import {
   Avatar,
+  Divider,
   InputBase,
+  Menu,
+  MenuItem,
   Slide,
   Tooltip,
   useScrollTrigger,
@@ -16,11 +19,15 @@ import {
 import {
   DarkModeOutlined,
   LightModeOutlined,
+  Logout,
+  PersonAdd,
   Search,
+  Settings,
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setMode } from "../features/theme/themeSlice";
-import { useGetUserQuery } from "../features/users/usersApiSlice";
+import useUser from "../hooks/useUser";
+import ProfileMenu from "./ProfileMenu";
 
 const drawerWidth = 240;
 
@@ -49,16 +56,16 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
   const theme = useTheme();
   const trigger = useScrollTrigger();
 
-  const {
-    data,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetUserQuery();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openn = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-
-
+  const { user, isLoading, isSuccess, isError, error } = useUser();
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
@@ -122,17 +129,57 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
 
             <Tooltip title="Account settings">
               <IconButton
-                // onClick={handleClick}
+                onClick={handleClick}
                 size="small"
                 sx={{ ml: 2 }}
-                // aria-controls={open ? 'account-menu' : undefined}
+                aria-controls={openn ? "account-menu" : undefined}
                 aria-haspopup="true"
-                // aria-expanded={open ? 'true' : undefined}
+                aria-expanded={openn ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}>{data?.results.fullname.substring(0,1)}</Avatar>
+                <Avatar sx={{ width: 32, height: 32 }}>
+                  {user?.results.fullname?.substring(0, 1)}
+                </Avatar>
               </IconButton>
             </Tooltip>
           </FlexBetween>
+
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={openn}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <ProfileMenu handleClose={handleClose} theme={theme}/>
+          </Menu>
         </Toolbar>
       </AppBar>
     </Slide>
