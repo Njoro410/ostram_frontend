@@ -25,11 +25,12 @@ import {
   AddCardOutlined,
   FormatListNumberedOutlined,
   PlaylistAddCheckOutlined,
-  CalculateOutlined
+  CalculateOutlined,
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 import { Scrollbars } from "react-custom-scrollbars";
+import Logo from "../assets/ostlogo.png"
 
 const drawerWidth = 240;
 
@@ -183,16 +184,30 @@ export default function DrawerComponent({
                 Ostram Sacco
               </Typography>
 
-              {!isNonMobile && (
-                <IconButton onClick={handleDrawerClose}>
-                  <ChevronLeft />
-                </IconButton>
-              )}
+              {!isNonMobile &&
+                (!open ? (
+                  <Box
+                  component="img"
+                  sx={{
+                    height: 53,
+                    width: 50,
+                    maxHeight: { xs: 233, md: 167 },
+                    maxWidth: { xs: 350, md: 250 },
+                    marginTop:1,
+                  }}
+                  alt="Ostram Logo"
+                  src={Logo}
+                />
+                ) : (
+                  <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeft />
+                  </IconButton>
+                ))}
             </Box>
           </FlexBetween>
         </Box>
       </DrawerHeader>
-    
+
       <Scrollbars
         autoHide
         autoHideTimeout={1000}
@@ -203,9 +218,15 @@ export default function DrawerComponent({
         <Box>
           <List>
             {navItems.map(({ text, icon }) => {
-              if (!icon) { 
+              if (!icon) {
                 return (
-                  <Typography key={text} sx={{ m: open ? "2.25rem 0 1rem 3rem" : "", opacity: open ? 1 : 0 }}>
+                  <Typography
+                    key={text}
+                    sx={{
+                      m: open ? "2.25rem 0 1rem 3rem" : "",
+                      opacity: open ? 1 : 0,
+                    }}
+                  >
                     {text}
                   </Typography>
                 );
@@ -247,7 +268,10 @@ export default function DrawerComponent({
                     >
                       {icon}
                     </ListItemIcon>
-                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                    <ListItemText
+                      primary={text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
                     {active === lcText && (
                       <ChevronRightOutlined sx={{ ml: "auto" }} />
                     )}
@@ -256,7 +280,6 @@ export default function DrawerComponent({
               );
             })}
           </List>
-          
         </Box>
       </Scrollbars>
     </Drawer>
