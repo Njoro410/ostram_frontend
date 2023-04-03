@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { themeSettings } from "./theme";
+import { themeSettings } from "../src/utils/theme";
 import Dashboard from "./views/dashboard";
 import Layout from "./views/layout";
 import Login from "./pages/Login";
