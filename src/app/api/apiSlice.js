@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { setCredentials, logOut } from '../../features/auth/authSlice'
+import { setAccessToken, logOut, setCSRFToken } from '../../features/auth/authSlice'
 
 
 const baseQuery = fetchBaseQuery({
@@ -10,7 +10,7 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.accesstoken
         const csrftoken = getState().auth.csrfToken
-        if (token ) {
+        if (token && csrftoken) {
             headers.set("Authorization", `Bearer ${token}`)
             headers.set('X-CSRFToken', csrftoken)
         }
@@ -23,17 +23,23 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     let result = await baseQuery(args, api, extraOptions);
+    // console.log(result.error?.data?.code)
 
     if (result.meta.response?.status === 401) {
-        console.log('sending refresh token')
+        // console.log('sending csrf token')
         // send refresh token to get new access token 
         try {
             const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions);
-            api.dispatch(setCredentials( refreshResult.data.access ))
+            api.dispatch(setAccessToken(refreshResult.data.access))
+            api.dispatch(setCSRFToken(refreshResult.meta.response.headers.get('x-csrftoken')))
+
+            //proceed with original response
             result = await baseQuery(args, api, extraOptions);
-          } catch (error) {
+        } catch (error) {
+            console.log('logging out via apiSlice')
+            await baseQuery('/auth/logout', api, extraOptions);
             api.dispatch(logOut());
-          }
+        }
     }
 
     return result
@@ -42,6 +48,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 
 export const apiSlice = createApi({
+    reducerPath: 'authSlice',
     baseQuery: baseQueryWithReauth,
-    endpoints: builder => ({})
+    tagTypes: ['User'],
+    endpoints: builder => ({}),
+    keepUnusedDataFor: 0,
 })
