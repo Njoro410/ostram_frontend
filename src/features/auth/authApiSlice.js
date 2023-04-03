@@ -12,6 +12,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     "Content-Type": "application/json"
                 },
             }),
+            providesTags: ['User'],
             transformResponse: async (response, meta) => {
                 // Extract the value of the "X-CSRF-Token" header from the response
                 const token = meta.response.headers.get('x-csrftoken')
