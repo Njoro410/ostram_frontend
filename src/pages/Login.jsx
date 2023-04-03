@@ -15,7 +15,7 @@ import Logo from "../assets/ostlogo.png";
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCSRFToken, setCredentials } from "../features/auth/authSlice";
+import { setCSRFToken, setAccessToken, setRefreshToken } from "../features/auth/authSlice";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -25,7 +25,7 @@ export default function SignIn() {
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState('');
+ 
 
   const {
     register,
@@ -40,8 +40,9 @@ export default function SignIn() {
     e.preventDefault()
     try {
       const userData = await login(data).unwrap();
-      
-      dispatch(setCredentials({ ...userData.data }));
+      // console.log(userData)
+      dispatch(setAccessToken(userData.data.accessToken ));
+      dispatch(setRefreshToken(userData.data.refreshToken ));
       dispatch(setCSRFToken(userData.token));
       reset();
       navigate("/dashboard");
