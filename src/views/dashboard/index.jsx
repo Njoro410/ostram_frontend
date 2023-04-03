@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import {
@@ -19,26 +19,28 @@ import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "../../components/StatBox";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useGetUserQuery } from "../../features/users/usersApiSlice";
+import useUser from "../../hooks/useUser";
 
 const Dashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
   const {
-    data,
+    user,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetUserQuery();
-  // console.log(data.results)
+  } = useUser();
+
+  // console.log(user)
  
 
 
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
-        <Header title="DASHBOARD" subtitle={`Welcome ${data?.results.fullname}`} />
+        <Header title="DASHBOARD" subtitle={`Welcome ${user?.results.fullname}`} />
 
         {/* <Box>
           <Button
