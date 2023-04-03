@@ -4,25 +4,29 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: { accesstoken: null, refreshtoken: null, csrfToken:null },
     reducers: {
-        setCredentials: (state, action) => {
-            const { accessToken, refreshToken } = action.payload
-            state.accesstoken = accessToken
-            state.refreshtoken = refreshToken
+        setAccessToken: (state, action) => {
+            // const { accessToken, refreshToken } = action.payload
+            state.accesstoken = action.payload
+            
+        },
+        setRefreshToken: (state, action) => {
+            state.refreshtoken = action.payload
         },
         setCSRFToken :(state, action) => {
             state.csrfToken = action.payload
         },
         logOut: (state, action) => {
-            state.token = null
-            state.refresh = null
+            state.accesstoken = null
+            state.refreshtoken = null
+            state.csrfToken = null
         }
     },
 })
 
-export const { setCredentials, setCSRFToken, logOut } = authSlice.actions
+export const { setAccessToken, setRefreshToken, setCSRFToken, logOut } = authSlice.actions
 
 export default authSlice.reducer
 
-export const selectCurrentUser = (state) => state.auth.user
+
 export const selectCurrentToken = (state) => state.auth.accesstoken
 export const selectCSRFToken = (state) => state.auth.csrfToken;
