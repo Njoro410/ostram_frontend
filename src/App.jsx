@@ -15,7 +15,7 @@ import CrbInfo from "./views/Members/CrbInfo";
 import SavingsAccount from "./views/Accounts/SavingsAccount";
 import DepositsAccount from "./views/Accounts/DepositsAccount";
 import Contributions from "./views/Accounts/Contributions";
-import SignIn from "./pages/SignIn";
+
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
           <Routes>
             {/* public routes */}
 
-            <Route path="/" element={<SignIn />} />
+            <Route path="/" element={<Login />} />
 
             {/* protected routes */}
 
