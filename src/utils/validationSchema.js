@@ -21,8 +21,8 @@ export const memberRegisterSchema = Yup.object().shape({
     .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
   residential: Yup.string()
     .required('Residential Area is required'),
-  // gender: Yup.string()
-  //   .required('Gender is required'),
+  gender: Yup.string()
+    .required('Gender is required'),
   phone_no: Yup.string()
     .required("Phone number is  required")
     .matches(phoneRegExp, 'Phone number is not valid')
