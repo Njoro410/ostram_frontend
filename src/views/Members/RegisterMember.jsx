@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Header from "../../components/Header";
 import {
   Box,
   Button,
-  Typography,
   useTheme,
   useMediaQuery,
   TextField,
@@ -11,16 +10,40 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
-import { KeyboardArrowDown } from "@mui/icons-material";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { memberRegisterSchema } from "../../utils/validationSchema";
+import { useRegisterMemberMutation } from "../../features/members/memberSlices";
+import toast, { Toaster } from "react-hot-toast";
 
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-  const [area, setArea] = useState("");
-  const handleChange = (event) => {
-    setArea(event.target.value);
+  const [memberRegister, {isLoading}] = useRegisterMemberMutation()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    control,
+  } = useForm({
+    resolver: yupResolver(memberRegisterSchema),
+  });
+
+  const onSubmitHandler = async (data, e) => {
+    e.preventDefault();
+    try {
+          console.log(data);
+      const memberData = await memberRegister(data).unwrap()
+      console.log(memberData.message)
+      reset();
+    } catch (err) {
+      console.log(err)
+    }
+
   };
   return (
     <Box m="5.5rem 2.5rem">
@@ -31,6 +54,9 @@ const RegisterMember = () => {
 
       <Box
         mt="20px"
+        component="form"
+        onSubmit={handleSubmit(onSubmitHandler)}
+        noValidate
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="160px"
@@ -58,11 +84,14 @@ const RegisterMember = () => {
               margin="normal"
               required
               fullWidth
-              id="fullname"
+              id="names"
               label="Full Name"
-              name="fullname"
-              autoComplete="fullname"
+              name="names"
+              autoComplete="names"
               autoFocus
+              {...register("names")}
+              error={errors.names ? true : false}
+              helperText={errors.names?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -85,11 +114,14 @@ const RegisterMember = () => {
               margin="normal"
               required
               fullWidth
-              id="idnumber"
+              id="id_no"
               label="ID Number"
-              name="idnumber"
-              autoComplete="idnumber"
+              name="id_no"
+              autoComplete="id_no"
               autoFocus
+              {...register("id_no")}
+              error={!!errors?.id_no}
+              helperText={errors.id_no?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -111,12 +143,16 @@ const RegisterMember = () => {
             <TextField
               margin="normal"
               required
+              type="number"
               fullWidth
-              id="membernumber"
+              id="mbr_no"
               label="Member Number"
-              name="membernumber"
-              autoComplete="membernumber"
+              name="mbr_no"
+              autoComplete="mbr_no"
               autoFocus
+              {...register("mbr_no")}
+              error={errors.mbr_no ? true : false}
+              helperText={errors.mbr_no?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -134,48 +170,44 @@ const RegisterMember = () => {
                 },
               }}
             />
-            <FormControl
-              fullWidth
-              required
-              autoFocus
-              margin="normal"
-              sx={{
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
-            >
-              <InputLabel id="arealabel">Residential Area</InputLabel>
-              <Select
-                labelId="arealabel"
-                id="residentialSelect"
-                label="Residential Area"
-                name="residentialSelect"
-                value={area}
-                onChange={handleChange}
-              >
-                <MenuItem value={1}>Kajiado</MenuItem>
-                <MenuItem value={2}>Isinya</MenuItem>
-                <MenuItem value={3}>Bissil</MenuItem>
-              </Select>
-            </FormControl>
 
-            <FormControl
+            <Controller
+              name="residential"
+              control={control}
+              defaultValue={1}
+              render={({ field: { onChange, value } }) => (
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  required
+                  error={!!errors?.residential}
+                  sx={{
+                    mt: 1,
+                  }}
+                >
+                  <InputLabel>Residential Area</InputLabel>
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    label="Residential Area"
+                  >
+                    <MenuItem value={1}>Kajiado</MenuItem>
+                    <MenuItem value={2}>Isinya</MenuItem>
+                    <MenuItem value={3}>M46</MenuItem>
+                  </Select>
+                  <FormHelperText>{errors.residential?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
+
+            {/* <FormControl
               fullWidth
-              required
+              // required
               autoFocus
               margin="normal"
+              // {...register("gender")}
+              // error={errors.gender ? true : false}
+              // helpertext={errors.gender?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -199,23 +231,27 @@ const RegisterMember = () => {
                 id="genderSelect"
                 label="Gender"
                 name="genderSelect"
-                value={area}
-                onChange={handleChange}
+                value={gender}
+                onChange={genderChange}
+
               >
-                <MenuItem value={1}>Male</MenuItem>
-                <MenuItem value={2}>Female</MenuItem>
+                <MenuItem value={'MALE'}>Male</MenuItem>
+                <MenuItem value={'FEMALE'}>Female</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
 
             <TextField
               margin="normal"
               required
               fullWidth
-              id="phoneNumber"
+              id="phone_no"
               label="Phone Number"
-              name="phonenumber"
-              autoComplete="phoneNumber"
+              name="phone_no"
+              autoComplete="phone_no"
               autoFocus
+              {...register("phone_no")}
+              error={errors.phone_no ? true : false}
+              helperText={errors.phone_no?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -237,16 +273,20 @@ const RegisterMember = () => {
           {/* This box will occupy the second half of the parent grid */}
           <Box gridColumn="2 / span 1">
             {/* This box will occupy the second half of the child grid */}
+
             <TextField
               margin="normal"
               required
               fullWidth
-              id="fullname"
+              id="email"
               label="Email Address"
-              name="fullname"
-              autoComplete="fullname"
+              name="email"
+              autoComplete="email"
               autoFocus
               disabled
+              // {...register("email")}
+              // error={errors.email ? true : false}
+              // helperText={errors.email?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -269,12 +309,15 @@ const RegisterMember = () => {
               margin="normal"
               required
               fullWidth
-              id="phoneNumber"
+              id="krapin"
               label="KRA Pin"
-              name="phonenumber"
-              autoComplete="phoneNumber"
+              name="krapin"
+              autoComplete="krapin"
               autoFocus
               disabled
+              // {...register("kra_pin")}
+              // error={errors.kra_pin ? true : false}
+              // helperText={errors.kra_pin?.message}
               sx={{
                 "& label": {
                   color: theme.palette.secondary[500],
@@ -297,10 +340,10 @@ const RegisterMember = () => {
               margin="normal"
               required
               fullWidth
-              id="relationship"
+              id="dob"
               label="D.O.B"
-              name="phonenumber"
-              autoComplete="phoneNumber"
+              name="dob"
+              autoComplete="dob"
               autoFocus
               disabled
               sx={{
@@ -325,10 +368,10 @@ const RegisterMember = () => {
               margin="normal"
               required
               fullWidth
-              id="relationship"
+              id="dor"
               label="Registration date"
-              name="phonenumber"
-              autoComplete="phoneNumber"
+              name="dor"
+              autoComplete="dor"
               autoFocus
               disabled
               sx={{
@@ -354,20 +397,20 @@ const RegisterMember = () => {
         <Box
           backgroundColor={theme.palette.background.alt}
           gridColumn="span 4"
-          gridRow="span 3"
+          gridRow="span 2"
           p="1rem"
           borderRadius="0.55rem"
         >
           {/* This box will span 4 columns */}
           <TextField
             margin="normal"
-            required
             fullWidth
-            id="fullname"
+            id="next_of_kin"
             label="Next of Kin Name"
-            name="fullname"
-            autoComplete="fullname"
+            name="next_of_kin"
+            autoComplete="next_of_kin"
             autoFocus
+            {...register("next_of_kin")}
             sx={{
               "& label": {
                 color: theme.palette.secondary[500],
@@ -388,13 +431,15 @@ const RegisterMember = () => {
 
           <TextField
             margin="normal"
-            required
             fullWidth
-            id="phoneNumber"
+            id="phone_nos"
             label="NoK Phone Number"
-            name="phonenumber"
-            autoComplete="phoneNumber"
+            name="phone_nos"
+            autoComplete="phone_nos"
             autoFocus
+            {...register("phone_nos")}
+            error={errors.phone_nos ? true : false}
+            helperText={errors.phone_nos?.message}
             sx={{
               "& label": {
                 color: theme.palette.secondary[500],
@@ -415,13 +460,13 @@ const RegisterMember = () => {
 
           <TextField
             margin="normal"
-            required
             fullWidth
             id="relationship"
             label="NoK Relationship"
-            name="phonenumber"
-            autoComplete="phoneNumber"
+            name="relationship"
+            autoComplete="relationship"
             autoFocus
+            {...register("relationship")}
             sx={{
               "& label": {
                 color: theme.palette.secondary[500],
@@ -439,6 +484,58 @@ const RegisterMember = () => {
               },
             }}
           />
+
+          {/* <TextField
+            margin="normal"
+            
+            fullWidth
+            id="nokemail"
+            label="NoK Email"
+            name="nokemail"
+            autoComplete="email"
+            autoFocus
+            {...register("email")}
+            error={errors.email ? true : false}
+            helperText={errors.email?.message}
+            sx={{
+              "& label": {
+                color: theme.palette.secondary[500],
+                "&.Mui-focused": {
+                  color: theme.palette.secondary[500],
+                },
+              },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: theme.palette.secondary[500],
+                },
+                "&:hover fieldset": {
+                  borderColor: "green",
+                },
+              },
+            }}
+          />
+
+ */}
+        </Box>
+
+        <Box gridColumn="span 4">
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 9,
+              p: 4,
+              backgroundColor: theme.palette.secondary[500],
+              color: "black",
+              fontWeight: "bold",
+              "&:hover": {
+                backgroundColor: theme.palette.secondary[100],
+              },
+            }}
+          >
+            Submit
+          </Button>
         </Box>
       </Box>
     </Box>
