@@ -17,11 +17,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { memberRegisterSchema } from "../../utils/validationSchema";
 import { useRegisterMemberMutation } from "../../features/members/memberSlices";
 import toast, { Toaster } from "react-hot-toast";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-  const [memberRegister, {isLoading}] = useRegisterMemberMutation()
+  const [memberRegister, { isLoading }] = useRegisterMemberMutation();
 
   const {
     register,
@@ -36,14 +37,12 @@ const RegisterMember = () => {
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
     try {
-          console.log(data);
-      const memberData = await memberRegister(data).unwrap()
-      console.log(memberData.message)
+      const memberData = await memberRegister(data).unwrap();
+      console.log(memberData.message);
       reset();
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-
   };
   return (
     <Box m="5.5rem 2.5rem">
@@ -70,12 +69,12 @@ const RegisterMember = () => {
           display="grid"
           gap="10px"
           backgroundColor={theme.palette.background.alt}
-          gridRow="span 3"
+          gridRow="span 2"
           p="1rem"
           borderRadius="0.55rem"
           sx={{
             gridColumn: "span 8",
-            gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           }}
         >
           <Box gridColumn="1 / span 1">
@@ -143,7 +142,6 @@ const RegisterMember = () => {
             <TextField
               margin="normal"
               required
-              type="number"
               fullWidth
               id="mbr_no"
               label="Member Number"
@@ -170,75 +168,45 @@ const RegisterMember = () => {
                 },
               }}
             />
-
+          </Box>
+          <Box gridColumn="2 / span 1">
             <Controller
-              name="residential"
+              name="gender"
               control={control}
-              defaultValue={1}
+              defaultValue="MALE"
               render={({ field: { onChange, value } }) => (
                 <FormControl
                   variant="outlined"
                   fullWidth
                   required
-                  error={!!errors?.residential}
+                  error={!!errors?.gender}
                   sx={{
-                    mt: 1,
+                    mt: 2,
+                    "& label": {
+                      color: theme.palette.secondary[500],
+                      "&.Mui-focused": {
+                        color: theme.palette.secondary[500],
+                      },
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: theme.palette.secondary[500],
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "green",
+                      },
+                    },
                   }}
                 >
-                  <InputLabel>Residential Area</InputLabel>
-                  <Select
-                    value={value}
-                    onChange={onChange}
-                    label="Residential Area"
-                  >
-                    <MenuItem value={1}>Kajiado</MenuItem>
-                    <MenuItem value={2}>Isinya</MenuItem>
-                    <MenuItem value={3}>M46</MenuItem>
+                  <InputLabel>Gender</InputLabel>
+                  <Select value={value} onChange={onChange} label="Gender">
+                    <MenuItem value="MALE">Male</MenuItem>
+                    <MenuItem value="FEMALE">Female</MenuItem>
                   </Select>
-                  <FormHelperText>{errors.residential?.message}</FormHelperText>
+                  <FormHelperText>{errors.gender?.message}</FormHelperText>
                 </FormControl>
               )}
             />
-
-            {/* <FormControl
-              fullWidth
-              // required
-              autoFocus
-              margin="normal"
-              // {...register("gender")}
-              // error={errors.gender ? true : false}
-              // helpertext={errors.gender?.message}
-              sx={{
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
-            >
-              <InputLabel id="genderlabel">Gender</InputLabel>
-              <Select
-                labelId="genderlabel"
-                id="genderSelect"
-                label="Gender"
-                name="genderSelect"
-                value={gender}
-                onChange={genderChange}
-
-              >
-                <MenuItem value={'MALE'}>Male</MenuItem>
-                <MenuItem value={'FEMALE'}>Female</MenuItem>
-              </Select>
-            </FormControl> */}
 
             <TextField
               margin="normal"
@@ -269,11 +237,55 @@ const RegisterMember = () => {
                 },
               }}
             />
-          </Box>
-          {/* This box will occupy the second half of the parent grid */}
-          <Box gridColumn="2 / span 1">
+            {/* </Box> */}
+            {/* This box will occupy the second half of the parent grid */}
+            {/* <Box gridColumn="2 / span 1"> */}
             {/* This box will occupy the second half of the child grid */}
 
+            <Controller
+              name="residential"
+              control={control}
+              defaultValue={1}
+              render={({ field: { onChange, value } }) => (
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  required
+                  error={!!errors?.residential}
+                  sx={{
+                    mt: 2,
+                    "& label": {
+                      color: theme.palette.secondary[500],
+                      "&.Mui-focused": {
+                        color: theme.palette.secondary[500],
+                      },
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": {
+                        borderColor: theme.palette.secondary[500],
+                      },
+                      "&:hover fieldset": {
+                        borderColor: "green",
+                      },
+                    },
+                  }}
+                >
+                  <InputLabel>Residential Area</InputLabel>
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    label="Residential Area"
+                  >
+                    <MenuItem value={1}>Kajiado</MenuItem>
+                    <MenuItem value={2}>Isinya</MenuItem>
+                    <MenuItem value={3}>M46</MenuItem>
+                  </Select>
+                  <FormHelperText>{errors.residential?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
+          </Box>
+          <Box gridColumn="3 / span 1">
             <TextField
               margin="normal"
               required
@@ -344,34 +356,6 @@ const RegisterMember = () => {
               label="D.O.B"
               name="dob"
               autoComplete="dob"
-              autoFocus
-              disabled
-              sx={{
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
-            />
-
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="dor"
-              label="Registration date"
-              name="dor"
-              autoComplete="dor"
               autoFocus
               disabled
               sx={{
@@ -484,47 +468,16 @@ const RegisterMember = () => {
               },
             }}
           />
-
-          {/* <TextField
-            margin="normal"
-            
-            fullWidth
-            id="nokemail"
-            label="NoK Email"
-            name="nokemail"
-            autoComplete="email"
-            autoFocus
-            {...register("email")}
-            error={errors.email ? true : false}
-            helperText={errors.email?.message}
-            sx={{
-              "& label": {
-                color: theme.palette.secondary[500],
-                "&.Mui-focused": {
-                  color: theme.palette.secondary[500],
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: theme.palette.secondary[500],
-                },
-                "&:hover fieldset": {
-                  borderColor: "green",
-                },
-              },
-            }}
-          />
-
- */}
         </Box>
 
-        <Box gridColumn="span 4">
+        <Box gridColumn="span 12">
+        {!isLoading ? (
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{
-              mt: 9,
+              mt: 5,
               p: 4,
               backgroundColor: theme.palette.secondary[500],
               color: "black",
@@ -536,6 +489,11 @@ const RegisterMember = () => {
           >
             Submit
           </Button>
+        ) : (
+          <LoadingButton loading fullWidth variant="contained">
+            <span>Submit</span>
+          </LoadingButton>
+        )}
         </Box>
       </Box>
     </Box>
