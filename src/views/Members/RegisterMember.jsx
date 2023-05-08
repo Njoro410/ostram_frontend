@@ -11,6 +11,7 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
+  Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,10 +20,20 @@ import { useRegisterMemberMutation } from "../../features/members/memberSlices";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 
+import { useGetResidentialQuery } from "../../features/members/memberSlices";
+
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
+
+  const {
+    data: areas,
+    // isLoading,
+    // isSuccess,
+    // isError,
+    // error,
+  } = useGetResidentialQuery({ skip: true });
 
   const {
     register,
@@ -38,10 +49,62 @@ const RegisterMember = () => {
     e.preventDefault();
     try {
       const memberData = await memberRegister(data).unwrap();
-      console.log(memberData.message);
+      // console.log(memberData);
+      toast.success(memberData.message, {
+        duration: 8000,
+        position: "top-right",
+
+        // Change colors of success/error/loading icon
+        iconTheme: {
+          primary: "#00ff1a",
+          secondary: "#fff",
+        },
+
+        // Aria
+        ariaProps: {
+          role: "status",
+          "aria-live": "polite",
+        },
+      });
       reset();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      // console.log(err.data.errors.mbr_no);
+      if (err.status === 400) {
+        toast.error(err.data.errors.mbr_no, {
+          duration: 8000,
+          position: "top-right",
+
+          // Change colors of success/error/loading icon
+          iconTheme: {
+            primary: "#f70707",
+            secondary: "#fff",
+          },
+
+          // Aria
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
+        });
+      } else {
+        toast.error("No server response", {
+          duration: 8000,
+          position: "top-right",
+
+          // Change colors of success/error/loading icon
+          iconTheme: {
+            primary: "#f70707",
+            secondary: "#fff",
+          },
+
+          // Aria
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
+        });
+      }
     }
   };
   return (
@@ -66,18 +129,16 @@ const RegisterMember = () => {
       >
         {/* This box will occupy the first half of the parent grid */}
         <Box
-          display="grid"
-          gap="10px"
-          backgroundColor={theme.palette.background.alt}
+          gridColumn="span 8"
           gridRow="span 2"
+          backgroundColor={theme.palette.background.alt}
           p="1rem"
           borderRadius="0.55rem"
-          sx={{
-            gridColumn: "span 8",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-          }}
+          display="grid"
+          gap="10px"
+          gridTemplateColumns="repeat(3, minmax(0, 1fr))"
         >
-          <Box gridColumn="1 / span 1">
+          <Box  >
             {/* This box will occupy the first half of the child grid */}
             <TextField
               margin="normal"
@@ -169,7 +230,7 @@ const RegisterMember = () => {
               }}
             />
           </Box>
-          <Box gridColumn="2 / span 1">
+          <Box>
             <Controller
               name="gender"
               control={control}
@@ -221,6 +282,7 @@ const RegisterMember = () => {
               error={errors.phone_no ? true : false}
               helperText={errors.phone_no?.message}
               sx={{
+                mt:2.5,
                 "& label": {
                   color: theme.palette.secondary[500],
                   "&.Mui-focused": {
@@ -271,21 +333,25 @@ const RegisterMember = () => {
                   }}
                 >
                   <InputLabel>Residential Area</InputLabel>
+
                   <Select
                     value={value}
                     onChange={onChange}
                     label="Residential Area"
                   >
-                    <MenuItem value={1}>Kajiado</MenuItem>
-                    <MenuItem value={2}>Isinya</MenuItem>
-                    <MenuItem value={3}>M46</MenuItem>
+                    {areas &&
+                      areas.results.map((area) => (
+                        <MenuItem key={area.area_code} value={area.area_code}>
+                          {area.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                   <FormHelperText>{errors.residential?.message}</FormHelperText>
                 </FormControl>
               )}
             />
           </Box>
-          <Box gridColumn="3 / span 1">
+          <Box >
             <TextField
               margin="normal"
               required
@@ -421,6 +487,7 @@ const RegisterMember = () => {
             name="phone_nos"
             autoComplete="phone_nos"
             autoFocus
+            required
             {...register("phone_nos")}
             error={errors.phone_nos ? true : false}
             helperText={errors.phone_nos?.message}
@@ -470,10 +537,40 @@ const RegisterMember = () => {
           />
         </Box>
 
-        <Box gridColumn="span 12">
-        {!isLoading ? (
+        <Box gridColumn="span 8">
+          {!isLoading ? (
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 5,
+                p: 4,
+                backgroundColor: theme.palette.secondary[500],
+                color: "black",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: theme.palette.secondary[100],
+                },
+              }}
+            >
+              Submit
+            </Button>
+          ) : (
+            <LoadingButton
+              loading
+              fullWidth
+              variant="contained"
+              sx={{ p: 4, mt: 5 }}
+            >
+              <span>Submit</span>
+            </LoadingButton>
+          )}
+        </Box>
+
+        <Box gridColumn="span 4">
           <Button
-            type="submit"
+            type="reset"
             fullWidth
             variant="contained"
             sx={{
@@ -487,15 +584,11 @@ const RegisterMember = () => {
               },
             }}
           >
-            Submit
+            <span>Reset</span>
           </Button>
-        ) : (
-          <LoadingButton loading fullWidth variant="contained">
-            <span>Submit</span>
-          </LoadingButton>
-        )}
         </Box>
       </Box>
+      <Toaster />
     </Box>
   );
 };
