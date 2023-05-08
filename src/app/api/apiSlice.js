@@ -23,7 +23,7 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     let result = await baseQuery(args, api, extraOptions);
-    // console.log(result.error?.data?.code)
+    // console.log(result.meta.response?.status)
 
     if (result.meta.response?.status === 401) {
         // console.log('sending csrf token')
@@ -52,5 +52,5 @@ export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: ['User'],
     endpoints: builder => ({}),
-    keepUnusedDataFor: 0,
+    keepUnusedDataFor: 600,
 })
