@@ -66,7 +66,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
   };
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
-
+ 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar
