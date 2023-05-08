@@ -15,6 +15,7 @@ import CrbInfo from "./views/Members/CrbInfo";
 import SavingsAccount from "./views/Accounts/SavingsAccount";
 import DepositsAccount from "./views/Accounts/DepositsAccount";
 import Contributions from "./views/Accounts/Contributions";
+import ApplyLoan from "./views/loans/ApplyLoan";
 
 
 
@@ -45,6 +46,8 @@ function App() {
                 <Route path="/savings account" element={<SavingsAccount />} />
                 <Route path="/deposits account" element={<DepositsAccount />} />
                 <Route path="/add contributions" element={<Contributions />} />
+                {/* loan link */}
+                <Route path="/apply loan" element={<ApplyLoan/>} />
 
               </Route>
             </Route>
