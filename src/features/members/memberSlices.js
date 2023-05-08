@@ -11,10 +11,19 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
                     "Content-Type": "application/json"
                 },
             })
+        }),
+
+        getResidential: builder.query({
+            query: () => ({
+                url: "/members/residential_areas/",
+                method: "GET"
+            })
         })
+        
     })
 })
 
 export const {
-    useRegisterMemberMutation
+    useRegisterMemberMutation,
+    useGetResidentialQuery,
 } = memberRegisterSlice;
