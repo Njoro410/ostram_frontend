@@ -14,12 +14,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
             providesTags: ['User'],
             transformResponse: async (response, meta) => {
                 // Extract the value of the "X-CSRF-Token" header from the response
+
                 const token = meta.response.headers.get('x-csrftoken')
+                // const status = meta.response?.status
 
                 const data = await response;
                 // Return an object containing the parsed response data and the token value
                 return { data, token };
-               
+
 
             }
         }),
