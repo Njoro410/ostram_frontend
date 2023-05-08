@@ -16,11 +16,11 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { memberRegisterSchema } from "../../utils/validationSchema";
-import { useRegisterMemberMutation } from "../../features/members/memberSlices";
+import { useRegisterMemberMutation } from "../../services/members/memberSlices";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import { useGetResidentialQuery } from "../../features/members/memberSlices";
+import { useGetResidentialQuery } from "../../services/members/memberSlices";
 
 const RegisterMember = () => {
   const theme = useTheme();
