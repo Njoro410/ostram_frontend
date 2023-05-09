@@ -39,3 +39,21 @@ export const memberRegisterSchema = Yup.object().shape({
     .min(10, "Number is too short")
     .max(10, "Number is too long")
 })
+
+
+
+export const loanApplicationSchema = Yup.object().shape({
+  applicant: Yup.string()
+    .required("Applicant is required"),
+  loan_type: Yup.string()
+    .required("Loan type is required"),
+  amount: Yup.string()
+    .required('Loan amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  status: Yup.string()
+    .required("Status is required"),
+  grace_period: Yup.string()
+    .required("Grace period is required"),
+  tenure_period: Yup.string()
+    .required("Tenure period is required"),
+})
