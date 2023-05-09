@@ -138,7 +138,7 @@ const RegisterMember = () => {
           gap="10px"
           gridTemplateColumns="repeat(3, minmax(0, 1fr))"
         >
-          <Box  >
+          <Box>
             {/* This box will occupy the first half of the child grid */}
             <TextField
               margin="normal"
@@ -234,7 +234,7 @@ const RegisterMember = () => {
             <Controller
               name="gender"
               control={control}
-              defaultValue="MALE"
+              defaultValue=""
               render={({ field: { onChange, value } }) => (
                 <FormControl
                   variant="outlined"
@@ -282,7 +282,7 @@ const RegisterMember = () => {
               error={errors.phone_no ? true : false}
               helperText={errors.phone_no?.message}
               sx={{
-                mt:2.5,
+                mt: 2.5,
                 "& label": {
                   color: theme.palette.secondary[500],
                   "&.Mui-focused": {
@@ -307,7 +307,7 @@ const RegisterMember = () => {
             <Controller
               name="residential"
               control={control}
-              defaultValue={1}
+              defaultValue=""
               render={({ field: { onChange, value } }) => (
                 <FormControl
                   variant="outlined"
@@ -351,7 +351,7 @@ const RegisterMember = () => {
               )}
             />
           </Box>
-          <Box >
+          <Box>
             <TextField
               margin="normal"
               required
