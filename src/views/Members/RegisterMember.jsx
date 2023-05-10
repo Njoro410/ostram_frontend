@@ -150,7 +150,7 @@ const RegisterMember = () => {
               autoComplete="names"
               autoFocus
               {...register("names")}
-              error={errors.names ? true : false}
+              error={!!errors?.names}
               helperText={errors.names?.message}
               sx={{
                 "& label": {
@@ -339,8 +339,8 @@ const RegisterMember = () => {
                     onChange={onChange}
                     label="Residential Area"
                   >
-                    {areas &&
-                      areas.results.map((area) => (
+                    {
+                      areas?.results.map((area) => (
                         <MenuItem key={area.area_code} value={area.area_code}>
                           {area.name}
                         </MenuItem>
