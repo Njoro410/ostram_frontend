@@ -10,16 +10,34 @@ import {
   FormControl,
   FormHelperText,
   Typography,
+  Autocomplete,
+  CircularProgress,
 } from "@mui/material";
 import Header from "../../components/Header";
-import React from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { loanApplicationSchema } from "../../utils/validationSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+
+import {
+  useGetLoanStatusQuery,
+  useGetLoanTypesQuery,
+} from "../../services/loans/loanSlices";
+import { useGetMembersQuery } from "../../services/members/memberSlices";
+import { LoadingButton } from "@mui/lab";
+import RHFAutoComplete from "../../components/RHFAutoComplete";
 
 const ApplyLoan = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
+
+  const { data: status } = useGetLoanStatusQuery();
+
+  const { data: types } = useGetLoanTypesQuery();
+
+  const { data: members, isFetching } = useGetMembersQuery({ skip: true });
 
   const {
     register,
@@ -31,6 +49,20 @@ const ApplyLoan = () => {
     resolver: yupResolver(loanApplicationSchema),
   });
 
+  function formatDateToYYYYMMDD(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}`;
+  }
+
+  const onSubmitHandler = (data) => {
+    
+    console.log(data);
+  };
+
   return (
     <Box m="5.5rem 2.5rem">
       <Header title="LOAN APPLICATION" subtitle="Apply loans " />
@@ -38,7 +70,7 @@ const ApplyLoan = () => {
       <Box
         mt="20px"
         component="form"
-        // onSubmit={handleSubmit(onSubmitHandler)}
+        onSubmit={handleSubmit(onSubmitHandler)}
         noValidate
         display="grid"
         gridTemplateColumns="repeat(12, minmax(0, 1fr))"
@@ -59,25 +91,15 @@ const ApplyLoan = () => {
           gridTemplateColumns="repeat(3, minmax(0, 1fr))"
         >
           <Box mt={2}>
-            <Controller
-              name="applicant"
+            <RHFAutoComplete
+              options={members?.results || []}
               control={control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  required
-                  error={!!errors?.applicant}
-                >
-                  <InputLabel>Applicant</InputLabel>
-                  <Select value={value} onChange={onChange} label="Applicant">
-                    <MenuItem value="MALE">Male</MenuItem>
-                    <MenuItem value="FEMALE">Female</MenuItem>
-                  </Select>
-                  <FormHelperText>{errors.applicant?.message}</FormHelperText>
-                </FormControl>
-              )}
+              name="applicant"
+              placeholder="Applicants Name"
+              error={!!errors?.applicant} 
+              helperText={errors.applicant?.message}
+              isFetch={isFetching}
+              multiple={false}
             />
 
             <Controller
@@ -96,8 +118,11 @@ const ApplyLoan = () => {
                 >
                   <InputLabel>Loan Type</InputLabel>
                   <Select value={value} onChange={onChange} label="Loan Type">
-                    <MenuItem value="MALE">Male</MenuItem>
-                    <MenuItem value="FEMALE">Female</MenuItem>
+                    {types?.results.map((type) => (
+                      <MenuItem key={type.id} value={type.id}>
+                        {type.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                   <FormHelperText>{errors.loan_type?.message}</FormHelperText>
                 </FormControl>
@@ -123,16 +148,47 @@ const ApplyLoan = () => {
           </Box>
 
           <Box>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="names"
-              label="Application Date"
-              name="names"
-              autoComplete="names"
-              autoFocus
-            />
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <Controller
+                name="application_date"
+                control={control}
+                defaultValue="" // add a default empty value for uncontrolled state
+                render={({ field, fieldState }) => (
+                  <FormControl
+                    variant="outlined"
+                    fullWidth
+                    required
+                    error={!!fieldState.error || !!errors?.application_date}
+                    sx={{
+                      mt: 2.2,
+                    }}
+                  >
+                    <DatePicker
+                      openTo="day"
+                      views={["year", "month", "day"]}
+                      value={field.value ? field.value : ""} // set value based on whether field has a value
+                      onChange={(date) => {
+                        field.onChange(formatDateToYYYYMMDD(date));
+                      }}
+                      // inputFormat="DD/MM/yyyy"
+                      label="Application Date"
+                      localeText={{ toolbarTitle: "Application Date" }}
+                      slotProps={{
+                        textField: {
+                          error: !!fieldState.error,
+                          helperText: fieldState?.error?.message,
+                        },
+                        toolbar: {
+                          toolbarPlaceholder: "__",
+                          toolbarFormat: "MMM Do YYYY",
+                          hidden: false,
+                        },
+                      }}
+                    />
+                  </FormControl>
+                )}
+              />
+            </LocalizationProvider>
 
             <Controller
               name="status"
@@ -143,13 +199,20 @@ const ApplyLoan = () => {
                   variant="outlined"
                   fullWidth
                   required
-                  error={!!errors?.applicant}
+                  error={!!errors?.status}
+                  sx={{
+                    mt: 2.8,
+                  }}
                 >
                   <InputLabel>Status</InputLabel>
                   <Select value={value} onChange={onChange} label="Status">
-                    <MenuItem value="1">Submitted</MenuItem>
+                    {status?.results.map((status) => (
+                      <MenuItem key={status.id} value={status.id}>
+                        {status.status_name}
+                      </MenuItem>
+                    ))}
                   </Select>
-                  <FormHelperText>{errors.applicant?.message}</FormHelperText>
+                  <FormHelperText>{errors.status?.message}</FormHelperText>
                 </FormControl>
               )}
             />
@@ -163,6 +226,9 @@ const ApplyLoan = () => {
               autoComplete="names"
               autoFocus
               {...register("loan_reason")}
+              sx={{
+                mt: 3,
+              }}
             />
           </Box>
 
@@ -171,11 +237,13 @@ const ApplyLoan = () => {
               margin="normal"
               required
               fullWidth
-              id="names"
+              id="grace_period"
               label="Grace period"
-              name="names"
-              autoComplete="names"
+              name="grace_period"
+              autoComplete="grace_period"
               autoFocus
+              error={!!errors?.grace_period}
+              helperText={errors.grace_period?.message}
               {...register("grace_period")}
             />
 
@@ -183,23 +251,17 @@ const ApplyLoan = () => {
               margin="normal"
               required
               fullWidth
-              id="names"
+              id="tenure_period"
               label="Tenure period"
-              name="names"
-              autoComplete="names"
+              name="tenure_period"
+              autoComplete="tenure_period"
               autoFocus
+              error={!!errors?.tenure_period}
+              helperText={errors.tenure_period?.message}
               {...register("tenure_period")}
-            />
-
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="names"
-              label="Guarantors"
-              name="names"
-              autoComplete="names"
-              autoFocus
+              sx={{
+                mt: 2,
+              }}
             />
           </Box>
         </Box>
@@ -210,7 +272,49 @@ const ApplyLoan = () => {
           backgroundColor={theme.palette.background.alt}
           p="1rem"
           borderRadius="0.55rem"
-        ></Box>
+        >
+          <RHFAutoComplete
+              options={members?.results || []}
+              control={control}
+              name="guarantors"
+              placeholder="Guarantors Name"
+              error={!!errors?.guarantors} 
+              helperText={errors.guarantors?.message}
+              isFetch={isFetching}
+              multiple={true}
+            />
+        </Box>
+
+        <Box gridColumn="span 8">
+          {/* {!isLoading ? ( */}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+              mt: 5,
+              p: 4,
+              backgroundColor: theme.palette.secondary[500],
+              color: "black",
+              fontWeight: "bold",
+              "&:hover": {
+                backgroundColor: theme.palette.secondary[100],
+              },
+            }}
+          >
+            Submit
+          </Button>
+          {/* ) : ( */}
+          {/* <LoadingButton
+              loading
+              fullWidth
+              variant="contained"
+              sx={{ p: 4, mt: 5 }}
+            >
+              <span>Submit</span>
+            </LoadingButton> */}
+          {/* )} */}
+        </Box>
       </Box>
     </Box>
   );
