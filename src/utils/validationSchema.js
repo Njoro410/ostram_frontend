@@ -56,4 +56,8 @@ export const loanApplicationSchema = Yup.object().shape({
     .required("Grace period is required"),
   tenure_period: Yup.string()
     .required("Tenure period is required"),
+  application_date: Yup.string()
+    .required("Application date is required"),
+  guarantors: Yup.array()
+    .required("Guarantors are required")
 })
