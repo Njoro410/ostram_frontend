@@ -29,8 +29,8 @@ import {
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
-import { Scrollbars } from "react-custom-scrollbars";
-import Logo from "../assets/ostlogo.png"
+import { Scrollbars } from "react-custom-scrollbars-2";
+import Logo from "../assets/ostlogo.png";
 
 const drawerWidth = 240;
 
@@ -187,17 +187,17 @@ export default function DrawerComponent({
               {!isNonMobile &&
                 (!open ? (
                   <Box
-                  component="img"
-                  sx={{
-                    height: 53,
-                    width: 50,
-                    maxHeight: { xs: 233, md: 167 },
-                    maxWidth: { xs: 350, md: 250 },
-                    marginTop:1,
-                  }}
-                  alt="Ostram Logo"
-                  src={Logo}
-                />
+                    component="img"
+                    sx={{
+                      height: 53,
+                      width: 50,
+                      maxHeight: { xs: 233, md: 167 },
+                      maxWidth: { xs: 350, md: 250 },
+                      marginTop: 1,
+                    }}
+                    alt="Ostram Logo"
+                    src={Logo}
+                  />
                 ) : (
                   <IconButton onClick={handleDrawerClose}>
                     <ChevronLeft />

@@ -1,4 +1,4 @@
- import React from "react";
+import React from "react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import {
@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "../../components/StatBox";
-import { Scrollbars } from "react-custom-scrollbars";
+import { Scrollbars } from "react-custom-scrollbars-2";
 import { useGetUserQuery } from "../../features/users/usersApiSlice";
 import useUser from "../../hooks/useUser";
 
@@ -25,22 +25,17 @@ const Dashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
-  const {
-    user,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useUser();
+  const { user, isLoading, isSuccess, isError, error } = useUser();
 
   // console.log(user)
- 
-
 
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
-        <Header title="DASHBOARD" subtitle={`Welcome ${user?.results.fullname}`} />
+        <Header
+          title="DASHBOARD"
+          subtitle={`Welcome ${user?.results.fullname}`}
+        />
 
         {/* <Box>
           <Button
@@ -72,7 +67,6 @@ const Dashboard = () => {
         {/* ROW 1 */}
         <StatBox
           title="New Members"
-
           increase="+14%"
           description="Since last month"
           icon={
@@ -83,7 +77,6 @@ const Dashboard = () => {
         />
         <StatBox
           title="Total loans"
-     
           increase="+21%"
           description="Given this month"
           icon={
@@ -95,7 +88,6 @@ const Dashboard = () => {
 
         <StatBox
           title="Total Savings"
-        
           increase="+5%"
           description="Since last month"
           icon={
@@ -106,7 +98,6 @@ const Dashboard = () => {
         />
         <StatBox
           title="Total Deposits"
-         
           increase="+43%"
           description="Since last month"
           icon={
