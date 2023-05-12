@@ -17,8 +17,6 @@ import DepositsAccount from "./views/Accounts/DepositsAccount";
 import Contributions from "./views/Accounts/Contributions";
 import ApplyLoan from "./views/loans/ApplyLoan";
 
-
-
 function App() {
   const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -39,16 +37,18 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 {/* members links */}
                 <Route path="/view members" element={<MemberList />} />
-                <Route path="/member registration" element={<RegisterMember />} />
+                <Route
+                  path="/member registration"
+                  element={<RegisterMember />}
+                />
                 <Route path="/member file" element={<MemberFile />} />
                 <Route path="/crb information" element={<CrbInfo />} />
-                  {/* accounts links */}
+                {/* accounts links */}
                 <Route path="/savings account" element={<SavingsAccount />} />
                 <Route path="/deposits account" element={<DepositsAccount />} />
                 <Route path="/add contributions" element={<Contributions />} />
                 {/* loan link */}
-                <Route path="/apply loan" element={<ApplyLoan/>} />
-
+                <Route path="/apply loan" element={<ApplyLoan />} />
               </Route>
             </Route>
           </Routes>
