@@ -41,7 +41,10 @@ function App() {
                   path="/member registration"
                   element={<RegisterMember />}
                 />
-                <Route path="/member file" element={<MemberFile />} />
+                <Route
+                  path="/member-details/:memberNo"
+                  element={<MemberFile />}
+                />
                 <Route path="/crb information" element={<CrbInfo />} />
                 {/* accounts links */}
                 <Route path="/savings account" element={<SavingsAccount />} />
