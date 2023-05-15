@@ -9,9 +9,6 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
-  Typography,
-  Autocomplete,
-  CircularProgress,
 } from "@mui/material";
 import Header from "../../components/Header";
 import React, { useState } from "react";
@@ -28,6 +25,7 @@ import {
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { LoadingButton } from "@mui/lab";
 import RHFAutoComplete from "../../components/RHFAutoComplete";
+import moment from "moment";
 
 const ApplyLoan = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -52,15 +50,16 @@ const ApplyLoan = () => {
   function formatDateToYYYYMMDD(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+  
+
     return `${year}-${month}-${day}`;
   }
 
   const onSubmitHandler = (data) => {
-    
     console.log(data);
+    console.log(moment())
   };
 
   return (
@@ -96,7 +95,7 @@ const ApplyLoan = () => {
               control={control}
               name="applicant"
               placeholder="Applicants Name"
-              error={!!errors?.applicant} 
+              error={!!errors?.applicant}
               helperText={errors.applicant?.message}
               isFetch={isFetching}
               multiple={false}
@@ -274,15 +273,15 @@ const ApplyLoan = () => {
           borderRadius="0.55rem"
         >
           <RHFAutoComplete
-              options={members?.results || []}
-              control={control}
-              name="guarantors"
-              placeholder="Guarantors Name"
-              error={!!errors?.guarantors} 
-              helperText={errors.guarantors?.message}
-              isFetch={isFetching}
-              multiple={true}
-            />
+            options={members?.results || []}
+            control={control}
+            name="guarantors"
+            placeholder="Guarantors Name"
+            error={!!errors?.guarantors}
+            helperText={errors.guarantors?.message}
+            isFetch={isFetching}
+            multiple={true}
+          />
         </Box>
 
         <Box gridColumn="span 8">

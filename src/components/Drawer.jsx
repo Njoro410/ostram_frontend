@@ -119,7 +119,7 @@ const navItems = [
     icon: <AccountBalanceWalletOutlined />,
   },
   {
-    text: "Add Contributions",
+    text: "Daily Contributions",
     icon: <AddBoxOutlined />,
   },
   {
