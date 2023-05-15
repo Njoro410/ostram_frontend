@@ -99,10 +99,6 @@ const navItems = [
     icon: <PersonAddOutlined />,
   },
   {
-    text: "Member File",
-    icon: <FolderOpenOutlined />,
-  },
-  {
     text: "CRB Information",
     icon: <LocalPoliceOutlined />,
   },
