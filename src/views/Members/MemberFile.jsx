@@ -25,7 +25,7 @@ const MemberFile = () => {
 
   return (
     <Box m="5.5rem 2.5rem">
-      <Header title="MEMBER DETAILS" subtitle={member.data.names} />
+      <Header title="MEMBER DETAILS" subtitle={member.results.names} />
       <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
           <Card
@@ -41,31 +41,31 @@ const MemberFile = () => {
             <CardHeader
               avatar={
                 <Avatar
-                  src={member.data.image}
+                  src={member.results.image}
                   sx={{ width: 56, height: 56 }}
                 />
               }
-              title={member.data.names}
-              subheader={member.data.mbr_no}
+              title={member.results.names}
+              subheader={member.results.mbr_no}
             />
             <CardContent>
               <Typography variant="h5" component="h2">
-                {member.data.names}
+                {member.results.names}
               </Typography>
               <Typography color="textSecondary">
-                Created by: {member.data.created_by}
+                Created by: {member.results.created_by}
               </Typography>
               <Typography color="textSecondary">
-                Gender: {member.data.gender}
+                Gender: {member.results.gender}
               </Typography>
               <Typography color="textSecondary">
-                ID Number: {member.data.id_no}
+                ID Number: {member.results.id_no}
               </Typography>
               <Typography color="textSecondary">
-                KRA Pin: {member.data.kra_pin ? member.data.kra_pin : "Null"}
+                KRA Pin: {member.results.kra_pin ? member.data.kra_pin : "Null"}
               </Typography>
               <Typography color="textSecondary">
-                Phone Number: {member.data.phone_no}
+                Phone Number: {member.results.phone_no}
               </Typography>
             </CardContent>
           </Card>
@@ -84,12 +84,14 @@ const MemberFile = () => {
             <CardHeader title="Next of Kin" />
             <CardContent>
               <Typography variant="h5" component="h2">
-                Name: {member.data.next_of_kin}
+                Name: {member.results.next_of_kin}
               </Typography>
-              <Typography>Relationship: {member.data.relationship}</Typography>
+              <Typography>
+                Relationship: {member.results.relationship}
+              </Typography>
               <Typography variant="body2" component="p">
                 Phone number:{" "}
-                {member.data.phone_nos ? member.data.phone_nos : "Null"}
+                {member.results.phone_nos ? member.results.phone_nos : "Null"}
               </Typography>
             </CardContent>
           </Card>
