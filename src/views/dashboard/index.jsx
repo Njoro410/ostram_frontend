@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import {
@@ -14,20 +14,40 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "../../components/StatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { useGetUserQuery } from "../../features/users/usersApiSlice";
 import useUser from "../../hooks/useUser";
+import Linechart from "../../charts/Linechart";
 
 const Dashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+  const [activeTab, setActiveTab] = useState(0);
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
 
-  // console.log(user)
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  const Savingseries = [
+    {
+      name: "Savings",
+      data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+    },
+  ];
+
+  const Depositseries = [
+    {
+      name: "Deposits",
+      data: [100, 40, 95, 75, 99, 652, 79, 981, 14],
+    },
+  ];
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -126,9 +146,14 @@ const Dashboard = () => {
           p="1rem"
           borderRadius="0.55rem"
         >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            some graph
-          </Typography>
+          <Tabs value={activeTab} onChange={handleTabChange}>
+            <Tab label="Savings"  />
+            <Tab label="Deposits" />
+          </Tabs>
+
+          {activeTab === 0 && <Linechart series={Savingseries} nameText='Savings to date'/>}
+
+          {activeTab === 1 && <Linechart series={Depositseries} nameText='Deposits to date'/>}
         </Box>
 
         <Box
