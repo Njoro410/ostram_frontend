@@ -1,4 +1,4 @@
-import { Box, TextField, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, TextField, useMediaQuery, useTheme } from "@mui/material";
 import React from "react";
 import Header from "../../components/Header";
 import RHFAutoComplete from "../../components/RHFAutoComplete";
@@ -35,13 +35,13 @@ const Contributions = () => {
         gridTemplateColumns="repeat(12, minmax(0, 1fr))"
         gridAutoRows="160px"
         gap="20px"
-        height="100vh"
+        // height="100vh"
         sx={{
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
         <Box
-          gridColumn="3 / span 8"
+          gridColumn="span 12"
           gridRow="span 3"
           backgroundColor={theme.palette.background.alt}
           p="1rem"
@@ -97,13 +97,15 @@ const Contributions = () => {
 
           <Box
             display="grid"
-            gridTemplateColumns="repeat(2, minmax(0, 1fr))"
+            gridTemplateColumns="repeat(3, minmax(0, 1fr))"
             gridAutoRows="160px"
+            // backgroundColor='red'
             gap="20px"
-            height="100vh"
+            // height="100vh"
+            pb="10rem"
             sx={{
               "& > div": {
-                gridColumn: isNonMediumScreens ? undefined : "span 2",
+                gridColumn: isNonMediumScreens ? undefined : "span 3",
               },
             }}
           >
@@ -113,7 +115,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Savings"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -124,7 +126,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Deposits"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -135,7 +137,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Loan Interest"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -146,7 +148,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Loan Repayment"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -158,7 +160,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Maintenance Fee"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -169,7 +171,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Late Charges"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -180,7 +182,7 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Registration Fee"
                 name="names"
                 autoComplete="names"
                 autoFocus
@@ -191,13 +193,71 @@ const Contributions = () => {
                 required
                 fullWidth
                 id="names"
-                label="Received by"
+                label="Loan Processing Fee"
+                name="names"
+                autoComplete="names"
+                autoFocus
+              />
+            </Box>
+
+            <Box>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="names"
+                label="Loan Insurance Fee"
                 name="names"
                 autoComplete="names"
                 autoFocus
               />
 
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="names"
+                label="Affidavit Fee"
+                name="names"
+                autoComplete="names"
+                autoFocus
+              />
 
+              <Button
+                type="reset"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  p: 1.8,
+                  backgroundColor: theme.palette.secondary[500],
+                  color: "black",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[100],
+                  },
+                }}
+              >
+                <span>Reset</span>
+              </Button>
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  p: 1.8,
+                  backgroundColor: theme.palette.secondary[500],
+                  color: "black",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[100],
+                  },
+                }}
+              >
+                <span>Submit</span>
+              </Button>
             </Box>
           </Box>
         </Box>
