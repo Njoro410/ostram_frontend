@@ -23,9 +23,11 @@ const Memberlist = () => {
   const { data: members, isLoading } = useGetMembersQuery();
 
   useEffect(() => {
-    setTabledata(members.data);
-    console.log(tableData);
-  });
+    if(members) {
+      setTabledata(members.results);
+    }
+  }, [members]);
+  
 
   const handleRowClick = (param) => {
     const memberNo = param.row.mbr_no;
