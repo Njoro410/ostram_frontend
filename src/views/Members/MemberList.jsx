@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const columns = [
   { field: "mbr_no", headerName: "Member No", width: 120 },
@@ -14,11 +14,20 @@ const columns = [
     width: 200,
     renderCell: (params) => (
       <strong>
-        {/* create a link which when clicked takes in the member number and redirects to a page */}
-        {/* <a href={`/member-details/${params.row.mbr_no}`}>{params.value}</a> */}
-        <Link to={`/member-details/${params.row.mbr_no}`}>{params.value}</Link>
+        <Link
+          to={`/member-details/${params.row.mbr_no}`}
+          preventScrollReset={true}
+          style={{
+            // textDecoration: "none",
+            color: "inherit",
+            fontWeight: "bold",
+          }}
+        >
+          {params.value}
+        </Link>
       </strong>
     ),
+    activeClassName: "",
   },
   { field: "phone_no", headerName: "Phone Number", width: 100 },
   { field: "residential", headerName: "Residential Area", width: 120 },
@@ -28,22 +37,17 @@ const columns = [
 ];
 
 const Memberlist = () => {
-  const navigate = useNavigate();
   const [tableData, setTabledata] = useState([]);
 
   const { data: members, isLoading } = useGetMembersQuery();
 
   useEffect(() => {
     // check if data is available then set members to tableData
-    setTabledata(members.results);
-    console.log(members, "response");
-    console.log(tableData, "set data");
+    if (members) {
+      setTabledata(members.results);
+    }
+    // setTabledata(members.results);
   });
-
-  const handleRowClick = (param) => {
-    const memberNo = param.row.mbr_no;
-    navigate(`/member-details/${memberNo}`);
-  };
 
   return (
     <Box m="5.5rem 2.5rem">
@@ -54,7 +58,6 @@ const Memberlist = () => {
           columns={columns}
           getRowId={(row) => row.mbr_no}
           key={tableData.mbr_no}
-          onRowClick={handleRowClick}
         />
       </div>
     </Box>
