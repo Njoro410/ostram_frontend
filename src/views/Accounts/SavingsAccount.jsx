@@ -268,6 +268,7 @@ const SavingsAccount = () => {
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
         >
+          
           <SplineArea />
         </Box>
       </Box>
