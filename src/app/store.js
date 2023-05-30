@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit"
 // import themeReducer from '../features/theme/themeSlice'
 import { apiSlice } from "./api/apiSlice"
 // import authReducer from '../features/auth/authSlice'
+import weatherApi from "./api/weatherSlice";
 import {
     persistStore,
     persistReducer,
@@ -32,7 +33,7 @@ export const store = configureStore({
             // },
             immutableCheck: false,
             serializableCheck: false,
-        }).concat(apiSlice.middleware),
+        }).concat(apiSlice.middleware, weatherApi.middleware),
     devTools: true
 })
 
