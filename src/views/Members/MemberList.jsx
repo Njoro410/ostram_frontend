@@ -4,9 +4,15 @@ import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { Link } from "react-router-dom";
+import Datagrid from "../../components/Datagrid";
 
 const columns = [
-  { field: "mbr_no", headerName: "Member No", width: 120 },
+  {
+    field: "mbr_no",
+    headerName: "Member No",
+    width: 120,
+    headerClassName: "primary-color",
+  },
   { field: "id_no", headerName: "ID", width: 50 },
   {
     field: "names",
@@ -52,14 +58,14 @@ const Memberlist = () => {
   return (
     <Box m="5.5rem 2.5rem">
       <Header title="MEMBER LIST" subtitle="A data grid of all members" />
-      <div style={{ height: 500, width: "100%" }}>
-        <DataGrid
-          rows={tableData}
-          columns={columns}
-          getRowId={(row) => row.mbr_no}
-          key={tableData.mbr_no}
-        />
-      </div>
+      {/* <div style={{ height: 600, width: "100%" }}> */}
+      <Datagrid
+        rows={tableData}
+        columns={columns}
+        getRowId={(row) => row.mbr_no}
+        key={tableData.mbr_no}
+      />
+      {/* </div> */}
     </Box>
   );
 };
