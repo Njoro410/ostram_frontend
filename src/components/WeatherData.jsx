@@ -52,9 +52,9 @@ const WeatherData = ({ location }) => {
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
   };
 
@@ -76,16 +76,16 @@ const WeatherData = ({ location }) => {
     });
   }
 
-  console.log(filterForecastWeather(forecastWeather));
+  // console.log(filterForecastWeather(forecastWeather));
 
   function getForecastWeatherCode(forecastWeather) {
     if (!forecastWeather || !Array.isArray(forecastWeather)) {
       return [];
     }
-    return forecastWeather.map((weath)=>(weath.condition.code))
+    return forecastWeather.map((weath) => weath.condition.code);
   }
 
-  console.log(getForecastWeatherCode(forecastWeather))
+  // console.log(getForecastWeatherCode(forecastWeather))
 
   return (
     <Box
@@ -156,7 +156,16 @@ const WeatherData = ({ location }) => {
         <Box>
           <Slider {...settings}>
             {filterForecastWeather(forecastWeather).map((hour) => (
-              <Box key={hour.time_epoch}>
+              <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#f1f1f1',
+                color: '#333',
+              }}
+                key={hour.time_epoch}
+              >
                 {hour.condition.text} {hour.time}
               </Box>
             ))}
