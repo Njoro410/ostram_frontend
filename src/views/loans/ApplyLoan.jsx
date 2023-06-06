@@ -9,9 +9,6 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
-  Typography,
-  Autocomplete,
-  CircularProgress,
 } from "@mui/material";
 import Header from "../../components/Header";
 import React, { useState } from "react";
@@ -28,6 +25,9 @@ import {
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { LoadingButton } from "@mui/lab";
 import RHFAutoComplete from "../../components/RHFAutoComplete";
+import moment from "moment";
+import DateSelector from "../../components/DateSelector";
+import RHFSelect from "../../components/RHFSelect";
 
 const ApplyLoan = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -49,18 +49,9 @@ const ApplyLoan = () => {
     resolver: yupResolver(loanApplicationSchema),
   });
 
-  function formatDateToYYYYMMDD(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    
-    return `${year}-${month}-${day}`;
-  }
-
   const onSubmitHandler = (data) => {
-    
     console.log(data);
+    console.log(moment());
   };
 
   return (
@@ -96,37 +87,18 @@ const ApplyLoan = () => {
               control={control}
               name="applicant"
               placeholder="Applicants Name"
-              error={!!errors?.applicant} 
+              error={!!errors?.applicant}
               helperText={errors.applicant?.message}
               isFetch={isFetching}
               multiple={false}
             />
 
-            <Controller
+            <RHFSelect
               name="loan_type"
               control={control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  required
-                  error={!!errors?.loan_type}
-                  sx={{
-                    mt: 3,
-                  }}
-                >
-                  <InputLabel>Loan Type</InputLabel>
-                  <Select value={value} onChange={onChange} label="Loan Type">
-                    {types?.results.map((type) => (
-                      <MenuItem key={type.id} value={type.id}>
-                        {type.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.loan_type?.message}</FormHelperText>
-                </FormControl>
-              )}
+              errors={errors?.loan_type}
+              data={types?.results}
+              label="Loan Type"
             />
 
             <TextField
@@ -148,73 +120,19 @@ const ApplyLoan = () => {
           </Box>
 
           <Box>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <Controller
-                name="application_date"
-                control={control}
-                defaultValue="" // add a default empty value for uncontrolled state
-                render={({ field, fieldState }) => (
-                  <FormControl
-                    variant="outlined"
-                    fullWidth
-                    required
-                    error={!!fieldState.error || !!errors?.application_date}
-                    sx={{
-                      mt: 2.2,
-                    }}
-                  >
-                    <DatePicker
-                      openTo="day"
-                      views={["year", "month", "day"]}
-                      value={field.value ? field.value : ""} // set value based on whether field has a value
-                      onChange={(date) => {
-                        field.onChange(formatDateToYYYYMMDD(date));
-                      }}
-                      // inputFormat="DD/MM/yyyy"
-                      label="Application Date"
-                      localeText={{ toolbarTitle: "Application Date" }}
-                      slotProps={{
-                        textField: {
-                          error: !!fieldState.error,
-                          helperText: fieldState?.error?.message,
-                        },
-                        toolbar: {
-                          toolbarPlaceholder: "__",
-                          toolbarFormat: "MMM Do YYYY",
-                          hidden: false,
-                        },
-                      }}
-                    />
-                  </FormControl>
-                )}
-              />
-            </LocalizationProvider>
+            <DateSelector
+              name="application_date"
+              label="Application Date"
+              control={control}
+              errors={errors?.application_date}
+            />
 
-            <Controller
+            <RHFSelect
               name="status"
               control={control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  required
-                  error={!!errors?.status}
-                  sx={{
-                    mt: 2.8,
-                  }}
-                >
-                  <InputLabel>Status</InputLabel>
-                  <Select value={value} onChange={onChange} label="Status">
-                    {status?.results.map((status) => (
-                      <MenuItem key={status.id} value={status.id}>
-                        {status.status_name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.status?.message}</FormHelperText>
-                </FormControl>
-              )}
+              errors={errors?.status}
+              data={status?.results}
+              label="Status"
             />
 
             <TextField
@@ -242,7 +160,7 @@ const ApplyLoan = () => {
               name="grace_period"
               autoComplete="grace_period"
               autoFocus
-              error={!!errors?.grace_period}
+              error={errors?.grace_period}
               helperText={errors.grace_period?.message}
               {...register("grace_period")}
             />
@@ -256,7 +174,7 @@ const ApplyLoan = () => {
               name="tenure_period"
               autoComplete="tenure_period"
               autoFocus
-              error={!!errors?.tenure_period}
+              error={errors?.tenure_period}
               helperText={errors.tenure_period?.message}
               {...register("tenure_period")}
               sx={{
@@ -274,15 +192,15 @@ const ApplyLoan = () => {
           borderRadius="0.55rem"
         >
           <RHFAutoComplete
-              options={members?.results || []}
-              control={control}
-              name="guarantors"
-              placeholder="Guarantors Name"
-              error={!!errors?.guarantors} 
-              helperText={errors.guarantors?.message}
-              isFetch={isFetching}
-              multiple={true}
-            />
+            options={members?.results || []}
+            control={control}
+            name="guarantors"
+            placeholder="Guarantors Name"
+            error={!!errors?.guarantors}
+            helperText={errors.guarantors?.message}
+            isFetch={isFetching}
+            multiple={true}
+          />
         </Box>
 
         <Box gridColumn="span 8">

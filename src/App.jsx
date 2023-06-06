@@ -49,7 +49,7 @@ function App() {
                 {/* accounts links */}
                 <Route path="/savings account" element={<SavingsAccount />} />
                 <Route path="/deposits account" element={<DepositsAccount />} />
-                <Route path="/add contributions" element={<Contributions />} />
+                <Route path="/daily contributions" element={<Contributions />} />
                 {/* loan link */}
                 <Route path="/apply loan" element={<ApplyLoan />} />
               </Route>

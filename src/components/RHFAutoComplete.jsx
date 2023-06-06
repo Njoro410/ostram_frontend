@@ -34,7 +34,7 @@ const RHFAutoComplete = ({
               filterSelectedOptions
               renderOption={(props, option) => (
                 <Typography {...props} key={option.mbr_no}>
-                  {option.names}
+                  {option.names}  
                 </Typography>
               )}
               onChange={(e, newValue) => {

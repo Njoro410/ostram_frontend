@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import {
@@ -14,20 +14,59 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "../../components/StatBox";
 import { Scrollbars } from "react-custom-scrollbars-2";
-import { useGetUserQuery } from "../../features/users/usersApiSlice";
 import useUser from "../../hooks/useUser";
+import Linechart from "../../charts/Linechart";
+import WeatherData from "../../components/WeatherData";
+import CustomTabs from "../../components/CustomTabs";
+import { useGetResidentialQuery } from "../../services/members/memberSlices";
 
 const Dashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+  const [activeGraphTab, setActiveGraphTab] = useState(0);
+  const [activeWeatherTab, setActiveWeatherTab] = useState(0);
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
+  const {
+    data: areas,
+    // isLoading,
+    // isSuccess,
+    // isError,
+    // error,
+  } = useGetResidentialQuery({ skip: true });
 
-  // console.log(user)
+  const handleGraphTabChange = (event, newValue) => {
+    setActiveGraphTab(newValue);
+  };
+  const handleWeatherTabChange = (event, newValue) => {
+    setActiveWeatherTab(newValue);
+  };
+
+  const graphTabs = [{ label: "Savings" }, { label: "Deposits" }];
+  const weatherTabs = areas?.results.map((area) => ({ label: area.name }));
+  const locations = areas?.results.map(
+    (area) => `${area.latitude},${area.longitude}`
+  );
+
+  const Savingseries = [
+    {
+      name: "Savings",
+      data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+    },
+  ];
+
+  const Depositseries = [
+    {
+      name: "Deposits",
+      data: [100, 40, 95, 75, 99, 652, 79, 981, 14],
+    },
+  ];
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -69,6 +108,7 @@ const Dashboard = () => {
           title="New Members"
           increase="+14%"
           description="Since last month"
+          value="18"
           icon={
             <Email
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -79,6 +119,7 @@ const Dashboard = () => {
           title="Total loans"
           increase="+21%"
           description="Given this month"
+          value="147"
           icon={
             <PointOfSale
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -90,6 +131,7 @@ const Dashboard = () => {
           title="Total Savings"
           increase="+5%"
           description="Since last month"
+          value="100,000"
           icon={
             <PersonAdd
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -100,6 +142,7 @@ const Dashboard = () => {
           title="Total Deposits"
           increase="+43%"
           description="Since last month"
+          value="98,000"
           icon={
             <Traffic
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -111,12 +154,23 @@ const Dashboard = () => {
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={theme.palette.background.alt}
-          p="1rem"
           borderRadius="0.55rem"
         >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            weather forecast
-          </Typography>
+          <CustomTabs
+            tabs={weatherTabs}
+            value={activeWeatherTab}
+            onChange={handleWeatherTabChange}
+          />
+
+          {activeWeatherTab === 0 && <WeatherData location={locations?.[0]} />}
+          {activeWeatherTab === 1 && <WeatherData location={locations?.[1]} />}
+          {activeWeatherTab === 2 && <WeatherData location={locations?.[2]} />}
+          {activeWeatherTab === 3 && <WeatherData location={locations?.[3]} />}
+          {activeWeatherTab === 4 && <WeatherData location={locations?.[4]} />}
+          {activeWeatherTab === 5 && <WeatherData location={locations?.[5]} />}
+          {activeWeatherTab === 6 && <WeatherData location={locations?.[6]} />}
+          {activeWeatherTab === 7 && <WeatherData location={locations?.[7]} />}
+          {activeWeatherTab === 8 && <WeatherData location={locations?.[8]} />}
         </Box>
 
         <Box
@@ -126,9 +180,19 @@ const Dashboard = () => {
           p="1rem"
           borderRadius="0.55rem"
         >
-          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            some graph
-          </Typography>
+          <CustomTabs
+            tabs={graphTabs}
+            value={activeGraphTab}
+            onChange={handleGraphTabChange}
+          />
+
+          {activeGraphTab === 0 && (
+            <Linechart series={Savingseries} nameText="Savings to date" />
+          )}
+
+          {activeGraphTab === 1 && (
+            <Linechart series={Depositseries} nameText="Deposits to date" />
+          )}
         </Box>
 
         <Box

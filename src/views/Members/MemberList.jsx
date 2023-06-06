@@ -10,7 +10,6 @@ import {
   IconButton,
   InputBase,
 } from "@mui/material";
-import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { Link } from "react-router-dom";
@@ -20,21 +19,16 @@ import FlexBetween from "../../components/FlexBetween";
 
 const Memberlist = () => {
   const theme = useTheme();
-  //     set search query to empty string
-  const [query, setQuery] = useState("");
-  const [searchParam] = useState(["names"]);
 
   const [tableData, setTabledata] = useState([]);
 
   const { data: members, isLoading } = useGetMembersQuery();
 
   useEffect(() => {
-    // check if data is available then set members to tableData
     if (members) {
       setTabledata(members.results);
     }
-    // setTabledata(members.results);
-  });
+  }, [members]);
 
   const columns = [
     {
@@ -114,17 +108,7 @@ const Memberlist = () => {
         borderRadius="9px"
         gap="3rem"
         p="0.1rem 1.5rem"
-      >
-        <InputBase
-          placeholder="Search..."
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <IconButton>
-          <Search />
-        </IconButton>
-      </FlexBetween>
+      ></FlexBetween>
       <Datagrid
         rows={tableData}
         columns={columns}
