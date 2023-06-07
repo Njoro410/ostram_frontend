@@ -20,9 +20,9 @@ const RHFSelect = ({control,errors,data,name,label}) => {
       >
         <InputLabel>{label}</InputLabel>
         <Select value={value} onChange={onChange} label={label}>
-          {data?.map((status) => (
-            <MenuItem key={status.id} value={status.id}>
-              {status.status_name}
+          {data?.map((item) => (
+            <MenuItem key={item.id} value={item.id}>
+              {item.status_name || item.name} 
             </MenuItem>
           ))}
         </Select>
