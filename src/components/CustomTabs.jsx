@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs, Tab } from "@mui/material";
+import { Tabs, Tab, Tooltip } from "@mui/material";
 
 const CustomTabs = ({ tabs, value, onChange }) => {
   return (
@@ -8,12 +8,13 @@ const CustomTabs = ({ tabs, value, onChange }) => {
       scrollButtons="auto"
       textColor="secondary"
       indicatorColor="secondary"
+      aria-label="tabs"
       value={value}
       onChange={onChange}
       sx={{
         "& .MuiTab-root": {
           fontSize: "0.8rem",
-          paddingX: "0rem"
+          paddingX: "1rem",
         },
         "& .MuiTabs-scrollButtons.Mui-disabled": {
           opacity: 0.3,
@@ -21,7 +22,9 @@ const CustomTabs = ({ tabs, value, onChange }) => {
       }}
     >
       {tabs?.map((tab, index) => (
-        <Tab key={index} label={tab.label} />
+        <Tooltip key={index} title={tab.tooltip}>
+          <Tab label={tab.label} />
+        </Tooltip>
       ))}
     </Tabs>
   );
