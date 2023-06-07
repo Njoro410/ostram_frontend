@@ -37,6 +37,7 @@ const WeatherData = ({ location }) => {
           1276 ||
           1273 ||
           1264 ||
+          1240 ||
           1261:
           return Rainy;
         case 1006 || 1009 || 1030 || 1135:
