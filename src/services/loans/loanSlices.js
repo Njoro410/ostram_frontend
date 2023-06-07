@@ -14,6 +14,13 @@ export const loanSlices = apiSlice.injectEndpoints({
                 url: "/loans/loan_status/",
                 method: "GET"
             })
+        }),
+
+        getAllLoans: builder.query({
+            query: () => ({
+                url: "/loans/all_loans/",
+                method: "GET"
+            })
         })
     })
 })
@@ -21,5 +28,6 @@ export const loanSlices = apiSlice.injectEndpoints({
 
 export const {
     useGetLoanTypesQuery,
-    useGetLoanStatusQuery
+    useGetLoanStatusQuery,
+    useGetAllLoansQuery
 } = loanSlices
