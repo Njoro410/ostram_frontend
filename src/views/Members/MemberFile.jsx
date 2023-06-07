@@ -23,9 +23,17 @@ import { useTheme } from "@mui/material/styles";
 import toTitleCase from "../../utils/titleCaseConverter";
 import AlertDialog from "../../components/Dialog";
 import CustomTabs from "../../components/CustomTabs";
+import { MemberInfoCard, NextOfKinBox } from "./MemberCard";
+
+const CustomTypography = ({ title, text }) => {
+  return (
+    <Typography color="textSecondary">
+      {title}: {text}
+    </Typography>
+  );
+};
 
 const MemberFile = () => {
-  const [value, setValue] = React.useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -43,11 +51,7 @@ const MemberFile = () => {
   const { memberNo } = useParams();
 
   // fetch member
-  const {
-    data: member,
-    isLoading,
-    isFetching,
-  } = useGetMemberDetailsQuery(memberNo);
+  const { data: member } = useGetMemberDetailsQuery(memberNo);
 
   const { data: loans } = useGetMemberLoansQuery(memberNo);
   console.log(loans, "loans");
@@ -57,9 +61,6 @@ const MemberFile = () => {
 
   const { data: savings } = useGetMemberSavingsQuery(memberNo);
   console.log(savings, "savings");
-
-  // TODO:style this
-  if (isLoading || isFetching) return <div>Loading...</div>;
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -86,74 +87,7 @@ const MemberFile = () => {
             },
           }}
         >
-          <Box
-            gridColumn="span 4"
-            gridRow="span 3"
-            borderRadius="0.55rem"
-            component="card"
-            sx={{
-              backgroundColor: theme.palette.background.alt,
-            }}
-          >
-            <CardContent>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                <Avatar
-                  alt={member.results.names}
-                  src={member.results.image}
-                  sx={{
-                    width: 120,
-                    height: 120,
-                    marginRight: "10px",
-                  }}
-                />
-              </div>
-              <div>
-                <Typography variant="h4" color="secondary">
-                  {toTitleCase(member.results.names)}
-                </Typography>
-                <Typography variant="p">
-                  {toTitleCase(member.results.gender)}
-                </Typography>
-              </div>
-              <br />
-              <hr />
-              <Typography color="textSecondary">
-                Member Number: {member.results.mbr_no}
-              </Typography>
-              <Typography color="textSecondary">
-                ID Number: {member.results.id_no}
-              </Typography>
-              <Typography color="textSecondary">
-                KRA Pin: {member.results.kra_pin ? member.data.kra_pin : "Null"}
-              </Typography>
-              <Typography color="textSecondary">
-                Phone Number: {member.results.phone_no}
-              </Typography>
-              <Typography color="textSecondary">
-                Residential area: {toTitleCase(member.results.residential)}
-              </Typography>
-              <Typography color="textSecondary">
-                Created by: {member.results.created_by}
-              </Typography>
-            </CardContent>
-
-            <CardActions>
-              <Button variant="contained" sx={{ marginRight: "5px" }}>
-                Update
-              </Button>
-              <AlertDialog
-                action="Delete"
-                title="You are about to delete this member"
-                message="Are you sure you want to delete this user? This action is irreversible"
-              />
-            </CardActions>
-          </Box>
+          <MemberInfoCard member={member} />
 
           <StatBox
             title="Total loans"
@@ -213,32 +147,7 @@ const MemberFile = () => {
           >
             <MemberChart />
           </Box>
-          <Box
-            gridColumn="span 4"
-            gridRow="span 1"
-            backgroundColor={theme.palette.background.alt}
-            p="1.5rem"
-            borderRadius="0.55rem"
-          >
-            <Typography
-              variant="h5"
-              sx={{
-                color: theme.palette.secondary[300],
-                marginBottom: "10px",
-              }}
-            >
-              Next of Kin
-            </Typography>
-            <Typography color="textSecondary">
-              Name: {toTitleCase(member.results.next_of_kin)}
-            </Typography>
-            <Typography color="textSecondary">
-              Phone number: {member.results.phone_nos}
-            </Typography>
-            <Typography color="textSecondary">
-              Relationship: {toTitleCase(member.results.relationship)}
-            </Typography>
-          </Box>
+          <NextOfKinBox nextOfKin={member} />
         </Box>
       )}
       {activeTab === 1 && <p>Deposits</p>}
