@@ -21,7 +21,6 @@ export const MemberInfoCard = ({ member }) => {
       gridColumn="span 4"
       gridRow="span 3"
       borderRadius="0.55rem"
-      component="card"
       sx={{
         backgroundColor: theme.palette.background.alt,
       }}

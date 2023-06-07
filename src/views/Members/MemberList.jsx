@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import {
-  Avatar,
-  Box,
-  Button,
-  Stack,
-  useTheme,
-  useMediaQuery,
-  IconButton,
-  InputBase,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Avatar, Box, Button, useTheme } from "@mui/material";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { Link } from "react-router-dom";
 import Datagrid from "../../components/Datagrid";
@@ -102,9 +92,7 @@ const Memberlist = () => {
   return (
     <Box m="5.5rem 2.5rem">
       <Header title="MEMBER LIST" subtitle="A data grid of all members" />
-      {/* <div style={{ height: 600, width: "100%" }}> */}
       <FlexBetween
-        // backgroundColor={theme.palette.background.alt}
         borderRadius="9px"
         gap="3rem"
         p="0.1rem 1.5rem"
@@ -115,7 +103,6 @@ const Memberlist = () => {
         getRowId={(row) => row.mbr_no}
         key={tableData.mbr_no}
       />
-      {/* </div> */}
     </Box>
   );
 };
