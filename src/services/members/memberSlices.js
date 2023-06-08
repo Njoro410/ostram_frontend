@@ -40,6 +40,5 @@ export const {
   useRegisterMemberMutation,
   useGetResidentialQuery,
   useGetMembersQuery,
-  useGetMemberDetailsQuery } =
-  memberRegisterSlice;
-
+  useGetMemberDetailsQuery,
+} = memberRegisterSlice;

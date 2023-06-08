@@ -7,12 +7,11 @@ import {
   CardContent,
   CardActions,
 } from "@mui/material";
-import { PointOfSale } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
-import toTitleCase from "../../utils/titleCaseConverter";
-import AlertDialog from "../../components/Dialog";
+import toTitleCase from "../utils/titleCaseConverter";
+import AlertDialog from "./Dialog";
 
-// Reusable components
+// Reusable member components
 export const MemberInfoCard = ({ member }) => {
   const theme = useTheme();
 
@@ -84,23 +83,6 @@ export const MemberInfoCard = ({ member }) => {
         />
       </CardActions>
     </Box>
-  );
-};
-
-const StatBox = ({ title, increase, description, icon }) => {
-  const theme = useTheme();
-
-  return (
-    <StatBox
-      title={title}
-      increase={increase}
-      description={description}
-      icon={
-        <PointOfSale
-          sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-        />
-      }
-    />
   );
 };
 

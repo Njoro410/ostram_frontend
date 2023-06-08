@@ -3,7 +3,7 @@ import Header from "../../components/Header";
 import { Avatar, Box, Button, useTheme } from "@mui/material";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { Link } from "react-router-dom";
-import Datagrid from "../../components/Datagrid";
+import Datagrid, { columnProperties } from "../../components/Datagrid";
 import toTitleCase from "../../utils/titleCaseConverter";
 import FlexBetween from "../../components/FlexBetween";
 
@@ -25,18 +25,18 @@ const Memberlist = () => {
       field: "mbr_no",
       headerName: "Member No",
       headerClassName: "primary-color",
+      ...columnProperties,
     },
     {
       field: "image",
       headerName: "",
       renderCell: (params) => <Avatar src={params.value}></Avatar>,
-      sortable: false,
-      filterable: false,
+      ...columnProperties,
     },
     {
       field: "names",
       headerName: "Name",
-      width: 260,
+      minWidth: 180,
       renderCell: (params) => (
         <strong>
           <Link
@@ -55,37 +55,40 @@ const Memberlist = () => {
         </strong>
       ),
       activeClassName: "",
-      sortable: false,
+      ...columnProperties,
     },
-    { field: "id_no", headerName: "ID", sortable: false },
+    { field: "id_no", headerName: "ID", ...columnProperties, minWidth: 100 },
     {
       field: "gender",
       headerName: "Gender",
-      sortable: false,
-      filterable: false,
+      ...columnProperties,
+      minWidth: 100,
     },
-    { field: "phone_no", headerName: "Phone Number", sortable: false },
+    {
+      field: "phone_no",
+      headerName: "Phone Number",
+      ...columnProperties,
+      minWidth: 100,
+    },
     {
       field: "residential",
       headerName: "Residential",
-      width: 120,
-      sortable: false,
-      filterable: false,
+      minWidth: 100,
+      ...columnProperties,
     },
     {
       field: "kra_pin",
       headerName: "KRA Pin",
       renderCell: (params) => <p>{params.value ? params.value : "null"}</p>,
-      sortable: false,
-      filterable: false,
+      ...columnProperties,
+      minWidth: 100,
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      minWidth: 100,
       renderCell: (params) => <Button variant="contained">Update</Button>,
-      sortable: false,
-      filterable: false,
+      ...columnProperties,
     },
   ];
 

@@ -3,23 +3,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useTheme } from "@emotion/react";
 
-const MemberChart = ({ name }) => {
+const BarChart = ({ series, nameText }) => {
   const theme = useTheme();
   const themeMode = useSelector((state) => state.theme.mode);
-  const series = [
-    {
-      name: "Loans",
-      data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
-    },
-    {
-      name: "Deposits",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-    },
-    {
-      name: "Savings",
-      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-    },
-  ];
+
   const options = {
     chart: {
       type: "bar",
@@ -39,6 +26,10 @@ const MemberChart = ({ name }) => {
       show: true,
       width: 2,
       colors: ["transparent"],
+    },
+    title: {
+      text: nameText,
+      align: "center",
     },
     xaxis: {
       categories: [
@@ -93,4 +84,4 @@ const MemberChart = ({ name }) => {
   );
 };
 
-export default MemberChart;
+export default BarChart;

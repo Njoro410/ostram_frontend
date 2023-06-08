@@ -9,49 +9,101 @@ import FlexBetween from "../../components/FlexBetween";
 import { Box, useMediaQuery } from "@mui/material";
 import { PointOfSale, PersonAdd, Traffic } from "@mui/icons-material";
 import StatBox from "../../components/StatBox";
-import MemberChart from "./MemberInfoGraph";
+import BarChart from "../../charts/BarChart";
 import { useTheme } from "@mui/material/styles";
 import toTitleCase from "../../utils/titleCaseConverter";
 import CustomTabs from "../../components/CustomTabs";
-import { MemberInfoCard, NextOfKinBox } from "./MemberCard";
-import Datagrid from "../../components/Datagrid";
+import { MemberInfoCard, NextOfKinBox } from "../../components/MemberCard";
+import Datagrid, { columnProperties } from "../../components/Datagrid";
+import formatDate from "../../utils/formatDate";
 
 const loansColumns = [
-  { field: "amount", headerName: "Amount" },
-  { field: "application_date", headerName: "Application date" },
-  { field: "issue_date", headerName: "Issue date" },
-  { field: "payment_frequency", headerName: "Payment frequency" },
-  { field: "loan_type", headerName: "Type" },
-  { field: "status", headerName: "Status" },
+  { field: "amount", headerName: "Amount", ...columnProperties, minWidth: 100 },
+  {
+    field: "application_date",
+    headerName: "Application date",
+    valueGetter: (params) => formatDate(params.row.application_date),
+    flex: 1,
+    minWidth: 100,
+  },
+  {
+    field: "issue_date",
+    headerName: "Issue date",
+    valueGetter: (params) => formatDate(params.row.issue_date),
+    flex: 1,
+    minWidth: 100,
+  },
+  {
+    field: "payment_frequency",
+    headerName: "Payment frequency",
+    ...columnProperties,
+    minWidth: 100,
+  },
+  {
+    field: "loan_type",
+    headerName: "Type",
+    ...columnProperties,
+    minWidth: 100,
+  },
+  { field: "status", headerName: "Status", ...columnProperties, minWidth: 100 },
 ];
 
 const generalColumns = [
-  { field: "balance", headerName: "Balance" },
-  { field: "created_on", headerName: "Created" },
-  { field: "created_by", headerName: "Created By" },
-  { field: "updated_on", headerName: "Updated" },
-  { field: "updated_by", headerName: "Updated By" },
-  { field: "branch", headerName: "Branch" },
+  {
+    field: "balance",
+    headerName: "Balance",
+    ...columnProperties,
+    minWidth: 100,
+  },
+  {
+    field: "created_on",
+    headerName: "Created",
+    valueGetter: (params) => formatDate(params.row.created_on),
+    flex: 1,
+    minWidth: 100,
+  },
+  {
+    field: "created_by",
+    headerName: "Created By",
+    ...columnProperties,
+    minWidth: 100,
+  },
+  {
+    field: "updated_on",
+    headerName: "Updated",
+    valueGetter: (params) => formatDate(params.row.updated_on),
+    flex: 1,
+    minWidth: 100,
+  },
+  {
+    field: "updated_by",
+    headerName: "Updated By",
+    ...columnProperties,
+    minWidth: 100,
+  },
+  { field: "branch", headerName: "Branch", ...columnProperties, minWidth: 100 },
 ];
+
+const Tabs = [
+  { label: "Member Information" },
+  { label: "Deposits" },
+  { label: "Loans" },
+  { label: "Savings" },
+];
+
 const MemberFile = () => {
   const [activeTab, setActiveTab] = useState(0);
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
 
-  const Tabs = [
-    { label: "Member Information" },
-    { label: "Deposits" },
-    { label: "Loans" },
-    { label: "Savings" },
-  ];
-
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const { memberNo } = useParams();
 
   // fetch member
-  const { data: member } = useGetMemberDetailsQuery(memberNo);
+  const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
+  console.log(member, "member");
   // fetch loans
   const [loansData, setLoans] = useState([]);
   const { data: loans } = useGetMemberLoansQuery(memberNo);
@@ -60,6 +112,7 @@ const MemberFile = () => {
       setLoans(loans.data);
     }
   }, [loans]);
+  console.log(loans, "loans");
   // fetch deposits
   const [depositsData, setDeposits] = useState([]);
   const { data: deposits } = useGetMemberDepositsQuery(memberNo);
@@ -67,7 +120,7 @@ const MemberFile = () => {
     if (deposits) {
       setDeposits(deposits.data);
     }
-  }, [loans]);
+  }, [deposits]);
   // fetch savings
   const [savingsData, setSavings] = useState([]);
   const { data: savings } = useGetMemberSavingsQuery(memberNo);
@@ -76,6 +129,27 @@ const MemberFile = () => {
       setSavings(savings.data);
     }
   }, [savings]);
+
+  if (isLoading) {
+    // Handle the loading state or return a loading spinner
+    return <div>Loading...</div>;
+  }
+
+  const series = [
+    {
+      name: "Loans",
+      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
+    },
+    {
+      name: "Deposits",
+      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
+    },
+    {
+      name: "Savings",
+      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
+    },
+  ];
+
   return (
     <Box m="1.5rem 2.5rem">
       <FlexBetween>
@@ -105,8 +179,8 @@ const MemberFile = () => {
 
           <StatBox
             title="Total loans"
-            increase={loans.data.amount}
-            description={loans.data.issue_date}
+            // increase={loans.data.amount}
+            // description={loans.data.issue_date}
             icon={
               <PointOfSale
                 sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -116,8 +190,8 @@ const MemberFile = () => {
 
           <StatBox
             title="Total Savings"
-            increase={savings.data.balance}
-            description={savings.data.updated_on}
+            // increase={savings.data.balance}
+            // description={savings.data.updated_on}
             icon={
               <PersonAdd
                 sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -126,8 +200,8 @@ const MemberFile = () => {
           />
           <StatBox
             title="Total Deposits"
-            increase={deposits.data.updated_on}
-            description={deposits.data.balance}
+            // increase={deposits.data.updated_on}
+            // description={deposits.data.balance}
             icon={
               <Traffic
                 sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
@@ -159,7 +233,7 @@ const MemberFile = () => {
               justifyItems: "center",
             }}
           >
-            <MemberChart />
+            <BarChart series={series} name="Loans, Deposits, Savings" />
           </Box>
           <NextOfKinBox nextOfKin={member} />
         </Box>
