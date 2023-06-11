@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import { useTheme } from "@emotion/react";
 import GroupedStackedColumn from "../../charts/GroupedStackedColumn";
 import PieChart from "../../charts/PieChart";
-import { useGetAllLoanTypesQuery } from "../../services/loans/loanSlices";
+import { useGetLoanTypesQuery } from "../../services/loans/loanSlices";
 import LoanProductCard from "../../components/LoanComponents/LoanProductCard";
 import AddLoanProductModal from "../../components/LoanComponents/AddLoanProductModal";
 
@@ -22,7 +22,7 @@ const LoanProducts = () => {
     isSuccess,
     isError,
     error,
-  } = useGetAllLoanTypesQuery();
+  } = useGetLoanTypesQuery();
 
   return (
     <Box mt="2rem">
