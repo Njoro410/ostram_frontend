@@ -545,7 +545,7 @@ const RegisterMember = () => {
               variant="contained"
               sx={{
                 mt: 5,
-                p: 4,
+                p: 1,
                 backgroundColor: theme.palette.secondary[500],
                 color: "black",
                 fontWeight: "bold",
@@ -561,7 +561,7 @@ const RegisterMember = () => {
               loading
               fullWidth
               variant="contained"
-              sx={{ p: 4, mt: 5 }}
+              sx={{ p: 1, mt: 5 }}
             >
               <span>Submit</span>
             </LoadingButton>
@@ -575,7 +575,7 @@ const RegisterMember = () => {
             variant="contained"
             sx={{
               mt: 5,
-              p: 4,
+              p: 1,
               backgroundColor: theme.palette.secondary[500],
               color: "black",
               fontWeight: "bold",
