@@ -28,6 +28,9 @@ const Loans = () => {
     {
       label: "Loan Assets",
     },
+    {
+      label: "Process Loan",
+    },
   ];
   return (
     <Box m="5.5rem 2.5rem">
