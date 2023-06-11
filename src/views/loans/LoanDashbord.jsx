@@ -75,6 +75,10 @@ const LoanDashbord = () => {
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <Paper
             elevation={0}
@@ -124,6 +128,10 @@ const LoanDashbord = () => {
           p="1.25rem 1rem"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <Paper
             elevation={0}
@@ -177,6 +185,10 @@ const LoanDashbord = () => {
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <Paper
             elevation={0}
@@ -230,6 +242,10 @@ const LoanDashbord = () => {
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <Paper
             elevation={0}
@@ -284,6 +300,10 @@ const LoanDashbord = () => {
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <Linechart series={Savingseries} nameText="Savings to date" />
         </Box>
@@ -298,6 +318,10 @@ const LoanDashbord = () => {
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <SplineArea />
         </Box>
