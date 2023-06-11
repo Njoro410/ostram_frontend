@@ -1,51 +1,111 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { Box } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Avatar, Box, Button, useTheme } from "@mui/material";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
-import { useNavigate } from "react-router-dom";
-
-const columns = [
-  { field: "mbr_no", headerName: "Member No", width: 120 },
-  { field: "id_no", headerName: "ID", width: 50 },
-  { field: "names", headerName: "Name", width: 200 },
-  { field: "phone_no", headerName: "Phone Number", width: 100 },
-  { field: "residential", headerName: "Residential Area", width: 120 },
-  { field: "next_of_kin", headerName: "Next of Kin", width: 200 },
-  { field: "gender", headerName: "Gender", width: 80 },
-  { field: "kra_pin", headerName: "KRA Pin", width: 100 },
-];
+import { Link } from "react-router-dom";
+import Datagrid, { columnProperties } from "../../components/Datagrid";
+import toTitleCase from "../../utils/titleCaseConverter";
+import FlexBetween from "../../components/FlexBetween";
 
 const Memberlist = () => {
-  const navigate = useNavigate();
+  const theme = useTheme();
+
   const [tableData, setTabledata] = useState([]);
 
   const { data: members, isLoading } = useGetMembersQuery();
 
   useEffect(() => {
-    if(members) {
+    if (members) {
       setTabledata(members.results);
     }
   }, [members]);
-  
 
-  const handleRowClick = (param) => {
-    const memberNo = param.row.mbr_no;
-    navigate(`/member-details/${memberNo}`);
-  };
+  const columns = [
+    {
+      field: "mbr_no",
+      headerName: "Member No",
+      headerClassName: "primary-color",
+      ...columnProperties,
+    },
+    {
+      field: "image",
+      headerName: "",
+      renderCell: (params) => <Avatar src={params.value}></Avatar>,
+      ...columnProperties,
+    },
+    {
+      field: "names",
+      headerName: "Name",
+      minWidth: 180,
+      renderCell: (params) => (
+        <strong>
+          <Link
+            to={`/member-details/${params.row.mbr_no}`}
+            preventScrollReset={true}
+            style={{
+              textDecoration: "none",
+              color: theme.palette.secondary[300],
+              "&:hover": {
+                color: theme.palette.secondary[100],
+              },
+            }}
+          >
+            {toTitleCase(params.value)}
+          </Link>
+        </strong>
+      ),
+      activeClassName: "",
+      ...columnProperties,
+    },
+    { field: "id_no", headerName: "ID", ...columnProperties, minWidth: 100 },
+    {
+      field: "gender",
+      headerName: "Gender",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "phone_no",
+      headerName: "Phone Number",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "residential",
+      headerName: "Residential",
+      minWidth: 100,
+      ...columnProperties,
+    },
+    {
+      field: "kra_pin",
+      headerName: "KRA Pin",
+      renderCell: (params) => <p>{params.value ? params.value : "null"}</p>,
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      minWidth: 100,
+      renderCell: (params) => <Button variant="contained">Update</Button>,
+      ...columnProperties,
+    },
+  ];
 
   return (
     <Box m="5.5rem 2.5rem">
       <Header title="MEMBER LIST" subtitle="A data grid of all members" />
-      <div style={{ height: 500, width: "100%" }}>
-        <DataGrid
-          rows={tableData}
-          columns={columns}
-          getRowId={(row) => row.mbr_no}
-          key={tableData.mbr_no}
-          onRowClick={handleRowClick}
-        />
-      </div>
+      <FlexBetween
+        borderRadius="9px"
+        gap="3rem"
+        p="0.1rem 1.5rem"
+      ></FlexBetween>
+      <Datagrid
+        rows={tableData}
+        columns={columns}
+        getRowId={(row) => row.mbr_no}
+        key={tableData.mbr_no}
+      />
     </Box>
   );
 };
