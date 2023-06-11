@@ -69,7 +69,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <Box m="1.5rem 2.5rem">
+    <Box m="5.5rem 2.5rem">
       <FlexBetween>
         <Header
           title="DASHBOARD"
@@ -114,6 +114,7 @@ const Dashboard = () => {
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
+          
         />
         <StatBox
           title="Total loans"
@@ -155,6 +156,10 @@ const Dashboard = () => {
           gridRow="span 2"
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <CustomTabs
             tabs={weatherTabs}
@@ -179,6 +184,10 @@ const Dashboard = () => {
           backgroundColor={theme.palette.background.alt}
           p="1rem"
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <CustomTabs
             tabs={graphTabs}
@@ -201,6 +210,10 @@ const Dashboard = () => {
           backgroundColor={theme.palette.background.alt}
           p="1.5rem"
           borderRadius="0.55rem"
+          sx={{
+            border: (theme) => `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+          }}
         >
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             more stuff

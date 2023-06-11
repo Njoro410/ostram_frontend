@@ -9,12 +9,22 @@ export const loanSlices = apiSlice.injectEndpoints({
       }),
     }),
 
-    getLoanStatus: builder.query({
-      query: () => ({
-        url: "/loans/loan_status/",
-        method: "GET",
-      }),
-    }),
+        getLoanStatus: builder.query({
+            query: () => ({
+                url: "/loans/loan_status/",
+                method: "GET"
+            })
+        }),
+
+        getAllLoans: builder.query({
+            query: () => ({
+                url: "/loans/all_loans/",
+                method: "GET"
+            })
+        }),
+
+    })
+})
 
     getMemberLoans: builder.query({
       query: (mbr_no) => ({
@@ -25,8 +35,10 @@ export const loanSlices = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useGetLoanTypesQuery,
-  useGetLoanStatusQuery,
+
+    useGetLoanTypesQuery,
+    useGetLoanStatusQuery,
+    useGetAllLoansQuery,
   useGetMemberLoansQuery,
-} = loanSlices;
+} = loanSlices
+
