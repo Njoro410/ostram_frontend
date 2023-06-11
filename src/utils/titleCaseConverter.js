@@ -1,5 +1,5 @@
 function toTitleCase(str) {
-  if (str) {
+  if (typeof str === 'string') { // check if str is a string
     // Split the string into an array of words
     const words = str.toLowerCase().split(" ");
 
