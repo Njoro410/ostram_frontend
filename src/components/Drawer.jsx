@@ -165,7 +165,7 @@ export default function DrawerComponent({
       sx={{
         "& .MuiDrawer-paper": {
           color: theme.palette.secondary[200],
-          backgroundColor: theme.palette.background.alt,
+          backgroundColor: theme.palette.background.default,
           boxSixing: "border-box",
           borderWidth: isNonMobile ? 0 : "2px",
           flexShrink: 0,

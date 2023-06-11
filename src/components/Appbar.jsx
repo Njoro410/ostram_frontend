@@ -101,7 +101,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             </IconButton>
 
             <FlexBetween
-              backgroundColor={theme.palette.background.alt}
+              backgroundColor={theme.palette.background.default}
               borderRadius="9px"
               gap="3rem"
               p="0.1rem 1.5rem"
