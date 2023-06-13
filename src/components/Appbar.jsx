@@ -66,7 +66,21 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
   };
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
- 
+
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    // Redirect to member list page with search query
+    window.location.href = `/view members?search=${encodeURIComponent(
+      searchQuery
+    )}`;
+  };
+
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar
@@ -105,9 +119,15 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               borderRadius="9px"
               gap="3rem"
               p="0.1rem 1.5rem"
+              component="form" // Add form element to handle form submission
+              onSubmit={handleSearchSubmit} // Handle form submission
             >
-              <InputBase placeholder="Search..." />
-              <IconButton>
+              <InputBase
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <IconButton type="submit">
                 <Search />
               </IconButton>
             </FlexBetween>
@@ -178,7 +198,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <ProfileMenu handleClose={handleClose} theme={theme}/>
+            <ProfileMenu handleClose={handleClose} theme={theme} />
           </Menu>
         </Toolbar>
       </AppBar>
