@@ -39,7 +39,7 @@ const StyledChip = styled(Chip)`
   font-size: 0.75rem;
 `;
 
-const LoanProductCard = ({ key, type }) => {
+const LoanProductCard = ({ unique_key, type }) => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
   // console.log(type.documents)
@@ -68,7 +68,7 @@ const LoanProductCard = ({ key, type }) => {
     setExpanded(!expanded);
   };
   return (
-    <GlassCard key={key} variant="outlined">
+    <GlassCard key={unique_key} variant="outlined">
       <FlexBetween>
         <StyledCardHeader
           title={`${type.name} Loan`}

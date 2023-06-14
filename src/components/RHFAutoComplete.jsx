@@ -23,24 +23,24 @@ const RHFAutoComplete = ({
           const { onChange, value, ref } = field;
 
           const selectedOptions = options.filter((option) =>
-            value?.includes(option.mbr_no)
+            value?.includes(option.mbr_no || option.id)
           );
 
           return (
             <Autocomplete
               multiple
               value={selectedOptions}
-              getOptionLabel={(option) => option.names}
+              getOptionLabel={(option) => option.names || option.name}
               filterSelectedOptions
               renderOption={(props, option) => (
-                <Typography {...props} key={option.mbr_no}>
-                  {option.names}  
+                <Typography {...props} key={option.mbr_no || option.id}>
+                  {option.names || option.name}  
                 </Typography>
               )}
               onChange={(e, newValue) => {
-                onChange(newValue.map((option) => option.mbr_no));
+                onChange(newValue.map((option) => option.mbr_no || option.id));
               }}
-              id="controllable-states-demo"
+              id="controllable-states"
               options={options}
               renderInput={(params) => (
                 <TextField
@@ -49,7 +49,7 @@ const RHFAutoComplete = ({
                   inputRef={ref}
                   error={error}
                   helperText={helperText}
-                  sx={{mt:2}}
+                  sx={{mt:1}}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
@@ -80,24 +80,24 @@ const RHFAutoComplete = ({
             value={
               value
                 ? options.find((option) => {
-                    return value === option.mbr_no;
+                    return value === option.mbr_no || option.id;
                   }) ?? null
                 : null
             }
             getOptionLabel={(option) => {
-              return option.names;
+              return option.names || option.lendee;
             }}
             renderOption={(props, option) => {
               return (
-                <p {...props} key={option.mbr_no}>
-                  {option.names}
+                <p {...props} key={option.mbr_no || option.id}>
+                  {option.names || option.lendee}
                 </p>
               );
             }}
             onChange={(e, newValue) => {
-              onChange(newValue ? newValue.mbr_no : null);
+              onChange(newValue ? newValue.mbr_no || newValue.id : null);
             }}
-            id="controllable-states-demo"
+            id="controllable-states"
             options={options}
             renderInput={(params) => (
               <TextField

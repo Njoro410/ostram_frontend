@@ -61,3 +61,26 @@ export const loanApplicationSchema = Yup.object().shape({
   guarantors: Yup.array()
     .required("Guarantors are required")
 })
+
+export const loanProductSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("Name is required"),
+  description: Yup.string()
+    .required("Please provide a description"),
+  rate: Yup.string()
+    .required('Product rate is required')
+    .test('is-number', 'Can only be a whole number or a decimal', (value) => !value || !isNaN(value)),
+  min_amount: Yup.string()
+    .required('Minimum amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  max_amount: Yup.string()
+    .required('Maximum amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  documents: Yup.array()
+    .required("Documents are required")
+})
+
+export const loanDocument = Yup.object().shape({
+  loan: Yup.string()
+    .required("Loan is required"),
+})

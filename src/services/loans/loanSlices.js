@@ -30,6 +30,20 @@ export const loanSlices = apiSlice.injectEndpoints({
       }),
     }),
 
+    getLoanDocuments: builder.query({
+      query: (loan_id) => ({
+        url: loan_id ? `/loans/loan_documents/${loan_id}/` : `/loans/loan_documents/`,
+        method: "GET",
+      }),
+    }),
+
+    getLoanDocumentsTypes: builder.query({
+      query: (document_id) => ({
+        url: document_id ? `/loans/loan_document_types/${document_id}/` : `/loans/loan_document_types/`,
+        method: "GET",
+      }),
+    }),
+
   })
 })
 
@@ -39,5 +53,7 @@ export const {
   useGetLoanStatusQuery,
   useGetAllLoansQuery,
   useGetMemberLoansQuery,
+  useLazyGetLoanDocumentsQuery,
+  useGetLoanDocumentsTypesQuery
 } = loanSlices
 

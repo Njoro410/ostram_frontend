@@ -18,6 +18,8 @@ import Contributions from "./views/Accounts/Contributions";
 import ApplyLoan from "./views/loans/ApplyLoan";
 import LoanList from "./views/loans/LoanList";
 import Loans from "./views/loans/Loans";
+import TodoApp from "./views/Apps/TodoApp";
+import LoanCalculator from "./views/Apps/LoanCalculator";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -51,10 +53,17 @@ function App() {
                 {/* accounts links */}
                 <Route path="/savings account" element={<SavingsAccount />} />
                 <Route path="/deposits account" element={<DepositsAccount />} />
-                <Route path="/daily contributions" element={<Contributions />} />
+                <Route
+                  path="/daily contributions"
+                  element={<Contributions />}
+                />
                 {/* loan link */}
                 <Route path="/apply loan" element={<ApplyLoan />} />
-                <Route path="/loan list" element={<Loans />} />
+                <Route path="/view loans" element={<Loans />} />
+
+                {/* Apps Link */}
+                <Route path="/todo list" element={<TodoApp />} />
+                <Route path="/loan calculator" element={<LoanCalculator />} />
               </Route>
             </Route>
           </Routes>

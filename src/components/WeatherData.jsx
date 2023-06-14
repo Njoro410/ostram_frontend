@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useGetWeatherDataQuery } from "../app/api/weatherSlice";
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Typography, alpha, useTheme } from "@mui/material";
 import Sunny from "../assets/weather/sunny.jpg";
 import Rainy from "../assets/weather/rainy.jpg";
 import Cloudy from "../assets/weather/cloudy.jpg";
@@ -11,12 +11,21 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const WeatherData = ({ location }) => {
+  const theme = useTheme();
   const {
     data: weather,
     isLoading,
     isError,
     error,
   } = useGetWeatherDataQuery(location);
+
+  const getTimeFromDate = (dateString) => {
+    const date = new Date(dateString);
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const timeString = date.toLocaleTimeString(undefined, timeOptions);
+
+    return timeString;
+  };
 
   const getImageUrl = () => {
     if (weather && weather?.current.condition.code) {
@@ -52,11 +61,12 @@ const WeatherData = ({ location }) => {
   };
 
   const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
+    centerMode: false,
+    variableWidth: true,
+    arrows: true,
+    infinite: true,
   };
 
   const imageUrl = getImageUrl();
@@ -64,7 +74,7 @@ const WeatherData = ({ location }) => {
     (time) => time
   );
 
-  function filterForecastWeather(forecastWeather) {
+  const filterForecastWeather = (forecastWeather) => {
     if (!forecastWeather || !Array.isArray(forecastWeather)) {
       return [];
     }
@@ -75,18 +85,7 @@ const WeatherData = ({ location }) => {
       const itemTimestamp = new Date(item.time).getTime();
       return itemTimestamp > currentTimestamp;
     });
-  }
-
-  // console.log(filterForecastWeather(forecastWeather));
-
-  function getForecastWeatherCode(forecastWeather) {
-    if (!forecastWeather || !Array.isArray(forecastWeather)) {
-      return [];
-    }
-    return forecastWeather.map((weath) => weath.condition.code);
-  }
-
-  // console.log(getForecastWeatherCode(forecastWeather))
+  };
 
   return (
     <Box
@@ -154,20 +153,66 @@ const WeatherData = ({ location }) => {
             {weather?.current.temp_c}&#176;C
           </Typography>
         </FlexBetween>
-        <Box>
+        <Box width="100%">
           <Slider {...settings}>
             {filterForecastWeather(forecastWeather).map((hour) => (
               <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: '#f1f1f1',
-                color: '#333',
-              }}
+                sx={{
+                  // padding: "0.3rem",
+                  width: "100%",
+                  marginTop: "1rem",
+                }}
                 key={hour.time_epoch}
               >
-                {hour.condition.text} {hour.time}
+                <Box
+                  sx={{
+                    color: "#f5f5f5",
+                    backgroundColor: alpha("#000000", 0.2),
+                    width: "100%",
+                    textAlign: "center",
+                    border: (theme) => `1px solid ${theme.palette.divider}`,
+                    borderRadius: 1,
+                  }}
+                >
+                  <Typography
+                    sx={{ fontWeight: "bold" }}
+                    variant="button"
+                    display="block"
+                    gutterBottom
+                  >
+                    {getTimeFromDate(hour.time)}
+                  </Typography>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Box
+                      component="img"
+                      sx={{ width: "3rem" }}
+                      src={hour.condition.icon}
+                      alt={hour.condition.text}
+                    />
+
+                    <Typography
+                      variant="button"
+                      display="block"
+                      gutterBottom
+                      sx={{ fontWeight: "bold", paddingRight: "1rem" }}
+                    >
+                      {hour.temp_c}&#176;C
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{ padding: 1 }}
+                    variant="button"
+                    display="block"
+                    gutterBottom
+                  >
+                    {hour.condition.text}
+                  </Typography>
+                </Box>
+                <Divider orientation="vertical" variant="middle" flexItem />
               </Box>
             ))}
           </Slider>

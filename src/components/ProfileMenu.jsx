@@ -11,7 +11,7 @@ const ProfileMenu = ({ handleClose, theme }) => {
   const handleLogout = useLogout();
   return (
     <Box sx={{ bgcolor: theme.palette.background.alt }}>
-      <MenuItem onClick={handleClose}>
+      {/* <MenuItem onClick={handleClose}>
         <Avatar /> Profile
       </MenuItem>
       <MenuItem onClick={handleClose}>
@@ -29,7 +29,7 @@ const ProfileMenu = ({ handleClose, theme }) => {
           <Settings fontSize="small" />
         </ListItemIcon>
         Settings
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleClose && handleLogout}>
         <ListItemIcon>
           <Logout fontSize="small" />

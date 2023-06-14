@@ -106,7 +106,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               gap="3rem"
               p="0.1rem 1.5rem"
             >
-              <InputBase placeholder="Search..." />
+              <InputBase placeholder="Search Coming Soon..." />
               <IconButton>
                 <Search />
               </IconButton>
