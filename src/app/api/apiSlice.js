@@ -5,7 +5,7 @@ import { setAccessToken, logOut, setCSRFToken } from '../../features/auth/authSl
 const baseQuery = fetchBaseQuery({
     baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
     credentials: 'include',
-    mode: 'cors',
+    mode: 'no-cors',
     method: 'POST',
     prepareHeaders: (headers, { getState }) => {
         const token = getState().auth.accesstoken
