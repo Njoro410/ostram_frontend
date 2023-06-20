@@ -39,6 +39,7 @@ const ApplyLoan = () => {
  
 
   const { data: members, isFetching } = useGetMembersQuery({ skip: true });
+ 
 
   const {
     register,
@@ -51,8 +52,8 @@ const ApplyLoan = () => {
   });
 
   const onSubmitHandler = (data) => {
-    console.log(data);
-    console.log(moment());
+    // console.log(data);
+    // console.log(moment());
   };
 
   return (
@@ -190,6 +191,7 @@ const ApplyLoan = () => {
           gridRow="span 2"
           backgroundColor={theme.palette.background.alt}
           p="1rem"
+          mt={1}
           borderRadius="0.55rem"
         >
           <RHFAutoComplete

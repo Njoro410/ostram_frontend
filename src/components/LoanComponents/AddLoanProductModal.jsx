@@ -5,36 +5,211 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import styled from "@emotion/styled";
+import { useGetLoanDocumentsTypesQuery } from "../../services/loans/loanSlices";
+import RHFAutoComplete from "../RHFAutoComplete";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loanProductSchema } from "../../utils/validationSchema";
+import { Controller, useForm } from "react-hook-form";
 
 const AddLoanProductModal = ({ open, onClose }) => {
   const theme = useTheme();
-  const CustomDialog = styled(Dialog)(({ theme }) => ({
-    '& .MuiPaper-root': {
-      backgroundColor: theme.palette.background.alt, 
-    },
-  }));
+  const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+
+  const { data: document_types, isFetching } = useGetLoanDocumentsTypesQuery();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    control,
+  } = useForm({
+    resolver: yupResolver(loanProductSchema),
+  });
+
+  const onSubmitHandler = (data, event) => {
+    event.preventDefault();
+    // onClose();
+    console.log(data);
+  };
 
   return (
-    <CustomDialog
-
+    <Dialog
+      sx={{
+        "& .MuiPaper-root": {
+          backgroundColor: theme.palette.background.alt,
+        },
+      }}
       open={open}
       onClose={onClose}
+      maxWidth="md"
     >
-      <DialogTitle>Subscribe</DialogTitle>
+      <DialogTitle>Add Loan Product</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
-        </DialogContentText>
+        <Box
+          mt="20px"
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
+          gridAutoRows="260px"
+          borderRadius="0.55rem"
+          component="form"
+          onSubmit={handleSubmit(onSubmitHandler)}
+          p="1rem"
+          gap="20px"
+          sx={{
+            "& > div": {
+              gridColumn: isNonMediumScreens ? undefined : "span 12",
+            },
+          }}
+        >
+          <Box gridColumn="span 4" gridRow="span 1">
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              {...register("name")}
+              error={errors.name ? true : false}
+              helperText={errors.name?.message}
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Description"
+              multiline
+              rows={errors.description?.message ? 5.3 : 4.2}
+              type="text"
+              fullWidth
+              {...register("description")}
+              error={errors.description ? true : false}
+              helperText={errors.description?.message}
+            />
+          </Box>
+          <Box gridColumn="span 4" gridRow="span 1">
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Rate"
+              type="text"
+              fullWidth
+              {...register("rate")}
+              error={errors.rate ? true : false}
+              helperText={errors.rate?.message}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Minimum Amount"
+              type="text"
+              fullWidth
+              {...register("min_amount")}
+              error={errors.min_amount ? true : false}
+              helperText={errors.min_amount?.message}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Maximum Amount"
+              type="text"
+              fullWidth
+              {...register("max_amount")}
+              error={errors.max_amount ? true : false}
+              helperText={errors.max_amount?.message}
+            />
+          </Box>
+          <Box gridColumn="span 4" gridRow="span 1">
+            <RHFAutoComplete
+              options={document_types?.results || []}
+              control={control}
+              name="documents"
+              placeholder="Select Documents"
+              error={!!errors?.documents}
+              helperText={errors.documents?.message}
+              isFetch={isFetching}
+              multiple={true}
+            />
+            <FormGroup sx={{ display: "flex" }}>
+              <Controller
+                name="need_guarantor"
+                control={control}
+                defaultValue={false}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...field}
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    }
+                    label="Needs Guarantors"
+                  />
+                )}
+              />
 
+              <Controller
+                name="need_collateral"
+                control={control}
+                defaultValue={false}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...field}
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    }
+                    label="Needs Collateral"
+                  />
+                )}
+              />
+            </FormGroup>
+          </Box>
+        </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onClose}>Subscribe</Button>
+        <Button onClick={onClose}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color={theme.palette.secondary.light}
+            gutterBottom
+            variant="button"
+            display="block"
+          >
+            Cancel
+          </Typography>
+        </Button>
+        <Button onClick={handleSubmit(onSubmitHandler)}>
+          <Typography
+            sx={{ fontSize: 14 }}
+            color={theme.palette.secondary.light}
+            gutterBottom
+            variant="button"
+            display="block"
+          >
+            Submit
+          </Typography>
+        </Button>
       </DialogActions>
-    </CustomDialog>
+    </Dialog>
   );
 };
 

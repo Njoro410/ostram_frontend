@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 export const columnProperties = {
   sortable: false,
@@ -8,10 +8,14 @@ export const columnProperties = {
 };
 
 const Datagrid = ({ columns, rows, getRowId }) => {
+  const theme = useTheme();
   return (
     <Box
+      backgroundColor={theme.palette.background.alt}
+      padding="1rem"
+      borderRadius="0.55rem"
       sx={{
-        height: 600,
+        height: 550,
         width: "100%",
         "& .MuiDataGrid-root": {
           border: "none",
@@ -19,6 +23,8 @@ const Datagrid = ({ columns, rows, getRowId }) => {
             border: "none",
           },
         },
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        borderRadius: 1,
       }}
     >
       <DataGrid

@@ -4,6 +4,9 @@ import CustomTabs from "../../components/CustomTabs";
 import LoanList from "./LoanList";
 import LoanDashbord from "./LoanDashbord";
 import LoanProducts from "./LoanProducts";
+import LoanDocuments from "./LoanDocuments/LoanDocuments";
+import LoanAssets from "./LoanAssets/LoanAssets";
+import ProcessLoans from "./ProcessLoans";
 
 const Loans = () => {
   const [activeLoanViewTab, setActiveLoanViewTab] = useState(0);
@@ -43,6 +46,9 @@ const Loans = () => {
       {activeLoanViewTab === 0 && <LoanDashbord />}
       {activeLoanViewTab === 1 && <LoanList />}
       {activeLoanViewTab === 2 && <LoanProducts />}
+      {activeLoanViewTab === 3 && <LoanDocuments />}
+      {activeLoanViewTab === 4 && <LoanAssets />}
+      {activeLoanViewTab === 5 && <ProcessLoans />}
     </Box>
   );
 };

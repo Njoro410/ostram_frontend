@@ -122,12 +122,8 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               component="form" // Add form element to handle form submission
               onSubmit={handleSearchSubmit} // Handle form submission
             >
-              <InputBase
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <IconButton type="submit">
+              <InputBase placeholder="Search Coming Soon..." />
+              <IconButton>
                 <Search />
               </IconButton>
             </FlexBetween>

@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 const DepositsAccount = () => {
   return (
     <Box m="5.5rem 2.5rem">
-      <Header title="MEMBER LIST" subtitle="A data grid of all members" />
+      <Header title="DEPOSIT ACCOUNTS" subtitle="Coming soon...." />
     </Box>
   );
 };

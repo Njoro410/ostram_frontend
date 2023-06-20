@@ -74,7 +74,6 @@ const LoanDashbord = () => {
           p="1.25rem 1rem"
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
@@ -127,7 +126,6 @@ const LoanDashbord = () => {
           gridRow="span 1"
           p="1.25rem 1rem"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
@@ -184,7 +182,6 @@ const LoanDashbord = () => {
           p="1.25rem 1rem"
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
@@ -241,7 +238,6 @@ const LoanDashbord = () => {
           p="1.25rem 1rem"
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
@@ -296,10 +292,8 @@ const LoanDashbord = () => {
           flexDirection="column"
           justifyContent="space-between"
           p="1.25rem 1rem"
-          // mt="5rem"
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
@@ -317,7 +311,6 @@ const LoanDashbord = () => {
           p="1.25rem 1rem"
           flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,

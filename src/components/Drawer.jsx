@@ -123,13 +123,14 @@ const navItems = [
     icon: null,
   },
   {
+    text: "View Loans",
+    icon: <FormatListNumberedOutlined />,
+  },
+  {
     text: "Apply Loan",
     icon: <AddCardOutlined />,
   },
-  {
-    text: "Loan List",
-    icon: <FormatListNumberedOutlined />,
-  },
+
   {
     text: "Apps",
     icon: null,

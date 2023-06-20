@@ -8,6 +8,7 @@ import PieChart from "../../charts/PieChart";
 import { useGetLoanTypesQuery } from "../../services/loans/loanSlices";
 import LoanProductCard from "../../components/LoanComponents/LoanProductCard";
 import AddLoanProductModal from "../../components/LoanComponents/AddLoanProductModal";
+// import { useGetLoanDocumentsTypesQuery } from "../../services/loans/loanSlices";
 
 const LoanProducts = () => {
   const theme = useTheme();
@@ -18,15 +19,15 @@ const LoanProducts = () => {
 
   const {
     data: loan_types,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
+    // isLoading,
+    // isSuccess,
+    // isError,
+    // error,
   } = useGetLoanTypesQuery();
 
   return (
     <Box mt="2rem">
-      <AddLoanProductModal open={openModal} onClose={handleModalClose}/>
+      <AddLoanProductModal open={openModal} onClose={handleModalClose} />
       <FlexBetween>
         <Header title="LOAN PRODUCTS" subtitle="Details about loan products" />
 
@@ -56,7 +57,6 @@ const LoanProducts = () => {
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="160px"
         borderRadius="0.55rem"
-        // height="100vh"
         p="1rem"
         gap="20px"
         sx={{
@@ -96,14 +96,13 @@ const LoanProducts = () => {
           <Box
             gridColumn="span 4"
             gridRow="span 2"
-            // gridRow={expanded ? "span 3" : "span 2"}
             backgroundColor={theme.palette.background.alt}
             borderRadius="0.55rem"
             p={2}
             mt="3.5rem"
             height="fit-content"
           >
-            <LoanProductCard key={type.id} type={type} />
+            <LoanProductCard unique_key={type.id} type={type} />
           </Box>
         ))}
       </Box>

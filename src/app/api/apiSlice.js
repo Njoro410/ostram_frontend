@@ -3,7 +3,7 @@ import { setAccessToken, logOut, setCSRFToken } from '../../features/auth/authSl
 
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'http://127.0.0.1:8000/api',
+    baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
     credentials: 'include',
     mode: 'cors',
     method: 'POST',

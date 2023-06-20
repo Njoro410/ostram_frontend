@@ -7,6 +7,8 @@ import {
   PointOfSale,
   PersonAdd,
   Traffic,
+  SavingsOutlined,
+  AccountBalanceWalletOutlined,
 } from "@mui/icons-material";
 import {
   Box,
@@ -16,6 +18,9 @@ import {
   useMediaQuery,
   Tabs,
   Tab,
+  Alert,
+  AlertTitle,
+  Divider,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "../../components/StatBox";
@@ -25,6 +30,23 @@ import Linechart from "../../charts/Linechart";
 import WeatherData from "../../components/WeatherData";
 import CustomTabs from "../../components/CustomTabs";
 import { useGetResidentialQuery } from "../../services/members/memberSlices";
+import styled from "@emotion/styled";
+
+const PulsatingAlert = styled(Alert)`
+  animation: pulse 2s infinite;
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+`;
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -92,7 +114,11 @@ const Dashboard = () => {
           </Button>
         </Box> */}
       </FlexBetween>
-
+      <PulsatingAlert severity="warning">
+        <AlertTitle>Warning</AlertTitle>
+        This webapp is <strong>still in development</strong>, functionality is
+        limited. You might see duplicate information
+      </PulsatingAlert>
       <Box
         mt="20px"
         display="grid"
@@ -110,11 +136,10 @@ const Dashboard = () => {
           description="Since last month"
           value="18"
           icon={
-            <Email
+            <PersonAdd
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
-          
         />
         <StatBox
           title="Total loans"
@@ -134,7 +159,7 @@ const Dashboard = () => {
           description="Since last month"
           value="100,000"
           icon={
-            <PersonAdd
+            <SavingsOutlined 
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
@@ -145,7 +170,7 @@ const Dashboard = () => {
           description="Since last month"
           value="98,000"
           icon={
-            <Traffic
+            <AccountBalanceWalletOutlined
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }
@@ -216,7 +241,8 @@ const Dashboard = () => {
           }}
         >
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
-            more stuff
+            Recent Transactions
+            <Divider />
           </Typography>
         </Box>
       </Box>
