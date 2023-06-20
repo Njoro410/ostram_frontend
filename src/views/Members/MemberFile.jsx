@@ -13,7 +13,10 @@ import BarChart from "../../charts/BarChart";
 import { useTheme } from "@mui/material/styles";
 import toTitleCase from "../../utils/titleCaseConverter";
 import CustomTabs from "../../components/CustomTabs";
-import { MemberInfoCard, NextOfKinBox } from "../../components/MemberCard";
+import {
+  MemberInfoCard,
+  NextOfKinBox,
+} from "../../components/MemberComponents/MemberCard";
 import Datagrid, { columnProperties } from "../../components/Datagrid";
 import formatDate from "../../utils/formatDate";
 

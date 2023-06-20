@@ -8,8 +8,8 @@ import {
   CardActions,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import toTitleCase from "../utils/titleCaseConverter";
-import AlertDialog from "./Dialog";
+import toTitleCase from "../../utils/titleCaseConverter";
+import AlertDialog from "../Dialog";
 
 // Reusable member components
 export const MemberInfoCard = ({ member }) => {
