@@ -106,7 +106,7 @@ const MemberFile = () => {
 
   // fetch member
   const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
-  console.log(member, "member");
+
   // fetch loans
   const [loansData, setLoans] = useState([]);
   const { data: loans } = useGetMemberLoansQuery(memberNo);
@@ -115,7 +115,7 @@ const MemberFile = () => {
       setLoans(loans.data);
     }
   }, [loans]);
-  console.log(loans, "loans");
+
   // fetch deposits
   const [depositsData, setDeposits] = useState([]);
   const { data: deposits } = useGetMemberDepositsQuery(memberNo);

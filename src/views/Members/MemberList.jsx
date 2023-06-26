@@ -14,25 +14,11 @@ const Memberlist = () => {
 
   const { data: members, isLoading } = useGetMembersQuery();
 
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const searchQuery = queryParams.get("search");
-
   useEffect(() => {
     if (members) {
-      let filteredMembers = members.results;
-
-      if (searchQuery) {
-        const lowercaseSearchQuery = searchQuery.toLowerCase();
-        filteredMembers = filteredMembers.filter((member) =>
-          member.names.toLowerCase().includes(lowercaseSearchQuery)
-        );
-      }
-
-      setTabledata(filteredMembers);
+      setTabledata(members.results);
     }
-  }, [members, searchQuery]);
-
+  }, [members]);
   const columns = [
     {
       field: "mbr_no",
