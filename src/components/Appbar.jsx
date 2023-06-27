@@ -15,6 +15,10 @@ import {
   Slide,
   Tooltip,
   useScrollTrigger,
+  Autocomplete,
+  TextField,
+  Box,
+  InputAdornment,
 } from "@mui/material";
 import {
   DarkModeOutlined,
@@ -28,6 +32,7 @@ import { useDispatch } from "react-redux";
 import { setMode } from "../features/theme/themeSlice";
 import useUser from "../hooks/useUser";
 import ProfileMenu from "./ProfileMenu";
+import { useGetMembersQuery } from "../services/members/memberSlices";
 
 const drawerWidth = 240;
 
@@ -66,7 +71,20 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
   };
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
- 
+
+  const [value, setValue] = useState(null);
+
+  const handleMemberChange = (event, newValue) => {
+    setValue(newValue);
+
+    // Perform the desired action when a member is selected, such as navigating to a specific page
+    if (newValue) {
+      // Assuming you have a route defined for the member's page, e.g., '/members/:mbr_no'
+      window.location.href = `/member-details/${newValue.mbr_no}`;
+    }
+  };
+  const { data: members, isFetching } = useGetMembersQuery({ skip: true });
+
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar
@@ -104,12 +122,45 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               backgroundColor={theme.palette.background.default}
               borderRadius="9px"
               gap="3rem"
-              p="0.1rem 1.5rem"
+              // p="0.1rem 1.5rem"
+              component="form" // Add form element to handle form submission
+              // onSubmit={handleSearchSubmit} // Handle form submission
             >
-              <InputBase placeholder="Search Coming Soon..." />
-              <IconButton>
+              {/* <InputBase placeholder="Search Coming Soon..." /> */}
+              <Autocomplete
+                id="member-select"
+                sx={{ width: 400 }}
+                options={members.results}
+                autoHighlight
+                getOptionLabel={(option) => (option ? option.names : "")}
+                // popupIcon={<Search />}
+                renderOption={(props, option) => (
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    key={option.mbr_no || option.id}
+                  >
+                    <p {...props} key={option.mbr_no}>
+                      {option.names}
+                    </p>
+                    <p {...props}>{option.mbr_no}</p>
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Search members..."
+                    fullWidth={true}
+
+                    // inputProps={{
+                    //   ...params.inputProps,
+                    // }}
+                  />
+                )}
+                onChange={handleMemberChange}
+              />
+              {/* <IconButton>
                 <Search />
-              </IconButton>
+              </IconButton> */}
             </FlexBetween>
           </FlexBetween>
 
@@ -178,7 +229,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <ProfileMenu handleClose={handleClose} theme={theme}/>
+            <ProfileMenu handleClose={handleClose} theme={theme} />
           </Menu>
         </Toolbar>
       </AppBar>

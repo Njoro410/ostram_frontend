@@ -13,7 +13,10 @@ import BarChart from "../../charts/BarChart";
 import { useTheme } from "@mui/material/styles";
 import toTitleCase from "../../utils/titleCaseConverter";
 import CustomTabs from "../../components/CustomTabs";
-import { MemberInfoCard, NextOfKinBox } from "../../components/MemberCard";
+import {
+  MemberInfoCard,
+  NextOfKinBox,
+} from "../../components/MemberComponents/MemberCard";
 import Datagrid, { columnProperties } from "../../components/Datagrid";
 import formatDate from "../../utils/formatDate";
 
@@ -103,7 +106,7 @@ const MemberFile = () => {
 
   // fetch member
   const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
-  console.log(member, "member");
+
   // fetch loans
   const [loansData, setLoans] = useState([]);
   const [getMemberLoans, { data: loans }] =
@@ -114,7 +117,7 @@ const MemberFile = () => {
       setLoans(loans.data);
     }
   }, [loans]);
-  console.log(loans, "loans");
+
   // fetch deposits
   const [depositsData, setDeposits] = useState([]);
   const { data: deposits } = useGetMemberDepositsQuery(memberNo);
