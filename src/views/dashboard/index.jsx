@@ -114,11 +114,11 @@ const Dashboard = () => {
           </Button>
         </Box> */}
       </FlexBetween>
-      <PulsatingAlert severity="warning">
+      {/* <PulsatingAlert severity="warning">
         <AlertTitle>Warning</AlertTitle>
         This webapp is <strong>still in development</strong>, functionality is
         limited. You might see duplicate information
-      </PulsatingAlert>
+      </PulsatingAlert> */}
       <Box
         mt="20px"
         display="grid"
