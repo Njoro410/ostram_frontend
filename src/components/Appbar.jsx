@@ -130,7 +130,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               <Autocomplete
                 id="member-select"
                 sx={{ width: 400 }}
-                options={members.results}
+                options={members?.results}
                 autoHighlight
                 getOptionLabel={(option) => (option ? option.names : "")}
                 // popupIcon={<Search />}
