@@ -11,10 +11,12 @@ const MUIDataGrid = ({ columns, rows }) => {
       borderRadius="0.55rem"
       marginTop={2}
       sx={{
-        height: "fit-content",
+        height: 440,
         width: "100%",
         "& .MuiDataGrid-root": {
           border: "none",
+          backgroundColor: theme.palette.background.default,
+          padding: 1,
           "& .MuiDataGrid-cell": {
             border: "none",
           },

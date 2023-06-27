@@ -9,6 +9,17 @@ export const loanSlices = apiSlice.injectEndpoints({
       }),
     }),
 
+    createLoanProduct: builder.mutation({
+      query: credentials => ({
+        url: "/loans/loan_types/",
+        method: "POST",
+        body: credentials,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+    }),
+
     getLoanStatus: builder.query({
       query: () => ({
         url: "/loans/loan_status/",
@@ -44,16 +55,105 @@ export const loanSlices = apiSlice.injectEndpoints({
       }),
     }),
 
+    getDocumentStatus: builder.query({
+      query: () => ({
+        url: "/loans/loan_document_status/",
+        method: "GET"
+      })
+    }),
+
+    createLoanDocumentType: builder.mutation({
+      query: credentials => ({
+        url: "/loans/loan_document_types/",
+        method: "POST",
+        body: credentials,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+    }),
+
+    getLoanAssets: builder.query({
+      query: (loan_id) => ({
+        url: loan_id ? `/assets/loan_assets/${loan_id}/` : `/assets/loan_assets/`,
+        method: "GET",
+      }),
+    }),
+
+    getLoanAssetDocuments: builder.query({
+      query: (asset_id) => ({
+        url: asset_id ? `/assets/loan_asset_document/${asset_id}/` : `/assets/loan_asset_document/`,
+        method: "GET",
+      }),
+    }),
+
+    createLoan: builder.mutation({
+      query: credentials => ({
+        url: '/loans/create_loan/',
+        method: "POST",
+        body: credentials,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+    }),
+
+    payLoan: builder.mutation({
+      query: credentials => ({
+        url: '/loans/pay_loan/',
+        method: "POST",
+        body: credentials,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+    }),
+
+    getLoanById: builder.query({
+      query: (loan_id) => ({
+        url: `/loans/loan/${loan_id}/`,
+        method: "GET",
+      }),
+    }),
+
+    getLoanInstallmentsById: builder.query({
+      query: (loan_id) => ({
+        url: `/loans/installments/${loan_id}/`,
+        method: "GET",
+      }),
+    }),
+
+    createLoanDocument: builder.mutation({
+      query: (formData) => ({
+        url: '/loans/loan_documents/',
+        method: "POST",
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data;',
+        }
+      })
+    }),
+
   })
 })
 
 
 export const {
   useGetLoanTypesQuery,
+  useCreateLoanProductMutation,
   useGetLoanStatusQuery,
   useGetAllLoansQuery,
-  useGetMemberLoansQuery,
+  useLazyGetMemberLoansQuery,
   useLazyGetLoanDocumentsQuery,
-  useGetLoanDocumentsTypesQuery
+  useGetDocumentStatusQuery,
+  useGetLoanDocumentsTypesQuery,
+  useCreateLoanDocumentTypeMutation,
+  useLazyGetLoanAssetsQuery,
+  useGetLoanAssetDocumentsQuery,
+  useCreateLoanMutation,
+  useLazyGetLoanByIdQuery,
+  useLazyGetLoanInstallmentsByIdQuery,
+  useCreateLoanDocumentMutation,
+  usePayLoanMutation
 } = loanSlices
 

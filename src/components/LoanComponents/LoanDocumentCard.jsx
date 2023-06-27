@@ -84,15 +84,13 @@ const LoanDocumentCard = ({ document }) => {
           {toTitleCase(document.loan_owner)}'s Loan
         </Typography>
       </CardContent>
-      <CardActions>
-        <FlexBetween>
+      <CardActions sx={{display:"flex",justifyContent:"space-between"}}>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Uploaded by: {document.created_by}
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             on: {formatDate(document.upload_date)}
           </Typography>
-        </FlexBetween>
       </CardActions>
     </GlassCard>
   );

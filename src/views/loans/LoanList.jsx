@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import { useGetAllLoansQuery } from "../../services/loans/loanSlices";
 import CustomTabs from "../../components/CustomTabs";
 import MUIDataGrid from "../../components/MUIDataGrid";
+import Datagrid, { columnProperties } from "../../components/Datagrid";
 
 const LoanList = () => {
   const { data: loans, isLoading } = useGetAllLoansQuery();
@@ -26,17 +27,17 @@ const LoanList = () => {
 
   function groupLoansByStatus(loanData) {
     const groupedLoans = loanData.reduce((result, loan) => {
-      const { status, ...remainingData } = loan;
-      if (!result[status]) {
-        result[status] = [];
+      const { status_name, ...remainingData } = loan;
+      if (!result[status_name]) {
+        result[status_name] = [];
       }
-      result[status].push({ ...loan, status });
+      result[status_name].push({ ...loan, status_name });
       return result;
     }, {});
 
     const groupedLoansArray = Object.entries(groupedLoans).map(
-      ([status, loans]) => ({
-        status,
+      ([status_name, loans]) => ({
+        status_name,
         loans,
       })
     );
@@ -45,14 +46,54 @@ const LoanList = () => {
   }
 
   const columns = [
-    { field: "id", headerName: "ID", width: 120 },
-    { field: "lendee", headerName: "Member Name", width: 200 },
-    { field: "loan_type", headerName: "Loan Type", width: 200 },
-    { field: "status", headerName: "Loan Status", width: 200 },
-    { field: "amount", headerName: "Amount", width: 120 },
-    { field: "application_date", headerName: "Application Date", width: 200 },
-    { field: "issue_date", headerName: "Issue Date", width: 200 },
-    { field: "payment_frequency", headerName: "Payment Frequency", width: 150 },
+    {
+      field: "id",
+      headerName: "ID",
+      ...columnProperties,
+      minWidth: 50,
+    },
+    {
+      field: "lendee",
+      headerName: "Member Name",
+      ...columnProperties,
+      minWidth: 250,
+    },
+    {
+      field: "loan_product_name",
+      headerName: "Loan Product",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "status_name",
+      headerName: "Loan Status",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "principal_amount",
+      headerName: "Principal Amount",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "remaining_balance",
+      headerName: "Remaining Balance",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "total_interest",
+      headerName: "Total Interest",
+      ...columnProperties,
+      minWidth: 100,
+    },
+    {
+      field: "total_payment",
+      headerName: "Total Payment",
+      ...columnProperties,
+      minWidth: 100,
+    },
   ];
 
   const loanTabs = [
@@ -70,7 +111,7 @@ const LoanList = () => {
       tooltip: " The loan has been approved and is currently being processed..",
     },
     {
-      label: "Pending",
+      label: "PENDING",
       tooltip:
         " The loan application is under review and a decision is pending.",
     },
@@ -109,19 +150,18 @@ const LoanList = () => {
     },
   ];
 
-  // Filter the loan data based on the active loan tab
   let filteredLoanData = loanData;
   if (activeLoanTab !== 0) {
     const selectedStatus = loanTabs[activeLoanTab].label.toUpperCase();
     const groupedLoans = groupLoansByStatus(loanData);
     const selectedGroup = groupedLoans.find(
-      (group) => group.status === selectedStatus
+      (group) => group.status_name === selectedStatus
     );
     filteredLoanData = selectedGroup ? selectedGroup.loans : [];
   }
 
   return (
-    <Box mt="2rem">
+    <Box mt="1rem">
       <Header title="LOANS LIST" subtitle="A data grid of all members" />
       <CustomTabs
         tabs={loanTabs}
@@ -129,7 +169,13 @@ const LoanList = () => {
         onChange={handleLoanTabChange}
       />
 
-      <MUIDataGrid rows={filteredLoanData} columns={columns} />
+      <Datagrid
+        rows={filteredLoanData}
+        columns={columns}
+        getRowId={(row) => row.id}
+        key={filteredLoanData.id}
+        isLoanList
+      />
     </Box>
   );
 };

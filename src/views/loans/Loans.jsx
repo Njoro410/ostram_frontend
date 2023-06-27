@@ -6,7 +6,8 @@ import LoanDashbord from "./LoanDashbord";
 import LoanProducts from "./LoanProducts";
 import LoanDocuments from "./LoanDocuments/LoanDocuments";
 import LoanAssets from "./LoanAssets/LoanAssets";
-import ProcessLoans from "./ProcessLoans";
+import ProcessLoans from "./ProcessLoans/ProcessLoans";
+import ViewLoan from "./ViewLoan";
 
 const Loans = () => {
   const [activeLoanViewTab, setActiveLoanViewTab] = useState(0);
@@ -23,6 +24,9 @@ const Loans = () => {
       label: "Loan Portfolio",
     },
     {
+      label: "View Loan",
+    },
+    {
       label: "Loan Products",
     },
     {
@@ -33,6 +37,9 @@ const Loans = () => {
     },
     {
       label: "Process Loan",
+    },
+    {
+      label: "Loan Calculator",
     },
   ];
   return (
@@ -45,10 +52,11 @@ const Loans = () => {
 
       {activeLoanViewTab === 0 && <LoanDashbord />}
       {activeLoanViewTab === 1 && <LoanList />}
-      {activeLoanViewTab === 2 && <LoanProducts />}
-      {activeLoanViewTab === 3 && <LoanDocuments />}
-      {activeLoanViewTab === 4 && <LoanAssets />}
-      {activeLoanViewTab === 5 && <ProcessLoans />}
+      {activeLoanViewTab === 2 && <ViewLoan />}
+      {activeLoanViewTab === 3 && <LoanProducts />}
+      {activeLoanViewTab === 4 && <LoanDocuments />}
+      {activeLoanViewTab === 5 && <LoanAssets />}
+      {activeLoanViewTab === 6 && <ProcessLoans />}
     </Box>
   );
 };

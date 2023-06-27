@@ -57,7 +57,7 @@ const SavingsAccount = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Savings This Year
+                Total Savings Amount This Year
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -159,7 +159,7 @@ const SavingsAccount = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Savings This Month
+                Total Savings Withdrawals This Month
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -168,7 +168,7 @@ const SavingsAccount = () => {
                 fontWeight="600"
                 sx={{ color: theme.palette.secondary[200] }}
               >
-                100,000
+                78,000
               </Typography>
               <Sparkline />
             </FlexBetween>

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Controller } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 const RHFAutoComplete = ({
   control,
@@ -34,7 +34,7 @@ const RHFAutoComplete = ({
               filterSelectedOptions
               renderOption={(props, option) => (
                 <Typography {...props} key={option.mbr_no || option.id}>
-                  {option.names || option.name}  
+                  {option.names || option.name}
                 </Typography>
               )}
               onChange={(e, newValue) => {
@@ -49,7 +49,7 @@ const RHFAutoComplete = ({
                   inputRef={ref}
                   error={error}
                   helperText={helperText}
-                  sx={{mt:1}}
+                  sx={{ mt: 1 }}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
@@ -80,7 +80,8 @@ const RHFAutoComplete = ({
             value={
               value
                 ? options.find((option) => {
-                    return value === option.mbr_no || option.id;
+                  return value === option.mbr_no || value === option.id;
+                  ;
                   }) ?? null
                 : null
             }
@@ -89,9 +90,14 @@ const RHFAutoComplete = ({
             }}
             renderOption={(props, option) => {
               return (
-                <p {...props} key={option.mbr_no || option.id}>
-                  {option.names || option.lendee}
-                </p>
+                <Box
+                  sx={{ display: "flex", justifyContent: "space-between", paddingX:"1rem" }}
+                  key={option.mbr_no || option.id}
+                >
+                  <p {...props}>{option.names || option.lendee}</p>
+
+                  <p >{option.mbr_no || option.id}</p>
+                </Box>
               );
             }}
             onChange={(e, newValue) => {

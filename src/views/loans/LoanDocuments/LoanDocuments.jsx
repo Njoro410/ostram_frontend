@@ -12,10 +12,16 @@ import CustomTabs from "../../../components/CustomTabs";
 import AllDocuments from "./AllDocuments";
 import SpecificLoanDocument from "./SpecificLoanDocument";
 import { useLazyGetLoanDocumentsQuery } from "../../../services/loans/loanSlices";
+import AddLoanDocumentTypeModal from "../../../components/LoanComponents/AddLoanDocumentTypeModal";
+import AddLoanDocumentModal from "../../../components/LoanComponents/AddLoanDocumentModal";
 
 const LoanDocuments = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+
+  const [openModal, setOpenModal] = useState(false);
+  const handleModalOpen = () => setOpenModal(true);
+  const handleModalClose = () => setOpenModal(false);
 
   const [activeDocViewTab, setActiveDocViewTab] = useState(0);
 
@@ -32,14 +38,17 @@ const LoanDocuments = () => {
     },
   ];
 
-  const [getLoanDocuments, { data: documents }] = useLazyGetLoanDocumentsQuery();
+  const [getLoanDocuments, { data: documents }] =
+    useLazyGetLoanDocumentsQuery();
 
   useEffect(() => {
     getLoanDocuments();
   }, []);
 
   return (
-    <Box mt="2rem">
+    <Box mt="1rem">
+      {/* <AddLoanDocumentTypeModal open={openModal} onClose={handleModalClose} /> */}
+      <AddLoanDocumentModal open={openModal} onClose={handleModalClose} />
       <FlexBetween>
         <Header
           title="LOAN DOCUMENTS"
@@ -48,7 +57,7 @@ const LoanDocuments = () => {
 
         <Box display="flex" gap={1}>
           <Button
-            // onClick={handleModalOpen}
+            onClick={handleModalOpen}
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
@@ -65,7 +74,7 @@ const LoanDocuments = () => {
             Add Loan Document Type
           </Button>
           <Button
-            // onClick={handleModalOpen}
+            onClick={handleModalOpen}
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
@@ -113,6 +122,9 @@ const LoanDocuments = () => {
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             Total Documents Available
           </Typography>
+          <Typography variant="h1" sx={{ color: theme.palette.secondary[100] }}>
+            18
+          </Typography>
         </Box>
         <Box
           gridColumn="span 2"
@@ -131,6 +143,9 @@ const LoanDocuments = () => {
           {" "}
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             Loans Without Documents
+          </Typography>
+          <Typography variant="h1" sx={{ color: theme.palette.secondary[100] }}>
+            4
           </Typography>
         </Box>
         <Box
@@ -152,6 +167,12 @@ const LoanDocuments = () => {
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             Document Types Available
           </Typography>
+          <Typography variant="h5" sx={{ color: theme.palette.secondary[100] }}>
+            KRA Pin
+          </Typography>
+          <Typography variant="h5" sx={{ color: theme.palette.secondary[100] }}>
+            ID Copy
+          </Typography>
         </Box>
         <Box
           gridColumn="span 2"
@@ -171,18 +192,32 @@ const LoanDocuments = () => {
           <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
             Pending Documents
           </Typography>
+          <Typography variant="h1" sx={{ color: theme.palette.secondary[100] }}>
+            5
+          </Typography>
         </Box>
         <Box
           gridColumn="span 2"
           gridRow="span 1"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          p="1.25rem 1rem"
+          flex="1 1 100%"
           backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
-          paddingY={2}
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
           }}
-        ></Box>
+        >
+          {" "}
+          <Typography variant="h6" sx={{ color: theme.palette.secondary[100] }}>
+            Accepted Documents
+          </Typography>
+          <Typography variant="h1" sx={{ color: theme.palette.secondary[100] }}>
+            4
+          </Typography>
+        </Box>
 
         <Box
           gridColumn="span 12"

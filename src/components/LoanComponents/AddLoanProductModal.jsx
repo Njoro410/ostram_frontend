@@ -9,14 +9,22 @@ import {
   Box,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import styled from "@emotion/styled";
-import { useGetLoanDocumentsTypesQuery } from "../../services/loans/loanSlices";
+import {
+  useGetLoanDocumentsTypesQuery,
+  useCreateLoanProductMutation,
+} from "../../services/loans/loanSlices";
 import RHFAutoComplete from "../RHFAutoComplete";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loanProductSchema } from "../../utils/validationSchema";
@@ -27,6 +35,7 @@ const AddLoanProductModal = ({ open, onClose }) => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
   const { data: document_types, isFetching } = useGetLoanDocumentsTypesQuery();
+  const [createLoanProduct, { isLoading }] = useCreateLoanProductMutation();
 
   const {
     register,
@@ -38,19 +47,18 @@ const AddLoanProductModal = ({ open, onClose }) => {
     resolver: yupResolver(loanProductSchema),
   });
 
-  const onSubmitHandler = (data, event) => {
+  const onSubmitHandler = async (data, event) => {
     event.preventDefault();
-    // onClose();
-    console.log(data);
+    try {
+      const response = await createLoanProduct(data).unwrap();
+      // console.log(response)
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <Dialog
-      sx={{
-        "& .MuiPaper-root": {
-          backgroundColor: theme.palette.background.alt,
-        },
-      }}
       open={open}
       onClose={onClose}
       maxWidth="md"
@@ -104,12 +112,12 @@ const AddLoanProductModal = ({ open, onClose }) => {
               autoFocus
               margin="dense"
               id="name"
-              label="Rate"
+              label="Annual Rate"
               type="text"
               fullWidth
-              {...register("rate")}
-              error={errors.rate ? true : false}
-              helperText={errors.rate?.message}
+              {...register("interest_rate")}
+              error={errors.interest_rate ? true : false}
+              helperText={errors.interest_rate?.message}
             />
             <TextField
               autoFocus
@@ -145,6 +153,37 @@ const AddLoanProductModal = ({ open, onClose }) => {
               isFetch={isFetching}
               multiple={true}
             />
+
+            <Controller
+              name="interest_type"
+              control={control}
+              defaultValue="Simple"
+              render={({ field: { onChange, value } }) => (
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  required
+                  error={!!errors?.payment_frequency}
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <InputLabel>Interest Type</InputLabel>
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    label="Interest Type"
+                  >
+                    <MenuItem value="Simple">Simple</MenuItem>
+                    <MenuItem value="Compounding">Compounding</MenuItem>
+                  </Select>
+                  <FormHelperText>
+                    {errors.payment_frequency?.message}
+                  </FormHelperText>
+                </FormControl>
+              )}
+            />
+
             <FormGroup sx={{ display: "flex" }}>
               <Controller
                 name="need_guarantor"

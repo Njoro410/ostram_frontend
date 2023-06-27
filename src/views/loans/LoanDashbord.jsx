@@ -28,7 +28,7 @@ const LoanDashbord = () => {
     },
   ];
   return (
-    <Box mt="2rem">
+    <Box mt="1rem">
       <FlexBetween>
         <Header
           title="LOAN DASHBOARD"
@@ -94,7 +94,7 @@ const LoanDashbord = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Loans This Year
+                Total Loans Given This Year
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -146,7 +146,7 @@ const LoanDashbord = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total loan amount
+                Total Loan Amount Disbursed This Year
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -202,7 +202,7 @@ const LoanDashbord = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Savings This Month
+                Pending Loan Amount This Yearly
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -258,7 +258,7 @@ const LoanDashbord = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Savings This Month
+                Number of pending loans
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -267,9 +267,9 @@ const LoanDashbord = () => {
                 fontWeight="600"
                 sx={{ color: theme.palette.secondary[200] }}
               >
-                100,000
+                5
               </Typography>
-              <Sparkline />
+              {/* <Sparkline /> */}
             </FlexBetween>
 
             <FlexBetween gap="1rem">
@@ -278,9 +278,9 @@ const LoanDashbord = () => {
                 fontStyle="italic"
                 sx={{ color: theme.palette.secondary.light }}
               >
-                15% Increase
+                {/* 15% Increase */}
               </Typography>
-              <Typography>Since last month</Typography>
+              {/* <Typography>Since last month</Typography> */}
             </FlexBetween>
           </Paper>
         </Box>

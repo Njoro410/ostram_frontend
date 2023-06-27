@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/
 import React from 'react'
 import { Controller } from 'react-hook-form'
 
-const RHFSelect = ({control,errors,data,name,label}) => {
+const RHFSelect = ({control,errors,data,name,label,mt}) => {
   return (
     <Controller
     name={name}
@@ -15,7 +15,7 @@ const RHFSelect = ({control,errors,data,name,label}) => {
         required
         error={errors}
         sx={{
-          mt: 2.8,
+          mt: mt,
         }}
       >
         <InputLabel>{label}</InputLabel>

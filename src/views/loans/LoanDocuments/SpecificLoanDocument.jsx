@@ -7,7 +7,7 @@ import {
 } from "../../../services/loans/loanSlices";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loanDocument } from "../../../utils/validationSchema";
+import { checkLoanDocumentSchema } from "../../../utils/validationSchema";
 import FlexBetween from "../../../components/FlexBetween";
 import LoanDocumentCard from "../../../components/LoanComponents/LoanDocumentCard";
 
@@ -23,7 +23,7 @@ const SpecificLoanDocument = () => {
     reset,
     control,
   } = useForm({
-    resolver: yupResolver(loanDocument),
+    resolver: yupResolver(checkLoanDocumentSchema),
   });
 
   const [loanId, setLoanId] = useState("");
@@ -32,6 +32,7 @@ const SpecificLoanDocument = () => {
 
   const onSubmitHandler = (data,e) => {
     e.preventDefault()
+    console.log(data)
     setLoanId(data.loan);
     setTriggerFetch(true);
   };

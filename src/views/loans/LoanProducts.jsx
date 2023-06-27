@@ -26,7 +26,7 @@ const LoanProducts = () => {
   } = useGetLoanTypesQuery();
 
   return (
-    <Box mt="2rem">
+    <Box mt="1rem">
       <AddLoanProductModal open={openModal} onClose={handleModalClose} />
       <FlexBetween>
         <Header title="LOAN PRODUCTS" subtitle="Details about loan products" />
@@ -98,9 +98,10 @@ const LoanProducts = () => {
             gridRow="span 2"
             backgroundColor={theme.palette.background.alt}
             borderRadius="0.55rem"
-            p={2}
+            p={0}
             mt="3.5rem"
             height="fit-content"
+            key={type.id}
           >
             <LoanProductCard unique_key={type.id} type={type} />
           </Box>

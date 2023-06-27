@@ -9,6 +9,7 @@ const SplineArea = () => {
       height: 350,
       type: "area",
       background: 'transparent',
+      
     },
     dataLabels: {
       enabled: false,
@@ -64,6 +65,10 @@ const SplineArea = () => {
         left: 0,
       },
     },
+    title: {
+      text: "Top savers last 3 months",
+      align: 'left'
+    },
     yaxis :{
         show: true,
         labels: {
@@ -89,11 +94,11 @@ const SplineArea = () => {
 
     series: [
       {
-        name: "series1",
+        name: "John Dow",
         data: [31, 40, 28, 51, 42, 109, 100],
       },
       {
-        name: "series2",
+        name: "Jane Dow",
         data: [11, 32, 45, 32, 34, 52, 41],
       },
     ],

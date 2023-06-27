@@ -1,13 +1,10 @@
-import { Box, useMediaQuery, useTheme } from "@mui/material";
-import React, { useState } from "react";
-import LoanDocumentCard from "../../../components/LoanComponents/LoanDocumentCard";
-import AddLoanDocumentTypeModal from "../../../components/LoanComponents/AddLoanDocumentTypeModal";
+import { Box, useMediaQuery, useTheme } from '@mui/material';
+import React from 'react'
+import LoanAssetCard from '../../../components/LoanComponents/LoanAssetCard';
 
-const AllDocuments = ({ documents }) => {
+const AllAssets = ({assets}) => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-
-
   return (
     <Box
       display="grid"
@@ -18,10 +15,9 @@ const AllDocuments = ({ documents }) => {
         "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
       }}
     >
-     
-      {documents?.map((document) => (
+      {assets?.map((asset) => (
         <Box
-          key={document.id}
+          key={asset.id}
           gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={theme.palette.background.alt}
@@ -29,11 +25,11 @@ const AllDocuments = ({ documents }) => {
           p={2}
           height="fit-content"
         >
-          <LoanDocumentCard document={document} />
+          <LoanAssetCard isInModal={false} asset={asset} />
         </Box>
       ))}
     </Box>
-  );
-};
+  )
+}
 
-export default AllDocuments;
+export default AllAssets

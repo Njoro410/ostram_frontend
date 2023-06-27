@@ -43,23 +43,30 @@ export const memberRegisterSchema = Yup.object().shape({
 
 
 export const loanApplicationSchema = Yup.object().shape({
-  applicant: Yup.string()
+  member: Yup.string()
     .required("Applicant is required"),
-  loan_type: Yup.string()
+  loan_product: Yup.string()
     .required("Loan type is required"),
-  amount: Yup.string()
+  principal_amount: Yup.string()
     .required('Loan amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  late_charge_percentage: Yup.string()
+    .required('Late charge percentage is required')
     .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
   status: Yup.string()
     .required("Status is required"),
+  payment_frequency: Yup.string()
+    .required("Payment frequency is required"),
   grace_period: Yup.string()
     .required("Grace period is required"),
-  tenure_period: Yup.string()
-    .required("Tenure period is required"),
+  term: Yup.string()
+    .required("Loan term is required"),
   application_date: Yup.string()
     .required("Application date is required"),
-  guarantors: Yup.array()
-    .required("Guarantors are required")
+  start_date: Yup.string()
+    .required("Start date is required"),
+  reason: Yup.string()
+    .required("Loan reason is required")
 })
 
 export const loanProductSchema = Yup.object().shape({
@@ -67,7 +74,7 @@ export const loanProductSchema = Yup.object().shape({
     .required("Name is required"),
   description: Yup.string()
     .required("Please provide a description"),
-  rate: Yup.string()
+  interest_rate: Yup.string()
     .required('Product rate is required')
     .test('is-number', 'Can only be a whole number or a decimal', (value) => !value || !isNaN(value)),
   min_amount: Yup.string()
@@ -77,10 +84,43 @@ export const loanProductSchema = Yup.object().shape({
     .required('Maximum amount is required')
     .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
   documents: Yup.array()
-    .required("Documents are required")
+    .required("Documents are required"),
+  interest_type: Yup.string()
+    .required("Please select one"),
 })
 
-export const loanDocument = Yup.object().shape({
+export const checkLoanDocumentSchema = Yup.object().shape({
   loan: Yup.string()
     .required("Loan is required"),
+})
+
+export const loanDocumentTypeSchema = Yup.object().shape({
+  name: Yup.string()
+    .required("Document is required"),
+  description: Yup.string()
+    .required("Description is required"),
+})
+
+export const AddLoanDocumentSchema = Yup.object().shape({
+  loan: Yup.string()
+    .required("Loan is required"),
+  document_type: Yup.string()
+    .required("Document type is required"),
+  status: Yup.string()
+    .required("Document status is required"),
+  // file: Yup.mixed()
+  //   .required("A file is required")
+  //   .test('fileFormat', 'Unsupported file format', (value) => {
+  //     return value && ['image/jpeg', 'image/png', 'application/pdf'].includes(value.type);
+  //   })
+})
+
+export const PayLoanSchema = Yup.object().shape({
+  loan: Yup.string()
+    .required("Loan is required"),
+  payment_amount: Yup.string()
+    .required('Minimum amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  payment_date: Yup.string()
+    .required("Application date is required"),
 })

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import { useGetMemberDetailsQuery } from "../../services/members/memberSlices";
-import { useGetMemberLoansQuery } from "../../services/loans/loanSlices";
+import { useLazyGetMemberLoansQuery } from "../../services/loans/loanSlices";
 import { useGetMemberDepositsQuery } from "../../services/deposits/depositSlice";
 import { useGetMemberSavingsQuery } from "../../services/savings/savingsSlice";
 import { useParams } from "react-router-dom";
@@ -106,9 +106,11 @@ const MemberFile = () => {
   console.log(member, "member");
   // fetch loans
   const [loansData, setLoans] = useState([]);
-  const { data: loans } = useGetMemberLoansQuery(memberNo);
+  const [getMemberLoans, { data: loans }] =
+    useLazyGetMemberLoansQuery();
   useEffect(() => {
     if (loans) {
+      getMemberLoans(memberNo)
       setLoans(loans.data);
     }
   }, [loans]);

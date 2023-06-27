@@ -78,7 +78,7 @@ const LoanProductCard = ({ unique_key, type }) => {
         />
 
         <StyledChip
-          label={`Rate | ${type.rate}%`}
+          label={`Rate | ${type.interest_rate}%`}
           variant="filled"
           color="primary"
         />
@@ -166,12 +166,12 @@ const LoanProductCard = ({ unique_key, type }) => {
               <FlexBetween>
                 <Typography variant="overline" sx={{ fontSize: "0.75rem" }}>
                   Minimum Amount <br />
-                  Ksh {type.min_amount_allowed.toLocaleString()}
+                  Ksh {type?.min_amount.toLocaleString()}
                 </Typography>
                 <Divider orientation="vertical" variant="middle" flexItem />
                 <Typography variant="overline" sx={{ fontSize: "0.75rem" }}>
                   Maximum Amount <br /> Ksh{" "}
-                  {type.max_amount_allowed.toLocaleString()}
+                  {type?.max_amount.toLocaleString()}
                 </Typography>
               </FlexBetween>
             </Box>
