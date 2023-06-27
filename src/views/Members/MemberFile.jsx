@@ -266,7 +266,7 @@ const MemberFile = () => {
           rows={savingsData}
           columns={generalColumns}
           getRowId={(row) => row.id}
-          key={savingsData.id}
+          key={savingsData?.id}
         />
       )}
     </Box>

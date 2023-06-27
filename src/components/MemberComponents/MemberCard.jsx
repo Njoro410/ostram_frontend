@@ -59,7 +59,7 @@ export const MemberInfoCard = ({ member }) => {
           ID Number: {member.results.id_no}
         </Typography>
         <Typography color="textSecondary">
-          KRA Pin: {member.results.kra_pin ? member.data.kra_pin : "Null"}
+          KRA Pin: {member.results?.kra_pin ? member.data?.kra_pin : "Null"}
         </Typography>
         <Typography color="textSecondary">
           Phone Number: {member.results.phone_no}
