@@ -33,6 +33,7 @@ import { setMode } from "../features/theme/themeSlice";
 import useUser from "../hooks/useUser";
 import ProfileMenu from "./ProfileMenu";
 import { useGetMembersQuery } from "../services/members/memberSlices";
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -60,6 +61,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
   const dispatch = useDispatch();
   const theme = useTheme();
   const trigger = useScrollTrigger();
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const openn = Boolean(anchorEl);
@@ -76,11 +78,8 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
 
   const handleMemberChange = (event, newValue) => {
     setValue(newValue);
-
-    // Perform the desired action when a member is selected, such as navigating to a specific page
     if (newValue) {
-      // Assuming you have a route defined for the member's page, e.g., '/members/:mbr_no'
-      window.location.href = `/member-details/${newValue.mbr_no}`;
+      navigate(`/member-details/${newValue.mbr_no}`);
     }
   };
   const { data: members, isFetching } = useGetMembersQuery({ skip: true });
