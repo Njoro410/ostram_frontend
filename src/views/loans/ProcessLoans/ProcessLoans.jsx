@@ -8,6 +8,8 @@ import GuaranteeLoan from "./GuaranteeLoan";
 import DisburseLoan from "./DisburseLoan";
 import CancelLoan from "./CancelLoan";
 import CloseLoan from "./CloseLoan";
+import OnHold from "./OnHold";
+import RejectLoan from "./RejectLoan";
 
 const ProcessLoans = () => {
   const [activeLoanProcessingTab, setActiveLoanProcessingTab] = useState(0);
@@ -31,6 +33,12 @@ const ProcessLoans = () => {
     },
     {
       label: "Close Loans",
+    },
+    {
+      label: "Put On Hold",
+    },
+    {
+      label: "Reject Loans",
     },
   ];
   const theme = useTheme();
@@ -71,6 +79,8 @@ const ProcessLoans = () => {
       {activeLoanProcessingTab === 2 && <DisburseLoan />}
       {activeLoanProcessingTab === 3 && <CancelLoan />}
       {activeLoanProcessingTab === 4 && <CloseLoan />}
+      {activeLoanProcessingTab === 5 && <OnHold />}
+      {activeLoanProcessingTab === 6 && <RejectLoan />}
     </Box>
   );
 };

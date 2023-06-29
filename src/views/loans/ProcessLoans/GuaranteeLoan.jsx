@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -23,7 +24,7 @@ import RHFAutoComplete from "../../../components/RHFAutoComplete";
 import {
   useGetAllLoansQuery,
   useLazyGetLoanByIdQuery,
-  useLazyGetLoanDocumentsQuery,
+  useUpdateLoanMutation,
   useLazyGetMemberLoansQuery,
 } from "../../../services/loans/loanSlices";
 import { useForm } from "react-hook-form";
@@ -68,6 +69,7 @@ const GuaranteeLoan = () => {
   const { data: members, isFetching } = useGetMembersQuery();
   const [getMemberLoans] = useLazyGetMemberLoansQuery();
   const [getLoanById] = useLazyGetLoanByIdQuery();
+  const [updateLoan, { isLoading }] = useUpdateLoanMutation();
 
   const {
     register,
@@ -97,6 +99,19 @@ const GuaranteeLoan = () => {
     }
   }, [loanId]);
 
+  const onSubmitGuarantorsHandler = async (data, e) => {
+    e.preventDefault();
+    try {
+      const response = await updateLoan({
+        loanId,
+        data,
+      }).unwrap();
+      console.log(response);
+    } catch (error) {
+      console.error("Loan status update failed:", error);
+    }
+  };
+
   useEffect(() => {
     if (triggerFetch) {
       getMemberLoans(memberId).then((response) => {
@@ -116,8 +131,6 @@ const GuaranteeLoan = () => {
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
         borderRadius="0.55rem"
-        component="form"
-        onSubmit={handleSubmit(onSubmitHandler)}
         p="1rem"
         mt="1rem"
         sx={{
@@ -125,47 +138,57 @@ const GuaranteeLoan = () => {
         }}
       >
         <Box
-          gridColumn="span 7"
+          gridColumn="span 8"
           gridRow="span 2"
           borderRadius="0.55rem"
           paddingRight={1}
+          component="form"
+          onSubmit={handleSubmit(onSubmitHandler)}
         >
-          <RHFAutoComplete
-            options={members?.results || []}
-            control={control}
-            name="loan"
-            placeholder="Choose a member to see their loans"
-            error={!!errors?.loan}
-            helperText={errors.loan?.message}
-            isFetch={isFetching}
-            multiple={false}
-          />
-        </Box>
-        <Box gridColumn="span 1" gridRow="span 2" borderRadius="0.55rem">
-          <Button
-            type="submit"
-            sx={{
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.background.alt,
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "13px 20px",
-              "&:hover": {
-                backgroundColor: "#fff",
-                color: "#3c52b2",
-              },
-            }}
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(12, 1fr)"
+            borderRadius="0.55rem"
+            gap="5px"
           >
-            Submit
-          </Button>
+            <Box gridColumn="span 11" gridRow="span 2">
+              <RHFAutoComplete
+                options={members?.results || []}
+                control={control}
+                name="loan"
+                placeholder="Choose a member to see their loans"
+                error={!!errors?.loan}
+                helperText={errors.loan?.message}
+                isFetch={isFetching}
+                multiple={false}
+              />
+            </Box>
+            <Box gridColumn="span 1" gridRow="span 2" borderRadius="0.55rem">
+              <Button
+                type="submit"
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  color: theme.palette.background.alt,
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  padding: "13px 20px",
+                  "&:hover": {
+                    backgroundColor: "#fff",
+                    color: "#3c52b2",
+                  },
+                }}
+              >
+                Submit
+              </Button>
+            </Box>{" "}
+          </Box>
         </Box>
-
         <Box
           gridColumn="span 4"
           gridRow="span 4"
           // backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
-          // height="12rem"
+          height="fit-content"
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
             borderRadius: 1,
@@ -217,15 +240,38 @@ const GuaranteeLoan = () => {
             gridColumn="span 8"
             gridRow="span 4"
             borderRadius="0.55rem"
+            component="form"
+            onSubmit={handleSubmit(onSubmitGuarantorsHandler)}
             marginTop={2}
             marginRight={2}
           >
             {" "}
-            <Typography sx={{ fontWeight: "bold" }} variant="h4" gutterBottom>
+            <Typography sx={{ fontWeight: "bold" }} variant="h5" gutterBottom>
               {" "}
               {toTitleCase(selectedRow?.lendee)}'s{" "}
-              {formatToKES(selectedRow?.principal_amount)} Loan
+              {formatToKES(selectedRow?.principal_amount)} Loan Recorded
+              Guarantors
             </Typography>
+            <Divider />
+            <Box display="flex" gap={1} mt={1}>
+              {selectedRow?.guarantors_list.length === 0 ? (
+                <p>No guarantors</p>
+              ) : (
+                selectedRow?.guarantors_list.map((guarantor) => (
+                  <StyledChip
+                    key={guarantor.mbr_no}
+                    avatar={
+                      <Avatar
+                        alt={guarantor.name}
+                        src="/static/images/avatar/1.jpg"
+                      />
+                    }
+                    label={guarantor.name}
+                    variant="filled"
+                  />
+                ))
+              )}
+            </Box>
             <RHFAutoComplete
               options={members?.results || []}
               control={control}
