@@ -46,6 +46,10 @@ function App() {
                   element={<RegisterMember />}
                 />
                 <Route
+                  path="/member-update/:memberNo"
+                  element={<RegisterMember />}
+                />
+                <Route
                   path="/member-details/:memberNo"
                   element={<MemberFile />}
                 />

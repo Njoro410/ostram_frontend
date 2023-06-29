@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/Header";
 import {
   Box,
@@ -16,16 +16,25 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { memberRegisterSchema } from "../../utils/validationSchema";
-import { useRegisterMemberMutation } from "../../services/members/memberSlices";
+import {
+  useRegisterMemberMutation,
+  useGetResidentialQuery,
+  useUpdateMemberMutation,
+} from "../../services/members/memberSlices";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
-
-import { useGetResidentialQuery } from "../../services/members/memberSlices";
+import { useLocation, useParams } from "react-router-dom";
 
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
+  const [memberUpdate] = useUpdateMemberMutation();
+  let { state } = useLocation();
+  console.log(state, "state");
+  const member = state?.member;
+  console.log(member, "member");
+  const { memberNo } = useParams();
 
   const {
     data: areas,
@@ -43,6 +52,9 @@ const RegisterMember = () => {
     control,
   } = useForm({
     resolver: yupResolver(memberRegisterSchema),
+    // prefills form but error if there's no member. solve that
+    // prepopulate a select form,
+    defaultValues: member ? member : "",
   });
 
   const onSubmitHandler = async (data, e) => {
@@ -107,11 +119,16 @@ const RegisterMember = () => {
       }
     }
   };
+
   return (
     <Box m="5.5rem 2.5rem">
       <Header
-        title="MEMBER REGISTRATION"
-        subtitle="Register new members by filling their details"
+        title={member ? "MEMBER UPDATE" : "MEMBER REGISTRATION"}
+        subtitle={
+          member
+            ? "Update member details"
+            : "Register new members by filling their details"
+        }
       />
 
       <Box
@@ -339,12 +356,11 @@ const RegisterMember = () => {
                     onChange={onChange}
                     label="Residential Area"
                   >
-                    {
-                      areas?.results.map((area) => (
-                        <MenuItem key={area.area_code} value={area.area_code}>
-                          {area.name}
-                        </MenuItem>
-                      ))}
+                    {areas?.results.map((area) => (
+                      <MenuItem key={area.area_code} value={area.area_code}>
+                        {area.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                   <FormHelperText>{errors.residential?.message}</FormHelperText>
                 </FormControl>

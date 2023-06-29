@@ -86,7 +86,14 @@ const Memberlist = () => {
       field: "actions",
       headerName: "Actions",
       minWidth: 100,
-      renderCell: (params) => <Button variant="contained">Update</Button>,
+      renderCell: (params) => (
+        <Link
+          to={`/member-update/${params.row.mbr_no}`}
+          state={{ member: params.row }}
+        >
+          <Button variant="contained">Update</Button>
+        </Link>
+      ),
       ...columnProperties,
     },
   ];
