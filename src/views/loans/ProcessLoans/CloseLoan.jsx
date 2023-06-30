@@ -22,9 +22,11 @@ import React, { useEffect, useState } from "react";
 import RHFAutoComplete from "../../../components/RHFAutoComplete";
 import {
   useGetAllLoansQuery,
+  useGetLoanStatusQuery,
   useLazyGetLoanByIdQuery,
   useLazyGetLoanDocumentsQuery,
   useLazyGetMemberLoansQuery,
+  useUpdateLoanMutation,
 } from "../../../services/loans/loanSlices";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -68,6 +70,7 @@ const CloseLoan = () => {
   const { data: members, isFetching } = useGetMembersQuery();
   const [getMemberLoans] = useLazyGetMemberLoansQuery();
   const [getLoanById] = useLazyGetLoanByIdQuery();
+  const [updateLoan, { isLoading }] = useUpdateLoanMutation();
 
   const {
     register,
@@ -105,6 +108,27 @@ const CloseLoan = () => {
       setTriggerFetch(false);
     }
   }, [triggerFetch]);
+
+  const { data: status } = useGetLoanStatusQuery();
+  const handleUpdateStatus = async (loanId) => {
+    try {
+      const approvedLoan = status?.results.find(
+        (s) => s.status_name === "CLOSED"
+      );
+      if (approvedLoan) {
+        const response = await updateLoan({
+          loanId,
+          data: { id: approvedLoan.id }, // Update data property to send object with id key
+        });
+        console.log(response);
+      } else {
+        console.log("No loan found with an APPROVED status");
+      }
+    } catch (error) {
+      console.error("Loan status update failed:", error);
+    }
+  };
+
 
   const formatToKES = (amount) => {
     return `KSh ${parseFloat(amount).toLocaleString("en-KE")}`;
@@ -380,23 +404,46 @@ const CloseLoan = () => {
                 </FlexBetween>
               </CardContent>
             </GlassCard>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 2,
-                p: 2,
-                backgroundColor: theme.palette.secondary[500],
-                color: "black",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: theme.palette.secondary[100],
-                },
-              }}
-            >
-              Close this loan
-            </Button>
+            {selectedRow?.status_name == "CLOSED" ? (
+              <Button
+                type="submit"
+                onClick={() => handleUpdateStatus(loanId)}
+                fullWidth
+                disabled
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  p: 2,
+                  backgroundColor: theme.palette.secondary[500],
+                  color: "black",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[100],
+                  },
+                }}
+              >
+                Closed
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                onClick={() => handleUpdateStatus(loanId)}
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  p: 2,
+                  backgroundColor: theme.palette.secondary[500],
+                  color: "black",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[100],
+                  },
+                }}
+              >
+                Close this loan
+              </Button>
+            )}
           </Box>
         ) : (
           ""

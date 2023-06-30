@@ -134,6 +134,18 @@ export const loanSlices = apiSlice.injectEndpoints({
       })
     }),
 
+    updateLoan: builder.mutation({
+      query: ({ loanId, data }) => ({
+        url: `/loans/update_loan/${loanId}/`,
+        method: "PUT",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    
+
   })
 })
 
@@ -154,6 +166,7 @@ export const {
   useLazyGetLoanByIdQuery,
   useLazyGetLoanInstallmentsByIdQuery,
   useCreateLoanDocumentMutation,
-  usePayLoanMutation
+  usePayLoanMutation,
+  useUpdateLoanMutation
 } = loanSlices
 

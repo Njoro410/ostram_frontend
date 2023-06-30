@@ -61,7 +61,7 @@ const WeatherData = ({ location }) => {
   };
 
   const settings = {
-    slidesToShow: 3,
+    slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: false,
     variableWidth: true,

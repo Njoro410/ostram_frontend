@@ -22,8 +22,9 @@ import React, { useEffect, useState } from "react";
 import RHFAutoComplete from "../../../components/RHFAutoComplete";
 import {
   useGetAllLoansQuery,
+  useGetLoanStatusQuery,
   useLazyGetLoanByIdQuery,
-  useLazyGetLoanDocumentsQuery,
+  useUpdateLoanMutation,
   useLazyGetMemberLoansQuery,
 } from "../../../services/loans/loanSlices";
 import { useForm } from "react-hook-form";
@@ -68,6 +69,7 @@ const ApproveLoans = () => {
   const { data: members, isFetching } = useGetMembersQuery();
   const [getMemberLoans] = useLazyGetMemberLoansQuery();
   const [getLoanById] = useLazyGetLoanByIdQuery();
+  const [updateLoan, { isLoading }] = useUpdateLoanMutation();
 
   const {
     register,
@@ -75,9 +77,7 @@ const ApproveLoans = () => {
     formState: { errors },
     reset,
     control,
-  } = useForm({
-    resolver: yupResolver(checkLoanDocumentSchema),
-  });
+  } = useForm({});
 
   const onSubmitHandler = (data, e) => {
     e.preventDefault();
@@ -108,6 +108,27 @@ const ApproveLoans = () => {
 
   const formatToKES = (amount) => {
     return `KSh ${parseFloat(amount).toLocaleString("en-KE")}`;
+  };
+
+  const { data: status } = useGetLoanStatusQuery();
+
+  const handleUpdateStatus = async (loanId) => {
+    try {
+      const approvedLoan = status?.results.find(
+        (s) => s.status_name === "APPROVED"
+      );
+      if (approvedLoan) {
+        const response = await updateLoan({
+          loanId,
+          data: { id: approvedLoan.id }, // Update data property to send object with id key
+        });
+        console.log(response);
+      } else {
+        console.log("No loan found with an APPROVED status");
+      }
+    } catch (error) {
+      console.error("Loan status update failed:", error);
+    }
   };
 
   return (
@@ -380,23 +401,46 @@ const ApproveLoans = () => {
                 </FlexBetween>
               </CardContent>
             </GlassCard>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 2,
-                p: 2,
-                backgroundColor: theme.palette.secondary[500],
-                color: "black",
-                fontWeight: "bold",
-                "&:hover": {
-                  backgroundColor: theme.palette.secondary[100],
-                },
-              }}
-            >
-              Cancel
-            </Button>
+            {selectedRow?.status_name == "APPROVED" ? (
+              <Button
+                type="submit"
+                fullWidth
+                disabled
+                onClick={() => handleUpdateStatus(loanId)}
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  p: 2,
+                  backgroundColor: theme.palette.secondary[500],
+                  color: "black",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[100],
+                  },
+                }}
+              >
+                Approved
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                onClick={() => handleUpdateStatus(loanId)}
+                variant="contained"
+                sx={{
+                  mt: 2,
+                  p: 2,
+                  backgroundColor: theme.palette.secondary[500],
+                  color: "black",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    backgroundColor: theme.palette.secondary[100],
+                  },
+                }}
+              >
+                Approve
+              </Button>
+            )}
           </Box>
         ) : (
           ""

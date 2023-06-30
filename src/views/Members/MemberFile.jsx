@@ -109,11 +109,10 @@ const MemberFile = () => {
 
   // fetch loans
   const [loansData, setLoans] = useState([]);
-  const [getMemberLoans, { data: loans }] =
-    useLazyGetMemberLoansQuery();
+  const [getMemberLoans, { data: loans }] = useLazyGetMemberLoansQuery();
   useEffect(() => {
     if (loans) {
-      getMemberLoans(memberNo)
+      getMemberLoans(memberNo);
       setLoans(loans.data);
     }
   }, [loans]);
@@ -156,120 +155,128 @@ const MemberFile = () => {
   ];
 
   return (
-    <Box m="1.5rem 2.5rem">
-      <FlexBetween>
-        <Header
-          title="MEMBER DETAILS"
-          subtitle={toTitleCase(member.results.names)}
-        />
-      </FlexBetween>
-      <br />
-
-      <CustomTabs tabs={Tabs} value={activeTab} onChange={handleTabChange} />
-
-      {activeTab === 0 && (
-        <Box
-          mt="20px"
-          display="grid"
-          gridTemplateColumns="repeat(12, 1fr)"
-          gridAutoRows="130px"
-          gap="20px"
-          sx={{
-            "& > div": {
-              gridColumn: isNonMediumScreens ? undefined : "span 12",
-            },
-          }}
-        >
-          <MemberInfoCard member={member} />
-
-          <StatBox
-            title="Total loans"
-            // increase={loans.data.amount}
-            // description={loans.data.issue_date}
-            icon={
-              <PointOfSale
-                sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-              />
-            }
-          />
-
-          <StatBox
-            title="Total Savings"
-            // increase={savings.data.balance}
-            // description={savings.data.updated_on}
-            icon={
-              <PersonAdd
-                sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-              />
-            }
-          />
-          <StatBox
-            title="Total Deposits"
-            // increase={deposits.data.updated_on}
-            // description={deposits.data.balance}
-            icon={
-              <Traffic
-                sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-              />
-            }
-          />
-
-          <StatBox
-            title="More info"
-            increase="+43%"
-            description="Since last month"
-            icon={
-              <Traffic
-                sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-              />
-            }
-          />
-
-          <Box
-            gridColumn="span 8"
-            gridRow="span 3"
-            backgroundColor={theme.palette.background.alt}
-            p="1rem"
-            borderRadius="0.55rem"
-            component="div"
-            sx={{
-              justifyContent: "center",
-              alignItems: "center",
-              justifyItems: "center",
-            }}
-          >
-            <BarChart series={series} name="Loans, Deposits, Savings" />
-          </Box>
-          <NextOfKinBox nextOfKin={member} />
-        </Box>
-      )}
-      {activeTab === 1 && (
-        <Datagrid
-          rows={depositsData}
-          columns={generalColumns}
-          getRowId={(row) => row.id}
-          key={depositsData.id}
-        />
-      )}
-
-      {activeTab === 2 && (
-        <Datagrid
-          rows={loansData}
-          columns={loansColumns}
-          getRowId={(row) => row.id}
-          key={loansData.id}
-        />
-      )}
-
-      {activeTab === 3 && (
-        <Datagrid
-          rows={savingsData}
-          columns={generalColumns}
-          getRowId={(row) => row.id}
-          key={savingsData?.id}
-        />
-      )}
+    <Box m="1.5rem 2.5rem" backgroundColor={theme.palette.background.alt}>
+      <CustomTabs
+        tabs={Tabs}
+        value={activeTab}
+        onChange={handleTabChange}
+        orientation="vertical"
+      />
     </Box>
+    // <Box m="1.5rem 2.5rem">
+    //   <FlexBetween>
+    //     <Header
+    //       title="MEMBER DETAILS"
+    //       subtitle={toTitleCase(member.results.names)}
+    //     />
+    //   </FlexBetween>
+    //   <br />
+
+    //   <CustomTabs tabs={Tabs} value={activeTab} onChange={handleTabChange} />
+
+    //   {activeTab === 0 && (
+    //     <Box
+    //       mt="20px"
+    //       display="grid"
+    //       gridTemplateColumns="repeat(12, 1fr)"
+    //       gridAutoRows="130px"
+    //       gap="20px"
+    //       sx={{
+    //         "& > div": {
+    //           gridColumn: isNonMediumScreens ? undefined : "span 12",
+    //         },
+    //       }}
+    //     >
+    //       <MemberInfoCard member={member} />
+
+    //       <StatBox
+    //         title="Total loans"
+    //         // increase={loans.data.amount}
+    //         // description={loans.data.issue_date}
+    //         icon={
+    //           <PointOfSale
+    //             sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+    //           />
+    //         }
+    //       />
+
+    //       <StatBox
+    //         title="Total Savings"
+    //         // increase={savings.data.balance}
+    //         // description={savings.data.updated_on}
+    //         icon={
+    //           <PersonAdd
+    //             sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+    //           />
+    //         }
+    //       />
+    //       <StatBox
+    //         title="Total Deposits"
+    //         // increase={deposits.data.updated_on}
+    //         // description={deposits.data.balance}
+    //         icon={
+    //           <Traffic
+    //             sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+    //           />
+    //         }
+    //       />
+
+    //       <StatBox
+    //         title="More info"
+    //         increase="+43%"
+    //         description="Since last month"
+    //         icon={
+    //           <Traffic
+    //             sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+    //           />
+    //         }
+    //       />
+
+    //       <Box
+    //         gridColumn="span 8"
+    //         gridRow="span 3"
+    //         backgroundColor={theme.palette.background.alt}
+    //         p="1rem"
+    //         borderRadius="0.55rem"
+    //         component="div"
+    //         sx={{
+    //           justifyContent: "center",
+    //           alignItems: "center",
+    //           justifyItems: "center",
+    //         }}
+    //       >
+    //         <BarChart series={series} name="Loans, Deposits, Savings" />
+    //       </Box>
+    //       <NextOfKinBox nextOfKin={member} />
+    //     </Box>
+    //   )}
+    //   {activeTab === 1 && (
+    //     <Datagrid
+    //       rows={depositsData}
+    //       columns={generalColumns}
+    //       getRowId={(row) => row.id}
+    //       key={depositsData.id}
+    //     />
+    //   )}
+
+    //   {activeTab === 2 && (
+    //     <Datagrid
+    //       rows={loansData}
+    //       columns={loansColumns}
+    //       getRowId={(row) => row.id}
+    //       key={loansData.id}
+    //     />
+    //   )}
+
+    //   {activeTab === 3 && (
+    //     <Datagrid
+    //       rows={savingsData}
+    //       columns={generalColumns}
+    //       getRowId={(row) => row.id}
+    //       key={savingsData?.id}
+    //     />
+    //   )}
+    // </Box>
   );
 };
 

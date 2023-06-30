@@ -12,7 +12,6 @@ import MemberList from "./views/Members/MemberList";
 import RegisterMember from "./views/Members/RegisterMember";
 import MemberFile from "./views/Members/MemberFile";
 import CrbInfo from "./views/Members/CrbInfo";
-import SavingsAccount from "./views/Accounts/SavingsAccount";
 import DepositsAccount from "./views/Accounts/DepositsAccount";
 import Contributions from "./views/Accounts/Contributions";
 import ApplyLoan from "./views/loans/ApplyLoan";
@@ -20,6 +19,7 @@ import LoanList from "./views/loans/LoanList";
 import Loans from "./views/loans/Loans";
 import TodoApp from "./views/Apps/TodoApp";
 import LoanCalculator from "./views/Apps/LoanCalculator";
+import Savings from "./views/Accounts/SavingsAccount/Savings";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -55,7 +55,7 @@ function App() {
                 />
                 <Route path="/crb information" element={<CrbInfo />} />
                 {/* accounts links */}
-                <Route path="/savings account" element={<SavingsAccount />} />
+                <Route path="/savings account" element={<Savings />} />
                 <Route path="/deposits account" element={<DepositsAccount />} />
                 <Route
                   path="/daily contributions"

@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs, Tab, Tooltip } from "@mui/material";
 
-const CustomTabs = ({ tabs, value, onChange }) => {
+const CustomTabs = ({ tabs, value, onChange, orientation }) => {
   return (
     <Tabs
       variant="scrollable"
@@ -11,6 +11,7 @@ const CustomTabs = ({ tabs, value, onChange }) => {
       aria-label="tabs"
       value={value}
       onChange={onChange}
+      orientation={orientation}
       sx={{
         "& .MuiTab-root": {
           fontSize: "0.8rem",
