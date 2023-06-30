@@ -38,9 +38,9 @@ const Loans = () => {
     {
       label: "Process Loan",
     },
-    {
-      label: "Loan Calculator",
-    },
+    // {
+    //   label: "Loan Calculator",
+    // },
   ];
   return (
     <Box m="5.5rem 2.5rem">

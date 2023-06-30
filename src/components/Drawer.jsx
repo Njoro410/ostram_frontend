@@ -139,10 +139,10 @@ const navItems = [
     text: "TODO List",
     icon: <PlaylistAddCheckOutlined />,
   },
-  {
-    text: "Loan Calculator",
-    icon: <CalculateOutlined />,
-  },
+  // {
+  //   text: "Loan Calculator",
+  //   icon: <CalculateOutlined />,
+  // },
 ];
 
 export default function DrawerComponent({

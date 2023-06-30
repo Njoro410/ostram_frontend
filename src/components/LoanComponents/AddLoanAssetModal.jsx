@@ -32,6 +32,7 @@ const AddLoanAssetModal = ({ open, onClose }) => {
   const { data: document_types } = useGetLoanDocumentsTypesQuery();
   const { data: document_status } = useGetDocumentStatusQuery();
   const [createLoanDocument, { isLoading }] = useCreateLoanDocumentMutation();
+  
   const {
     register,
     handleSubmit,

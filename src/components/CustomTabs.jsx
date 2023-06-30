@@ -1,11 +1,12 @@
 import React from "react";
 import { Tabs, Tab, Tooltip } from "@mui/material";
 
-const CustomTabs = ({ tabs, value, onChange }) => {
+const CustomTabs = ({ tabs, value, onChange, orientation }) => {
   return (
     <Tabs
       variant="scrollable"
       scrollButtons="auto"
+      orientation = {orientation ? "vertical" : ""}
       textColor="secondary"
       indicatorColor="secondary"
       aria-label="tabs"

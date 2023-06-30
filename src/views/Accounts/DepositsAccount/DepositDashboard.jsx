@@ -1,25 +1,25 @@
 import { Box, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
 import React from "react";
-import Header from "../../components/Header";
-import FlexBetween from "../../components/FlexBetween";
-import Sparkline from "../../charts/Sparkline";
-import Linechart from "../../charts/Linechart";
-import SplineArea from "../../charts/SplineArea";
+import Header from "../../../components/Header";
+import FlexBetween from "../../../components/FlexBetween";
+import Sparkline from "../../../charts/Sparkline";
+import Linechart from "../../../charts/Linechart";
+import SplineArea from "../../../charts/SplineArea";
 
-const SavingsAccount = () => {
+const DepositsDashboard = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const Savingseries = [
     {
       name: "Savings",
-      data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+      data: [10, 41, 35, 51, 49, 62, 69, 91, 17],
     },
   ];
   return (
-    <Box m="5.5rem 2.5rem">
+<Box mt="1rem">
       <Header
-        title="SAVING ACCOUNTS"
-        subtitle="Comprehensive detail about savings accounts"
+        title="DEPOSITS ACCOUNTS"
+        subtitle="Comprehensive detail about deposits accounts"
       />
       <Box
         mt="20px"
@@ -57,7 +57,7 @@ const SavingsAccount = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Savings Amount This Year
+                Total Deposits Amount This Year
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -106,7 +106,7 @@ const SavingsAccount = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total savings this Month
+                Total Deposits Amount This Month
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -159,7 +159,7 @@ const SavingsAccount = () => {
                 variant="h6"
                 sx={{ color: theme.palette.secondary[100] }}
               >
-                Total Savings Withdrawals This Month
+                Total Deposit Withdrawals This Month
               </Typography>
             </FlexBetween>
             <FlexBetween>
@@ -168,7 +168,7 @@ const SavingsAccount = () => {
                 fontWeight="600"
                 sx={{ color: theme.palette.secondary[200] }}
               >
-                78,000
+                100,000
               </Typography>
               <Sparkline />
             </FlexBetween>
@@ -208,7 +208,7 @@ const SavingsAccount = () => {
             justifyContent='center'
           >
             <FlexBetween gap="1rem">
-              <Typography>Saving growth rate last 6 months</Typography>
+              <Typography>Deposits growth rate last 6 months</Typography>
               <Typography
                 variant="h5"
                 fontStyle="italic"
@@ -230,7 +230,7 @@ const SavingsAccount = () => {
             borderRadius="0.35rem"
           >
             <FlexBetween gap="1rem">
-              <Typography>Average monthly savings</Typography>
+              <Typography>Average monthly deposits</Typography>
               <Typography
                 variant="h5"
                 fontStyle="italic"
@@ -254,7 +254,7 @@ const SavingsAccount = () => {
           backgroundColor={theme.palette.background.alt}
           borderRadius="0.55rem"
         >
-          <Linechart series={Savingseries} nameText='Savings to date'/>
+          <Linechart series={Savingseries} nameText='Deposits to date'/>
         </Box>
 
         <Box
@@ -276,4 +276,4 @@ const SavingsAccount = () => {
   );
 };
 
-export default SavingsAccount;
+export default DepositsDashboard;

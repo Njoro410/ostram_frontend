@@ -8,7 +8,17 @@ export const savingsSlices = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    addMemberSavings: builder.mutation({
+      query: ({ memberId, data }) => ({
+        url: `/savings/add_savings/${memberId}/`,
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetMemberSavingsQuery } = savingsSlices;
+export const { useGetMemberSavingsQuery, useAddMemberSavingsMutation } = savingsSlices;

@@ -31,6 +31,7 @@ import WeatherData from "../../components/WeatherData";
 import CustomTabs from "../../components/CustomTabs";
 import { useGetResidentialQuery } from "../../services/members/memberSlices";
 import styled from "@emotion/styled";
+import jwt_decode from "jwt-decode";
 
 const PulsatingAlert = styled(Alert)`
   animation: pulse 2s infinite;

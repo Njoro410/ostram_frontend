@@ -152,22 +152,7 @@ const RegisterMember = () => {
               {...register("names")}
               error={!!errors?.names}
               helperText={errors.names?.message}
-              sx={{
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
+
             />
 
             <TextField
@@ -182,22 +167,7 @@ const RegisterMember = () => {
               {...register("id_no")}
               error={!!errors?.id_no}
               helperText={errors.id_no?.message}
-              sx={{
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
+
             />
 
             <TextField
@@ -212,22 +182,7 @@ const RegisterMember = () => {
               {...register("mbr_no")}
               error={errors.mbr_no ? true : false}
               helperText={errors.mbr_no?.message}
-              sx={{
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
-              }}
+          
             />
           </Box>
           <Box>
@@ -243,20 +198,7 @@ const RegisterMember = () => {
                   error={!!errors?.gender}
                   sx={{
                     mt: 2,
-                    "& label": {
-                      color: theme.palette.secondary[500],
-                      "&.Mui-focused": {
-                        color: theme.palette.secondary[500],
-                      },
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: theme.palette.secondary[500],
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "green",
-                      },
-                    },
+  
                   }}
                 >
                   <InputLabel>Gender</InputLabel>
@@ -283,20 +225,7 @@ const RegisterMember = () => {
               helperText={errors.phone_no?.message}
               sx={{
                 mt: 2.5,
-                "& label": {
-                  color: theme.palette.secondary[500],
-                  "&.Mui-focused": {
-                    color: theme.palette.secondary[500],
-                  },
-                },
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: theme.palette.secondary[500],
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "green",
-                  },
-                },
+
               }}
             />
             {/* </Box> */}
@@ -316,20 +245,7 @@ const RegisterMember = () => {
                   error={!!errors?.residential}
                   sx={{
                     mt: 2,
-                    "& label": {
-                      color: theme.palette.secondary[500],
-                      "&.Mui-focused": {
-                        color: theme.palette.secondary[500],
-                      },
-                    },
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": {
-                        borderColor: theme.palette.secondary[500],
-                      },
-                      "&:hover fieldset": {
-                        borderColor: "green",
-                      },
-                    },
+
                   }}
                 >
                   <InputLabel>Residential Area</InputLabel>
@@ -461,22 +377,7 @@ const RegisterMember = () => {
             autoComplete="next_of_kin"
             autoFocus
             {...register("next_of_kin")}
-            sx={{
-              "& label": {
-                color: theme.palette.secondary[500],
-                "&.Mui-focused": {
-                  color: theme.palette.secondary[500],
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: theme.palette.secondary[500],
-                },
-                "&:hover fieldset": {
-                  borderColor: "green",
-                },
-              },
-            }}
+
           />
 
           <TextField
@@ -491,22 +392,7 @@ const RegisterMember = () => {
             {...register("phone_nos")}
             error={errors.phone_nos ? true : false}
             helperText={errors.phone_nos?.message}
-            sx={{
-              "& label": {
-                color: theme.palette.secondary[500],
-                "&.Mui-focused": {
-                  color: theme.palette.secondary[500],
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: theme.palette.secondary[500],
-                },
-                "&:hover fieldset": {
-                  borderColor: "green",
-                },
-              },
-            }}
+
           />
 
           <TextField
@@ -518,22 +404,7 @@ const RegisterMember = () => {
             autoComplete="relationship"
             autoFocus
             {...register("relationship")}
-            sx={{
-              "& label": {
-                color: theme.palette.secondary[500],
-                "&.Mui-focused": {
-                  color: theme.palette.secondary[500],
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: theme.palette.secondary[500],
-                },
-                "&:hover fieldset": {
-                  borderColor: "green",
-                },
-              },
-            }}
+
           />
         </Box>
 

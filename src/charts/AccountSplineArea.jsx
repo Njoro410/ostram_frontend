@@ -2,7 +2,7 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 import { useSelector } from "react-redux";
 
-const AccountSplineArea = () => {
+const AccountSplineArea = ({series}) => {
   const tmode = useSelector((state) => state.theme.mode);
   const options = {
     chart: {
@@ -78,18 +78,18 @@ const AccountSplineArea = () => {
         enabled: false,
       },
     },
-    series: [
-      {
-        name: "John Dow",
-        data: [31, 40, 28, 51, 42, 109, 100],
-      },
-    ],
+    // series: [
+    //   {
+    //     name: "John Dow",
+    //     data: [31, 40, 28, 51, 42, 109, 100],
+    //   },
+    // ],
   };
 
   return (
     <ReactApexChart
       options={options}
-      series={options.series}
+      series={series}
       type="area"
       height={145}
       width="100%"

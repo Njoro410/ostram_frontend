@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginValidationSchema } from "../utils/validationSchema";
@@ -15,17 +15,22 @@ import Logo from "../assets/ostlogo.png";
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCSRFToken, setAccessToken, setRefreshToken } from "../features/auth/authSlice";
+import {
+  setCSRFToken,
+  setAccessToken,
+  setRefreshToken,
+  setUserId,
+} from "../features/auth/authSlice";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
+import jwt_decode from "jwt-decode";
 
 export default function SignIn() {
   const theme = useTheme();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
- 
 
   const {
     register,
@@ -36,28 +41,31 @@ export default function SignIn() {
     resolver: yupResolver(loginValidationSchema),
   });
 
-  const onSubmitHandler = async (data,e) => {
-    e.preventDefault()
+  const onSubmitHandler = async (data, e) => {
+    e.preventDefault();
     try {
       const userData = await login(data).unwrap();
-      // console.log(userData)
-      dispatch(setAccessToken(userData.data.accessToken ));
-      dispatch(setRefreshToken(userData.data.refreshToken ));
+      dispatch(setAccessToken(userData.data.accessToken));
+      dispatch(setRefreshToken(userData.data.refreshToken));
       dispatch(setCSRFToken(userData.token));
+      var token = userData.data.accessToken;
+      var decoded = jwt_decode(token);
+      dispatch(setUserId(decoded.user_id));
+
       reset();
       navigate("/dashboard");
     } catch (err) {
-      if (err.status === 400) { 
+      if (err.status === 400) {
         toast.error(err.data.message, {
           duration: 8000,
           position: "top-right",
-  
+
           // Change colors of success/error/loading icon
           iconTheme: {
             primary: "#f70707",
             secondary: "#fff",
           },
-  
+
           // Aria
           ariaProps: {
             role: "status",
@@ -68,13 +76,13 @@ export default function SignIn() {
         toast.error("No server response", {
           duration: 8000,
           position: "top-right",
-  
+
           // Change colors of success/error/loading icon
           iconTheme: {
             primary: "#f70707",
             secondary: "#fff",
           },
-  
+
           // Aria
           ariaProps: {
             role: "status",
@@ -82,7 +90,6 @@ export default function SignIn() {
           },
         });
       }
-
     }
   };
 
@@ -189,7 +196,7 @@ export default function SignIn() {
           {!isLoading ? (
             <Button
               type="submit"
-              {...(errors.email || errors.password ? {disabled:true}:{})}
+              {...(errors.email || errors.password ? { disabled: true } : {})}
               fullWidth
               variant="contained"
               sx={{
