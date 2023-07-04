@@ -1,23 +1,47 @@
-import { Box, Divider, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  LinearProgress,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLazyGetUserTodoQuery } from "../../../services/todo/todoSlice";
+import {
+  useLazyGetUserTodoQuery,
+  useLazyGetPublicTodosQuery,
+} from "../../../services/todo/todoSlice";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import Person2OutlinedIcon from "@mui/icons-material/Person2Outlined";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { useSelector } from "react-redux";
 import { selectUserId } from "../../../features/auth/authSlice";
+import FlexBetween from "../../../components/FlexBetween";
 
 const AllTodo = () => {
+  const theme = useTheme();
   const [todos, setTodos] = useState(null);
   const userId = useSelector(selectUserId);
-  const [getUserTodo] = useLazyGetUserTodoQuery();
+  const [getPublicTodos] = useLazyGetPublicTodosQuery();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleRefresh = () => {
+    setIsLoading(true);
+    getPublicTodos().then((response) => {
+      setTodos(response.data);
+      setIsLoading(false);
+    });
+  };
 
   useEffect(() => {
-    getUserTodo(userId).then((response) => {
+    setIsLoading(true);
+
+    getPublicTodos().then((response) => {
       setTodos(response.data);
+      setIsLoading(false);
     });
   }, []);
-
 
   const bull = (
     <Box
@@ -30,18 +54,34 @@ const AllTodo = () => {
 
   return (
     <Box>
-      <Typography
-        sx={{
-          textAlign: "center",
-          m: 3,
-          fontFamily: "monospace",
-          fontWeight: "bold",
-        }}
-        variant="h4"
-        gutterBottom
-      >
-        Public Todos
-      </Typography>
+      <FlexBetween>
+        <Typography
+          sx={{
+            textAlign: "center",
+            m: 3,
+            fontFamily: "monospace",
+            fontWeight: "bold",
+          }}
+          variant="h4"
+          gutterBottom
+        >
+          Public Todos
+        </Typography>
+        <IconButton
+          onClick={handleRefresh}
+          sx={{ marginX: 10 }}
+          aria-label="refresh"
+        >
+          <RefreshIcon />
+        </IconButton>
+      </FlexBetween>
+      {isLoading ? (
+        <LinearProgress
+          sx={{
+            backgroundColor: theme.palette.background.alt,
+          }}
+        />
+      ) : null}
       <Divider variant="middle" />
       <Box sx={{ maxHeight: "400px", overflowY: "auto" }}>
         {todos?.results.map((todo) => (
