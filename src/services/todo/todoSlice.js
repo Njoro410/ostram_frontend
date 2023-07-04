@@ -8,6 +8,12 @@ export const todoSlices = apiSlice.injectEndpoints({
                 method: "GET",
             }),
         }),
+        getPublicTodos: builder.query({
+            query: () => ({
+                url: `/todos/public_todos/`,
+                method: "GET",
+            }),
+        }),
         addTodo: builder.mutation({
             query: (data) => ({
                 url: `/todos/create_todo/`,
@@ -21,4 +27,4 @@ export const todoSlices = apiSlice.injectEndpoints({
     }),
 });
 
-export const { useLazyGetUserTodoQuery, useAddTodoMutation } = todoSlices;
+export const { useLazyGetUserTodoQuery, useLazyGetPublicTodosQuery, useAddTodoMutation } = todoSlices;
