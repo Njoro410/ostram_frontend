@@ -82,7 +82,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
       navigate(`/member-details/${newValue.mbr_no}`);
     }
   };
-  const { data: members, isFetching } = useGetMembersQuery({ skip: true });
+  const { data: members, isFetching } = useGetMembersQuery();
 
   return (
     <Slide appear={false} direction="down" in={!trigger}>
@@ -129,7 +129,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               <Autocomplete
                 id="member-select"
                 sx={{ width: 400 }}
-                options={members?.results}
+                options={members?.results || []}
                 autoHighlight
                 getOptionLabel={(option) => (option ? option.names : "")}
                 // popupIcon={<Search />}
