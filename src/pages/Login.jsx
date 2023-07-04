@@ -147,6 +147,7 @@ export default function SignIn() {
             {...register("email")}
             error={errors.email ? true : false}
             helperText={errors.email?.message}
+            defaultValue="admin1@test.com"
             sx={{
               "& label": {
                 color: theme.palette.secondary[500],
@@ -172,6 +173,7 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
+            defaultValue="123456"
             autoComplete="current-password"
             {...register("password")}
             error={errors.password ? true : false}
