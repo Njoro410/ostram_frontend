@@ -55,7 +55,7 @@ const PayLoanModal = ({ open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md">
       <Toaster/>
-      <DialogTitle>Add Loan Product</DialogTitle>
+      <DialogTitle>Pay Loan</DialogTitle>
       <DialogContent>
         {" "}
         <Box component="form" onSubmit={handleSubmit(onSubmitHandler)}>

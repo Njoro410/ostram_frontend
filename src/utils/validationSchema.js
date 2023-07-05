@@ -124,3 +124,17 @@ export const PayLoanSchema = Yup.object().shape({
   payment_date: Yup.string()
     .required("Application date is required"),
 })
+
+export const createTodoSchema = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  description: Yup.string().required("Description is required")
+})
+
+export const AddSavingsSchema = Yup.object().shape({
+  account: Yup.string()
+    .required("Account is required"),
+  received_amount: Yup.string().required("Amount is required"),
+  received_date: Yup.string()
+    .required("Received date is required"),
+
+})

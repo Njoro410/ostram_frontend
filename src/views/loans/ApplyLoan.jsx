@@ -35,7 +35,7 @@ const ApplyLoan = () => {
 
   const { data: types } = useGetLoanTypesQuery();
 
-  const { data: members, isFetching } = useGetMembersQuery({ skip: true });
+  const { data: members, isFetching } = useGetMembersQuery();
 
   const [createLoan, { isLoading }] = useCreateLoanMutation();
 
@@ -69,7 +69,7 @@ const ApplyLoan = () => {
           "aria-live": "polite",
         },
       });
-      reset()
+      reset();
     } catch (err) {
       console.log(err);
     }
@@ -78,7 +78,7 @@ const ApplyLoan = () => {
   return (
     <Box m="5.5rem 2.5rem">
       <Header title="LOAN APPLICATION" subtitle="Apply loans " />
-<Toaster/>
+      <Toaster />
       <Box
         mt="20px"
         component="form"

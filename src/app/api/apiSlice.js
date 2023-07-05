@@ -6,8 +6,8 @@ import {
 } from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
-  baseUrl: "http://127.0.0.1:8000/api",
+  baseUrl: "https://web-production-7b2fc.up.railway.app/api",
+  // baseUrl: "http://127.0.0.1:8000/api",
   credentials: "include",
   mode: "cors",
   method: "POST",

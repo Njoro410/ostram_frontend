@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { Avatar, Box, Button, useTheme } from "@mui/material";
+import { Avatar, Box, Button, useTheme, CircularProgress } from "@mui/material";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { Link, useLocation } from "react-router-dom";
 import Datagrid, { columnProperties } from "../../components/Datagrid";
 import toTitleCase from "../../utils/titleCaseConverter";
 import FlexBetween from "../../components/FlexBetween";
+import CustomSpinner from "../../components/CustomSpinner";
 
 const Memberlist = () => {
   const theme = useTheme();
@@ -13,7 +14,6 @@ const Memberlist = () => {
   const [tableData, setTabledata] = useState([]);
 
   const { data: members, isLoading } = useGetMembersQuery();
-
   useEffect(() => {
     if (members) {
       setTabledata(members.results);
@@ -56,12 +56,12 @@ const Memberlist = () => {
       activeClassName: "",
       ...columnProperties,
     },
-    { field: "id_no", headerName: "ID", ...columnProperties, minWidth: 100 },
+    { field: "id_no", headerName: "ID", ...columnProperties, minWidth: 80 },
     {
       field: "gender",
       headerName: "Gender",
       ...columnProperties,
-      minWidth: 100,
+      minWidth: 80,
     },
     {
       field: "phone_no",
@@ -102,12 +102,16 @@ const Memberlist = () => {
     <Box m="5.5rem 2.5rem">
       <Header title="MEMBER LIST" subtitle="A data grid of all members" />
       <FlexBetween borderRadius="9px" gap="3rem" p="0.1rem 1.5rem">
-        <Datagrid
-          rows={tableData}
-          columns={columns}
-          getRowId={(row) => row.mbr_no}
-          key={tableData.mbr_no}
-        />
+        {isLoading ? (
+          <CustomSpinner />
+        ) : (
+          <Datagrid
+            rows={tableData}
+            columns={columns}
+            getRowId={(row) => row.mbr_no}
+            key={tableData.mbr_no}
+          />
+        )}
       </FlexBetween>
     </Box>
   );

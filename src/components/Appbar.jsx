@@ -33,7 +33,7 @@ import { setMode } from "../features/theme/themeSlice";
 import useUser from "../hooks/useUser";
 import ProfileMenu from "./ProfileMenu";
 import { useGetMembersQuery } from "../services/members/memberSlices";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -83,7 +83,6 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
     }
   };
   const { data: members, isFetching } = useGetMembersQuery({ skip: true });
-
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar
@@ -129,7 +128,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               <Autocomplete
                 id="member-select"
                 sx={{ width: 400 }}
-                options={members?.results}
+                options={members?.results || []}
                 autoHighlight
                 getOptionLabel={(option) => (option ? option.names : "")}
                 // popupIcon={<Search />}

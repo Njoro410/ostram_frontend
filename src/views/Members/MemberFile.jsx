@@ -6,19 +6,13 @@ import { useGetMemberDepositsQuery } from "../../services/deposits/depositSlice"
 import { useGetMemberSavingsQuery } from "../../services/savings/savingsSlice";
 import { useParams } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
-import { Box, useMediaQuery } from "@mui/material";
-import { PointOfSale, PersonAdd, Traffic } from "@mui/icons-material";
-import StatBox from "../../components/StatBox";
-import BarChart from "../../charts/BarChart";
+import { Box, useMediaQuery, Divider } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import toTitleCase from "../../utils/titleCaseConverter";
 import CustomTabs from "../../components/CustomTabs";
-import {
-  MemberInfoCard,
-  NextOfKinBox,
-} from "../../components/MemberComponents/MemberCard";
+import { MemberInfo } from "../../components/MemberComponents/MemberInfo";
 import Datagrid, { columnProperties } from "../../components/Datagrid";
-import formatDate from "../../utils/formatDate";
+import MemberLoans from "../../components/MemberComponents/MemberLoans";
+import CustomSpinner from "../../components/CustomSpinner";
 
 const loansColumns = [
   { field: "amount", headerName: "Amount", ...columnProperties, minWidth: 100 },
@@ -92,7 +86,10 @@ const Tabs = [
   { label: "Deposits" },
   { label: "Loans" },
   { label: "Savings" },
+  { divider: "true" },
 ];
+
+const ActionTabs = [{ label: "Update" }, { label: "Delete" }];
 
 const MemberFile = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -134,34 +131,95 @@ const MemberFile = () => {
     }
   }, [savings]);
 
-  if (isLoading) {
-    // Handle the loading state or return a loading spinner
-    return <div>Loading...</div>;
-  }
-
-  const series = [
-    {
-      name: "Loans",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-    },
-    {
-      name: "Deposits",
-      data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-    },
-    {
-      name: "Savings",
-      data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
-    },
-  ];
-
   return (
-    <Box m="1.5rem 2.5rem" backgroundColor={theme.palette.background.alt}>
-      <CustomTabs
-        tabs={Tabs}
-        value={activeTab}
-        onChange={handleTabChange}
-        orientation="vertical"
-      />
+    <Box m="5.5rem 2.5rem">
+      <FlexBetween>
+        <Header
+          title={member?.results?.names?.toUpperCase()}
+          subtitle="Member file"
+        />
+      </FlexBetween>
+
+      <Box
+        mt="20px"
+        display="grid"
+        gridTemplateColumns="repeat(12, 1fr)"
+        // gridAutoRows="160px"
+        gap="10px"
+        sx={{
+          "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
+        }}
+      >
+        {/* Vertical Tabs */}
+        {isNonMediumScreens && (
+          <Box
+            gridColumn="span 3"
+            gridRow="span 3"
+            flexDirection="column"
+            justifyContent="space-between"
+            p="1.25rem 1rem"
+            flex="1 1 100%"
+            backgroundColor={theme.palette.background.alt}
+            sx={{
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 1,
+            }}
+          >
+            <CustomTabs
+              tabs={Tabs}
+              value={activeTab}
+              onChange={handleTabChange}
+              orientation
+            />
+            <Divider />
+            <p>Action buttons here. Hide on non medium, move to profile card</p>
+          </Box>
+        )}
+
+        {/* Horizontal Tabs */}
+        {!isNonMediumScreens && (
+          <Box flexGrow={1}>
+            <CustomTabs
+              tabs={Tabs}
+              value={activeTab}
+              onChange={handleTabChange}
+            />
+          </Box>
+        )}
+        <Box
+          gridColumn="span 9"
+          gridRow="span 3"
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(12, 1fr)"
+            gridAutoRows="160px"
+            gap="10px"
+            sx={{
+              "& > div": {
+                gridColumn: isNonMediumScreens ? undefined : "span 12",
+              },
+            }}
+          >
+            {" "}
+            {isLoading ? (
+              <CustomSpinner />
+            ) : (
+              <Box gridColumn="span 12">
+                {activeTab === 0 && <MemberInfo member={member} />}
+                {activeTab === 1 && <p>deposits</p>}
+                {activeTab === 2 && (
+                  <MemberLoans mbr_no={member?.results.mbr_no} />
+                )}
+                {activeTab === 3 && <p>savings</p>}
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Box>
     </Box>
     // <Box m="1.5rem 2.5rem">
     //   <FlexBetween>

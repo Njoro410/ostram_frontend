@@ -6,12 +6,12 @@ const CustomTabs = ({ tabs, value, onChange, orientation }) => {
     <Tabs
       variant="scrollable"
       scrollButtons="auto"
+      orientation={orientation ? "vertical" : "horizontal"}
       textColor="secondary"
       indicatorColor="secondary"
       aria-label="tabs"
       value={value}
       onChange={onChange}
-      orientation={orientation}
       sx={{
         "& .MuiTab-root": {
           fontSize: "0.8rem",

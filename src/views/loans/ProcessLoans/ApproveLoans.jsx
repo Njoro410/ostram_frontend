@@ -37,6 +37,8 @@ import Header from "../../../components/Header";
 import styled from "@emotion/styled";
 import toTitleCase from "../../../utils/titleCaseConverter";
 import formatDate from "../../../utils/formatDate";
+import { Toaster, toast } from "react-hot-toast";
+import { LoadingButton } from "@mui/lab";
 
 const GlassCard = styled(Card)`
   background-color: rgba(87, 86, 86, 0.25);
@@ -121,8 +123,23 @@ const ApproveLoans = () => {
         const response = await updateLoan({
           loanId,
           data: { id: approvedLoan.id }, // Update data property to send object with id key
+        }).unwrap();
+        toast.success(response.message, {
+          duration: 5000,
+          position: "top-right",
+
+          // Change colors of success/error/loading icon
+          iconTheme: {
+            primary: "#00ff1a",
+            secondary: "#fff",
+          },
+
+          // Aria
+          ariaProps: {
+            role: "status",
+            "aria-live": "polite",
+          },
         });
-        console.log(response);
       } else {
         console.log("No loan found with an APPROVED status");
       }
@@ -133,6 +150,7 @@ const ApproveLoans = () => {
 
   return (
     <Box mt="1rem">
+      <Toaster />
       <Box
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
@@ -421,6 +439,10 @@ const ApproveLoans = () => {
               >
                 Approved
               </Button>
+            ) : isLoading ? (
+              <LoadingButton loading fullWidth variant="contained">
+                <span>Submit</span>
+              </LoadingButton>
             ) : (
               <Button
                 type="submit"

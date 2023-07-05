@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Typography, useMediaQuery } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import FlexBetween from "../../../components/FlexBetween";
 import Header from "../../../components/Header";
 import { useTheme } from "@emotion/react";
@@ -9,36 +9,12 @@ import AccountSplineArea from "../../../charts/AccountSplineArea";
 import ZoomableTimeseries from "../../../charts/MixedYAxis";
 import BarChart from "../../../charts/BarChart";
 import MixedYAxis from "../../../charts/MixedYAxis";
-import AddSavingsModal from "../../../components/SavingsComponents/AddSavingsModal";
 
-const MemberSavings = () => {
+const MemberDeposits = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-  const [openModal, setOpenModal] = useState(false);
-  const handleModalOpen = () => setOpenModal(true);
-  const handleModalClose = () => setOpenModal(false);
-
-  const series1 = [
-    {
-      name: "Amount",
-      data: [31, 400, 28, 51, 42, 10, 20],
-    },
-  ];
-  const series2 = [
-    {
-      name: "Amount",
-      data: [31, 4, 28, 51, 42, 109, 100],
-    },
-  ];
-  const series3 = [
-    {
-      name: "Amount",
-      data: [31, 40, 2, 51, 42, 19, 10],
-    },
-  ];
   return (
     <Box mt="1rem">
-      <AddSavingsModal open={openModal} onClose={handleModalClose} />
       <FlexBetween>
         <Header
           title="MEMBER SAVINGS"
@@ -47,7 +23,6 @@ const MemberSavings = () => {
 
         <Box>
           <Button
-            onClick={handleModalOpen}
             sx={{
               backgroundColor: theme.palette.secondary.light,
               color: theme.palette.background.alt,
@@ -61,7 +36,7 @@ const MemberSavings = () => {
               },
             }}
           >
-            Add Savings
+            Apply Loan
           </Button>
         </Box>
       </FlexBetween>
@@ -83,9 +58,7 @@ const MemberSavings = () => {
             gridAutoRows="160px"
             gap="20px"
             sx={{
-              "& > div": {
-                gridColumn: isNonMediumScreens ? undefined : "span 12",
-              },
+              "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
             }}
           >
             <Box
@@ -102,23 +75,18 @@ const MemberSavings = () => {
               }}
             >
               <Typography
-                sx={{ fontWeight: "lighter", ml: 3, mt: 5 }}
+                sx={{ fontWeight: "lighter", ml: 3, mt: 5  }}
                 variant="h6"
               >
                 Total Balance
               </Typography>
               <Typography
-                sx={{
-                  fontWeight: "1000",
-                  ml: 3,
-                  mt: 1,
-                  color: theme.palette.secondary[400],
-                }}
+                sx={{ fontWeight: "1000", ml: 3, mt: 1,color: theme.palette.secondary[400]  }}
                 variant="h2"
               >
-                Ksh 37,000
+                Ksh 24,000
               </Typography>
-              <AccountSplineArea series={series1} />
+              <AccountSplineArea />
             </Box>
             <Box
               gridColumn="span 4"
@@ -140,17 +108,12 @@ const MemberSavings = () => {
                 Total Deposited This Month
               </Typography>
               <Typography
-                sx={{
-                  fontWeight: "1000",
-                  ml: 3,
-                  mt: 1,
-                  color: theme.palette.secondary[400],
-                }}
+                sx={{ fontWeight: "1000", ml: 3, mt: 1,color: theme.palette.secondary[400]  }}
                 variant="h2"
               >
-                Ksh 4,000
+                Ksh 24,000
               </Typography>
-              <AccountSplineArea series={series2} />
+              <AccountSplineArea />
             </Box>
             <Box
               gridColumn="span 4"
@@ -166,23 +129,18 @@ const MemberSavings = () => {
               }}
             >
               <Typography
-                sx={{ fontWeight: "lighter", ml: 3, mt: 5 }}
+                sx={{ fontWeight: "lighter", ml: 3, mt: 5,color: theme.palette.secondary[400]  }}
                 variant="h6"
               >
                 Total Withdrawn This Month
               </Typography>
               <Typography
-                sx={{
-                  fontWeight: "1000",
-                  ml: 3,
-                  mt: 1,
-                  color: theme.palette.secondary[400],
-                }}
+                sx={{ fontWeight: "1000", ml: 3, mt: 1,color: theme.palette.secondary[400] }}
                 variant="h2"
               >
-                Ksh 2,000
+                Ksh 24,000
               </Typography>
-              <AccountSplineArea series={series3} />
+              <AccountSplineArea />
             </Box>
           </Box>
         </Box>
@@ -226,4 +184,4 @@ const MemberSavings = () => {
   );
 };
 
-export default MemberSavings;
+export default MemberDeposits;
