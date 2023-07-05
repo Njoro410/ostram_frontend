@@ -39,21 +39,22 @@ const AddTodo = () => {
         duration: 5000,
         position: "top-right",
 
-        // Change colors of success/error/loading icon
         iconTheme: {
           primary: "#00ff1a",
           secondary: "#fff",
         },
-
-        // Aria
-        ariaProps: {
-          role: "status",
-          "aria-live": "polite",
-        },
       });
       reset();
     } catch (err) {
-      console.log(err);
+      toast.error(err.data.message, {
+        duration: 5000,
+        position: "top-right",
+
+        iconTheme: {
+          primary: "#ff0000",
+          secondary: "#fff",
+        },
+      });
     }
   };
   return (

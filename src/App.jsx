@@ -14,7 +14,6 @@ import MemberFile from "./views/Members/MemberFile";
 import CrbInfo from "./views/Members/CrbInfo";
 import Contributions from "./views/Accounts/Contributions";
 import ApplyLoan from "./views/loans/ApplyLoan";
-import LoanList from "./views/loans/LoanList";
 import Loans from "./views/loans/Loans";
 import TodoApp from "./views/Apps/Todo/TodoApp";
 import LoanCalculator from "./views/Apps/LoanCalculator";
@@ -22,6 +21,7 @@ import Savings from "./views/Accounts/SavingsAccount/Savings";
 import Deposits from "./views/Accounts/DepositsAccount/Deposits";
 import Profile from "./views/userAccount/Profile";
 import Settings from "./views/settings/Settings";
+
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
