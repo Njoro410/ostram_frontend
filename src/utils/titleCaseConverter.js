@@ -11,6 +11,8 @@ function toTitleCase(str) {
     // Join the words back into a single string
     const titleCaseStr = titleCaseWords.join(" ");
 
+    
+
     return titleCaseStr;
   }
 }

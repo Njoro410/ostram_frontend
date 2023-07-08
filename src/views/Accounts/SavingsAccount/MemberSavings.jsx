@@ -143,10 +143,11 @@ const MemberSavings = () => {
                 sx={{
                   fontWeight: "1000",
                   ml: 3,
-                  mt: 1,
+                  // mt: 1,
                   color: theme.palette.secondary[400],
+                  fontSize:"2rem"
                 }}
-                variant="h2"
+                variant="p"
               >
                 Ksh 4,000
               </Typography>

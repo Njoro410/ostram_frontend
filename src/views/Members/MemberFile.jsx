@@ -108,15 +108,14 @@ const MemberFile = () => {
   const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
 
   // fetch loans
-  const [loansData, setLoans] = useState([]);
-  const [getMemberLoans, { data: loans }] =
-    useLazyGetMemberLoansQuery();
+  const [memberLoans, setMemberLoans] = useState([]);
+  const [getMemberLoans] = useLazyGetMemberLoansQuery();
+
   useEffect(() => {
-    if (loans) {
-      getMemberLoans(memberNo)
-      setLoans(loans.data);
-    }
-  }, [loans]);
+    getMemberLoans(memberNo).then((response) => {
+      setMemberLoans(response.data);
+    });
+  }, []);
 
   // fetch deposits
   const [depositsData, setDeposits] = useState([]);
@@ -254,10 +253,10 @@ const MemberFile = () => {
 
       {activeTab === 2 && (
         <Datagrid
-          rows={loansData}
+          rows={memberLoans}
           columns={loansColumns}
           getRowId={(row) => row.id}
-          key={loansData.id}
+          key={memberLoans.id}
         />
       )}
 

@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useGetWeatherDataQuery } from "../app/api/weatherSlice";
-import { Box, Divider, Typography, alpha, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  LinearProgress,
+  Typography,
+  alpha,
+  useTheme,
+} from "@mui/material";
 import Sunny from "../assets/weather/sunny.jpg";
 import Rainy from "../assets/weather/rainy.jpg";
 import Cloudy from "../assets/weather/cloudy.jpg";
@@ -93,6 +100,13 @@ const WeatherData = ({ location }) => {
         position: "relative",
       }}
     >
+      {isLoading ? (
+        <LinearProgress
+          sx={{
+            backgroundColor: theme.palette.background.alt,
+          }}
+        />
+      ) : null}
       {imageUrl && (
         <Box
           component="img"
@@ -150,7 +164,8 @@ const WeatherData = ({ location }) => {
               px: "1rem",
             }}
           >
-            {weather?.current.temp_c}&#176;C
+            {weather?.current.temp_c && `${weather?.current.temp_c}°C`}
+
           </Typography>
         </FlexBetween>
         <Box width="100%">
