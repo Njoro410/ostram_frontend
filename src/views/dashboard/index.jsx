@@ -62,7 +62,7 @@ const Dashboard = () => {
     // isSuccess,
     // isError,
     // error,
-  } = useGetResidentialQuery({ skip: true });
+  } = useGetResidentialQuery();
 
   const handleGraphTabChange = (event, newValue) => {
     setActiveGraphTab(newValue);

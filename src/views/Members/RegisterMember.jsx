@@ -35,6 +35,7 @@ const RegisterMember = () => {
     // isError,
     // error,
   } = useGetResidentialQuery();
+  console.log(areas?.results)
 
   const {
     register,
