@@ -21,6 +21,7 @@ import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import { useGetResidentialQuery } from "../../services/members/memberSlices";
+import RHFSelect from "../../components/RHFSelect";
 
 const RegisterMember = () => {
   const theme = useTheme();
@@ -33,7 +34,7 @@ const RegisterMember = () => {
     // isSuccess,
     // isError,
     // error,
-  } = useGetResidentialQuery({ skip: true });
+  } = useGetResidentialQuery();
 
   const {
     register,
@@ -152,7 +153,6 @@ const RegisterMember = () => {
               {...register("names")}
               error={!!errors?.names}
               helperText={errors.names?.message}
-
             />
 
             <TextField
@@ -167,7 +167,6 @@ const RegisterMember = () => {
               {...register("id_no")}
               error={!!errors?.id_no}
               helperText={errors.id_no?.message}
-
             />
 
             <TextField
@@ -182,7 +181,6 @@ const RegisterMember = () => {
               {...register("mbr_no")}
               error={errors.mbr_no ? true : false}
               helperText={errors.mbr_no?.message}
-          
             />
           </Box>
           <Box>
@@ -198,7 +196,6 @@ const RegisterMember = () => {
                   error={!!errors?.gender}
                   sx={{
                     mt: 2,
-  
                   }}
                 >
                   <InputLabel>Gender</InputLabel>
@@ -225,47 +222,23 @@ const RegisterMember = () => {
               helperText={errors.phone_no?.message}
               sx={{
                 mt: 2.5,
-
               }}
             />
             {/* </Box> */}
             {/* This box will occupy the second half of the parent grid */}
             {/* <Box gridColumn="2 / span 1"> */}
             {/* This box will occupy the second half of the child grid */}
+            
 
-            <Controller
+            <RHFSelect
               name="residential"
               control={control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  required
-                  error={!!errors?.residential}
-                  sx={{
-                    mt: 2,
-
-                  }}
-                >
-                  <InputLabel>Residential Area</InputLabel>
-
-                  <Select
-                    value={value}
-                    onChange={onChange}
-                    label="Residential Area"
-                  >
-                    {
-                      areas?.results.map((area) => (
-                        <MenuItem key={area.area_code} value={area.area_code}>
-                          {area.name}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                  <FormHelperText>{errors.residential?.message}</FormHelperText>
-                </FormControl>
-              )}
+              errors={errors?.residential}
+              data={areas?.results}
+              label="Residential Area"
+              mt={2}
             />
+
           </Box>
           <Box>
             <TextField
@@ -377,7 +350,6 @@ const RegisterMember = () => {
             autoComplete="next_of_kin"
             autoFocus
             {...register("next_of_kin")}
-
           />
 
           <TextField
@@ -392,7 +364,6 @@ const RegisterMember = () => {
             {...register("phone_nos")}
             error={errors.phone_nos ? true : false}
             helperText={errors.phone_nos?.message}
-
           />
 
           <TextField
@@ -404,7 +375,6 @@ const RegisterMember = () => {
             autoComplete="relationship"
             autoFocus
             {...register("relationship")}
-
           />
         </Box>
 
