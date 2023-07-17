@@ -1,9 +1,21 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import CustomSpinner from "../CustomSpinner";
+import { useLazyGetMemberLoansQuery } from "../../services/loans/loanSlices";
 
 const MemberLoans = ({ mbr_no }) => {
   const theme = useTheme();
+
+  // fetch loans
+  const [memberLoans, setMemberLoans] = useState([]);
+  const [getMemberLoans, { isLoading }] = useLazyGetMemberLoansQuery();
+  useEffect(() => {
+    getMemberLoans(mbr_no).then((response) => {
+      setMemberLoans(response.data);
+    });
+  }, []);
+
   return (
     <Box
       gridColumn="span 12"
@@ -17,7 +29,14 @@ const MemberLoans = ({ mbr_no }) => {
         borderRadius: 1,
       }}
     >
-      <p>member things here </p>
+      {/* <p>display loans</p> */}
+      {isLoading ? (
+        <CustomSpinner />
+      ) : (
+        <>
+          <p>loans here</p>
+        </>
+      )}
     </Box>
   );
 };

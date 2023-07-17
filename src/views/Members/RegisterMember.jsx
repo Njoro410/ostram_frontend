@@ -30,10 +30,8 @@ const RegisterMember = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
   const [memberUpdate] = useUpdateMemberMutation();
-  let { state } = useLocation();
-  console.log(state, "state");
-  const member = state?.member;
-  console.log(member, "member");
+  const location = useLocation();
+  const { member } = location.state || {};
   const { memberNo } = useParams();
 
   const {
@@ -52,7 +50,6 @@ const RegisterMember = () => {
     control,
   } = useForm({
     resolver: yupResolver(memberRegisterSchema),
-    // prefills form but error if there's no member. solve that
     // prepopulate a select form,
     defaultValues: member ? member : "",
   });
@@ -61,7 +58,7 @@ const RegisterMember = () => {
     e.preventDefault();
     try {
       const memberData = await memberRegister(data).unwrap();
-      // console.log(memberData);
+      console.log(memberData, "registration input");
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
@@ -169,7 +166,6 @@ const RegisterMember = () => {
               {...register("names")}
               error={!!errors?.names}
               helperText={errors.names?.message}
-
             />
 
             <TextField
@@ -184,7 +180,6 @@ const RegisterMember = () => {
               {...register("id_no")}
               error={!!errors?.id_no}
               helperText={errors.id_no?.message}
-
             />
 
             <TextField
@@ -199,7 +194,6 @@ const RegisterMember = () => {
               {...register("mbr_no")}
               error={errors.mbr_no ? true : false}
               helperText={errors.mbr_no?.message}
-          
             />
           </Box>
           <Box>
@@ -215,7 +209,6 @@ const RegisterMember = () => {
                   error={!!errors?.gender}
                   sx={{
                     mt: 2,
-  
                   }}
                 >
                   <InputLabel>Gender</InputLabel>
@@ -242,7 +235,6 @@ const RegisterMember = () => {
               helperText={errors.phone_no?.message}
               sx={{
                 mt: 2.5,
-
               }}
             />
             {/* </Box> */}
@@ -262,7 +254,6 @@ const RegisterMember = () => {
                   error={!!errors?.residential}
                   sx={{
                     mt: 2,
-
                   }}
                 >
                   <InputLabel>Residential Area</InputLabel>
@@ -393,7 +384,6 @@ const RegisterMember = () => {
             autoComplete="next_of_kin"
             autoFocus
             {...register("next_of_kin")}
-
           />
 
           <TextField
@@ -408,7 +398,6 @@ const RegisterMember = () => {
             {...register("phone_nos")}
             error={errors.phone_nos ? true : false}
             helperText={errors.phone_nos?.message}
-
           />
 
           <TextField
@@ -420,7 +409,6 @@ const RegisterMember = () => {
             autoComplete="relationship"
             autoFocus
             {...register("relationship")}
-
           />
         </Box>
 
