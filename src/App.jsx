@@ -21,7 +21,7 @@ import Savings from "./views/Accounts/SavingsAccount/Savings";
 import Deposits from "./views/Accounts/DepositsAccount/Deposits";
 import Profile from "./views/userAccount/Profile";
 import Settings from "./views/settings/Settings";
-
+import Reports from "./views/Accounts/Reports";
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
@@ -63,6 +63,7 @@ function App() {
                   path="/daily contributions"
                   element={<Contributions />}
                 />
+                <Route path="/reports" element={<Reports />} />
                 {/* loan link */}
                 <Route path="/apply loan" element={<ApplyLoan />} />
                 <Route path="/view loans" element={<Loans />} />

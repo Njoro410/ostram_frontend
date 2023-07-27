@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
-import { Avatar, Box, Button, useTheme, CircularProgress } from "@mui/material";
+import { Avatar, Box, Button, useTheme } from "@mui/material";
 import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { Link, useLocation } from "react-router-dom";
 import Datagrid, { columnProperties } from "../../components/Datagrid";

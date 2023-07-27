@@ -120,11 +120,8 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               backgroundColor={theme.palette.background.default}
               borderRadius="9px"
               gap="3rem"
-              // p="0.1rem 1.5rem"
-              component="form" // Add form element to handle form submission
-              // onSubmit={handleSearchSubmit} // Handle form submission
+              component="form"
             >
-              {/* <InputBase placeholder="Search Coming Soon..." /> */}
               <Autocomplete
                 id="member-select"
                 sx={{ width: 400 }}
@@ -148,17 +145,10 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
                     {...params}
                     label="Search members..."
                     fullWidth={true}
-
-                    // inputProps={{
-                    //   ...params.inputProps,
-                    // }}
                   />
                 )}
                 onChange={handleMemberChange}
               />
-              {/* <IconButton>
-                <Search />
-              </IconButton> */}
             </FlexBetween>
           </FlexBetween>
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import {
   Box,
@@ -11,7 +11,6 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
-  Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,15 +23,16 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useLocation, useParams } from "react-router-dom";
+import { removeDashesFromPhoneNumber } from "../../utils/formatFormInputs";
 
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+  const { memberNo } = useParams();
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
   const [memberUpdate] = useUpdateMemberMutation();
   const location = useLocation();
   const { member } = location.state || {};
-  const { memberNo } = useParams();
 
   const {
     data: areas,
@@ -51,14 +51,32 @@ const RegisterMember = () => {
   } = useForm({
     resolver: yupResolver(memberRegisterSchema),
     // prepopulate a select form,
-    defaultValues: member ? member : "",
+    // defaultValues: member && memberNo ? member : {},
+    defaultValues:
+      member && memberNo
+        ? {
+            names: member.names,
+            id_no: member.id_no,
+            mbr_no: member.mbr_no,
+            gender: member.gender,
+            phone_no: removeDashesFromPhoneNumber(member.phone_no),
+            residential: member.residential,
+            next_of_kin: member.next_of_kin,
+            phone_nos: removeDashesFromPhoneNumber(member.phone_nos),
+            relationship: member.relationship,
+          }
+        : {},
   });
 
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
     try {
-      const memberData = await memberRegister(data).unwrap();
-      console.log(memberData, "registration input");
+      console.log(member, "member");
+      const memberData = await (member
+        ? memberUpdate({ data }).unwrap()
+        : memberRegister(data).unwrap());
+      console.log(memberData, member ? "update input" : "registration input");
+
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
@@ -429,7 +447,7 @@ const RegisterMember = () => {
                 },
               }}
             >
-              Submit
+              {member ? "Update" : "Submit"}
             </Button>
           ) : (
             <LoadingButton
@@ -438,7 +456,7 @@ const RegisterMember = () => {
               variant="contained"
               sx={{ p: 1, mt: 5 }}
             >
-              <span>Submit</span>
+              <span>{member ? "Update" : "Submit"}</span>
             </LoadingButton>
           )}
         </Box>
