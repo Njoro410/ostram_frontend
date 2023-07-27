@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  useTheme,
-  FormControl,
-  MenuItem,
-  InputLabel,
-  Select,
-} from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { useGetContributionsQuery } from "../../services/contributions/contributionSlices";
 import CustomSpinner from "../../components/CustomSpinner";
 import Datagrid, { columnProperties } from "../../components/Datagrid";
 import Header from "../../components/Header";
 import FlexBetween from "../../components/FlexBetween";
 import formatDate from "../../utils/formatDate";
+import ExportExcel from "./ExportExcel";
 
 const Reports = () => {
   const theme = useTheme();
@@ -21,6 +14,33 @@ const Reports = () => {
   const [reportData, setReportData] = useState([]);
 
   const { data: contributions, isLoading } = useGetContributionsQuery();
+
+  const ExcelExportData = [
+    {
+      "First Name": "Arul ",
+      "Last Name": "prasath",
+      "Employee code": "001",
+      "Mobile No": "1234567890",
+      DOB: "91-01-1995",
+      Address: "Chennai",
+    },
+    {
+      "Fipst Name": "Balu",
+      "Last Name": "Subramani",
+      "Employee code": "902",
+      "Mobile No": "8787987898",
+      DOB: "02-02-2000",
+      Address: "be",
+    },
+    {
+      "First Name": "Chandru ",
+      "Last Name": "kumar",
+      "Employee code": "603",
+      "Mobile No": "5467678987",
+      DOB: "03-03-1997",
+      Address: "vellore",
+    },
+  ];
 
   useEffect(() => {
     if (contributions) {
@@ -94,6 +114,11 @@ const Reports = () => {
   return (
     <Box m="5.5rem 2.5rem">
       <Header title="REPORTS" subtitle="A statement of contributions made" />
+      <p>Export</p>
+      <ExportExcel
+        excelData={contributions?.results}
+        fileName={"Excel Export"}
+      />
 
       <FlexBetween borderRadius="9px" gap="3rem" p="0.1rem 1.5rem">
         {isLoading ? (
