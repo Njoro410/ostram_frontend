@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../components/Header";
 import { useGetMemberDetailsQuery } from "../../services/members/memberSlices";
 import { useDeleteMemberMutation } from "../../services/members/memberSlices";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { Box, useMediaQuery, Divider, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -120,15 +120,28 @@ const MemberFile = () => {
           title={member?.results?.names?.toUpperCase()}
           subtitle="Member file"
         />
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => handleDeleteMember(memberNo)}
-          disabled={isDeleting}
-          startIcon={isDeleting ? <CustomSpinner size={20} /> : null}
-        >
-          Delete
-        </Button>
+        <Box>
+          <FlexBetween>
+            <Link
+              to={`/member-update/${memberNo}`}
+              state={{ member: member?.results }}
+            >
+              <Button variant="outlined" color="secondary">
+                Update
+              </Button>
+            </Link>
+
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => handleDeleteMember(memberNo)}
+              disabled={isDeleting}
+              startIcon={isDeleting ? <CustomSpinner size={20} /> : null}
+            >
+              Delete
+            </Button>
+          </FlexBetween>
+        </Box>
       </FlexBetween>
 
       <Box
@@ -162,8 +175,6 @@ const MemberFile = () => {
               onChange={handleTabChange}
               orientation
             />
-            <Divider />
-            <p>Action buttons here. Hide on non medium, move to profile card</p>
           </Box>
         )}
 

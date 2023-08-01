@@ -466,6 +466,7 @@ const RegisterMember = () => {
             type="reset"
             fullWidth
             variant="contained"
+            disabled={!!member}
             sx={{
               mt: 5,
               p: 1,
