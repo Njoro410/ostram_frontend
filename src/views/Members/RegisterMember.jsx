@@ -25,6 +25,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useLocation, useParams } from "react-router-dom";
 import { removeDashesFromPhoneNumber } from "../../utils/formatFormInputs";
 
+
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -40,7 +41,8 @@ const RegisterMember = () => {
     // isSuccess,
     // isError,
     // error,
-  } = useGetResidentialQuery({ skip: true });
+  } = useGetResidentialQuery();
+  console.log(areas?.results)
 
   const {
     register,
@@ -259,8 +261,9 @@ const RegisterMember = () => {
             {/* This box will occupy the second half of the parent grid */}
             {/* <Box gridColumn="2 / span 1"> */}
             {/* This box will occupy the second half of the child grid */}
+            
 
-            <Controller
+            <RHFSelect
               name="residential"
               control={control}
               defaultValue=""
@@ -291,6 +294,7 @@ const RegisterMember = () => {
                 </FormControl>
               )}
             />
+
           </Box>
           <Box>
             <TextField
