@@ -7,6 +7,8 @@ import Header from "../../components/Header";
 import FlexBetween from "../../components/FlexBetween";
 import formatDate from "../../utils/formatDate";
 import ExportExcel from "./ExportExcel";
+import ReportsFilter from "../../components/ContributionsComponents/ReportsFilter";
+import { DatePickerInput } from "@mantine/dates";
 
 const Reports = () => {
   const theme = useTheme();
@@ -14,33 +16,8 @@ const Reports = () => {
   const [reportData, setReportData] = useState([]);
 
   const { data: contributions, isLoading } = useGetContributionsQuery();
-
-  const ExcelExportData = [
-    {
-      "First Name": "Arul ",
-      "Last Name": "prasath",
-      "Employee code": "001",
-      "Mobile No": "1234567890",
-      DOB: "91-01-1995",
-      Address: "Chennai",
-    },
-    {
-      "Fipst Name": "Balu",
-      "Last Name": "Subramani",
-      "Employee code": "902",
-      "Mobile No": "8787987898",
-      DOB: "02-02-2000",
-      Address: "be",
-    },
-    {
-      "First Name": "Chandru ",
-      "Last Name": "kumar",
-      "Employee code": "603",
-      "Mobile No": "5467678987",
-      DOB: "03-03-1997",
-      Address: "vellore",
-    },
-  ];
+  const [value, setValue] = useState([null, null]);
+  console.log(value, "picked value");
 
   useEffect(() => {
     if (contributions) {
@@ -113,14 +90,23 @@ const Reports = () => {
 
   return (
     <Box m="5.5rem 2.5rem">
-      <Header title="REPORTS" subtitle="A statement of contributions made" />
-      <p>Export</p>
-      <ExportExcel
-        excelData={contributions?.results}
-        fileName={"Excel Export"}
+      <FlexBetween>
+        <Header title="REPORTS" subtitle="A statement of contributions made" />
+        <ExportExcel
+          excelData={contributions?.results}
+          fileName={"Excel Export"}
+        />
+      </FlexBetween>
+      <DatePickerInput
+        type="range"
+        label="Filter transactions"
+        placeholder="Select month or period"
+        value={value}
+        onChange={setValue}
+        mx="auto"
+        maw={400}
       />
-
-      <FlexBetween borderRadius="9px" gap="3rem" p="0.1rem 1.5rem">
+      <FlexBetween borderRadius="9px" gap="3rem">
         {isLoading ? (
           <CustomSpinner />
         ) : (
