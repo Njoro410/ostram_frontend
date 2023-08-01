@@ -138,3 +138,24 @@ export const AddSavingsSchema = Yup.object().shape({
     .required("Received date is required"),
 
 })
+
+export const checkStaffDetailsSchema = Yup.object().shape({
+  staff: Yup.string()
+    .required("Staff name is required"),
+})
+
+export const addStaffSchema = Yup.object().shape({
+  username: Yup.string()
+    .required('Username is required'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Email is invalid'),
+  password: Yup.string()
+    .required('Password is required'),
+  password2: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
+  reports_to: Yup.string()
+    .required("Staff name is required"),
+  
+});

@@ -32,6 +32,8 @@ import CustomTabs from "../../components/CustomTabs";
 import { useGetResidentialQuery } from "../../services/members/memberSlices";
 import styled from "@emotion/styled";
 import jwt_decode from "jwt-decode";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const PulsatingAlert = styled(Alert)`
   animation: pulse 2s infinite;
@@ -56,6 +58,12 @@ const Dashboard = () => {
   const [activeWeatherTab, setActiveWeatherTab] = useState(0);
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
+  // console.log(user)
+
+  const access = useSelector(selectCurrentToken)
+  const id = jwt_decode(access)
+  console.log(id.user_id)
+
   const {
     data: areas,
     // isLoading,
@@ -96,7 +104,7 @@ const Dashboard = () => {
       <FlexBetween>
         <Header
           title="DASHBOARD"
-          subtitle={`Welcome ${user?.results.fullname}`}
+          subtitle={`Welcome ${user?.results.first_name}`}
         />
 
         {/* <Box>

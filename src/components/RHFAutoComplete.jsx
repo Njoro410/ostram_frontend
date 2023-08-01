@@ -49,7 +49,7 @@ const RHFAutoComplete = ({
                   inputRef={ref}
                   error={error}
                   helperText={helperText}
-                  sx={{ mt: 1 }}
+                  // sx={{ mt: 1 }}
                   InputProps={{
                     ...params.InputProps,
                     endAdornment: (
@@ -80,23 +80,25 @@ const RHFAutoComplete = ({
             value={
               value
                 ? options.find((option) => {
-                  return value === option.mbr_no || value === option.id;
-                  ;
+                    return value === option.mbr_no || value === option.id;
                   }) ?? null
                 : null
             }
             getOptionLabel={(option) => {
-              return option.names || option.lendee;
+              return option.names || option.lendee || option.full_name;
             }}
             renderOption={(props, option) => {
+              let display = option.names || option.lendee || option.full_name;
+              if (display === option.full_name) {
+                display = option.full_name;
+              } else {
+                display = `${option.names || option.lendee} (${
+                  option.mbr_no || option.member
+                })`;
+              }
               return (
-                <Box
-                  sx={{ display: "flex", justifyContent: "space-between", paddingX:"1rem" }}
-                  key={option.mbr_no || option.id}
-                >
-                  <p {...props}>{option.names || option.lendee}</p>
-
-                  <p >{option.mbr_no || option.id}</p>
+                <Box key={option.mbr_no || option.id}>
+                  <p {...props}>{display}</p>
                 </Box>
               );
             }}

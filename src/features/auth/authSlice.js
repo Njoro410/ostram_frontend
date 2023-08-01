@@ -21,6 +21,7 @@ const authSlice = createSlice({
             state.accesstoken = null
             state.refreshtoken = null
             state.csrfToken = null
+            state.userId = null
         }
     },
 })

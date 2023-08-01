@@ -7,7 +7,7 @@ const useUser = () => {
         isSuccess,
         isError,
         error,
-    } = useGetUserQuery({ skip: true });
+    } = useGetUserQuery();
     return {
         user,isLoading,isSuccess,isError,error
     }

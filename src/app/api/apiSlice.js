@@ -3,8 +3,8 @@ import { setAccessToken, logOut, setCSRFToken } from '../../features/auth/authSl
 
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
-    // baseUrl: 'http://127.0.0.1:8000/api',
+    // baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
+    baseUrl: 'http://127.0.0.1:8001/api',
     credentials: 'include',
     mode: 'cors',
     method: 'POST',
@@ -30,7 +30,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         // console.log('sending csrf token')
         // send refresh token to get new access token 
         try {
-            const refreshResult = await baseQuery('/auth/refresh-token', api, extraOptions);
+            const refreshResult = await baseQuery('/auth/refresh-token/', api, extraOptions);
             api.dispatch(setAccessToken(refreshResult.data.access))
             api.dispatch(setCSRFToken(refreshResult.meta.response.headers.get('x-csrftoken')))
 
@@ -53,5 +53,5 @@ export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: ['User'],
     endpoints: builder => ({}),
-    keepUnusedDataFor: 6000,
+    keepUnusedDataFor: 0,
 })

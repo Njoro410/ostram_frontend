@@ -15,9 +15,12 @@ function formatDate(dateString) {
     day: "numeric",
     month: "long",
     year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   };
 
-  const formattedDate = date.toLocaleDateString("en-GB", options);
+  const formattedDate = date.toLocaleDateString("en-US", options);
   const formattedWithSuffix = formattedDate.replace(
     /\b\d{1,2}\b/,
     (dayStr) => dayStr + suffix
