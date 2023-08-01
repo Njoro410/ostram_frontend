@@ -6,7 +6,7 @@ const CustomTabs = ({ tabs, value, onChange, orientation }) => {
     <Tabs
       variant="scrollable"
       scrollButtons="auto"
-      orientation = {orientation ? "vertical" : "horizontal"}
+      orientation={orientation ? "vertical" : "horizontal"}
       textColor="secondary"
       indicatorColor="secondary"
       aria-label="tabs"

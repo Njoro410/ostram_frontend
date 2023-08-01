@@ -11,6 +11,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { IconButton, Typography } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+
 import {
   ChevronLeft,
   ChevronRightOutlined,
@@ -117,6 +119,10 @@ const navItems = [
   {
     text: "Daily Contributions",
     icon: <AddBoxOutlined />,
+  },
+  {
+    text: "Reports",
+    icon: <AssessmentIcon />,
   },
   {
     text: "Loans",
