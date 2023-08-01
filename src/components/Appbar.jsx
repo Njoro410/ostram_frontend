@@ -33,7 +33,7 @@ import { setMode } from "../features/theme/themeSlice";
 import useUser from "../hooks/useUser";
 import ProfileMenu from "./ProfileMenu";
 import { useGetMembersQuery } from "../services/members/memberSlices";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -82,8 +82,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
       navigate(`/member-details/${newValue.mbr_no}`);
     }
   };
-  const { data: members, isFetching } = useGetMembersQuery();
-
+  const { data: members, isFetching } = useGetMembersQuery({ skip: true });
   return (
     <Slide appear={false} direction="down" in={!trigger}>
       <AppBar
@@ -121,11 +120,8 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               backgroundColor={theme.palette.background.default}
               borderRadius="9px"
               gap="3rem"
-              // p="0.1rem 1.5rem"
-              component="form" // Add form element to handle form submission
-              // onSubmit={handleSearchSubmit} // Handle form submission
+              component="form"
             >
-              {/* <InputBase placeholder="Search Coming Soon..." /> */}
               <Autocomplete
                 id="member-select"
                 sx={{ width: 400 }}
@@ -149,17 +145,10 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
                     {...params}
                     label="Search members..."
                     fullWidth={true}
-
-                    // inputProps={{
-                    //   ...params.inputProps,
-                    // }}
                   />
                 )}
                 onChange={handleMemberChange}
               />
-              {/* <IconButton>
-                <Search />
-              </IconButton> */}
             </FlexBetween>
           </FlexBetween>
 

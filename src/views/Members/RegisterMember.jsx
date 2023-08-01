@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import {
   Box,
@@ -11,22 +11,29 @@ import {
   InputLabel,
   FormControl,
   FormHelperText,
-  Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { memberRegisterSchema } from "../../utils/validationSchema";
-import { useRegisterMemberMutation } from "../../services/members/memberSlices";
+import {
+  useRegisterMemberMutation,
+  useGetResidentialQuery,
+  useUpdateMemberMutation,
+} from "../../services/members/memberSlices";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useLocation, useParams } from "react-router-dom";
+import { removeDashesFromPhoneNumber } from "../../utils/formatFormInputs";
 
-import { useGetResidentialQuery } from "../../services/members/memberSlices";
-import RHFSelect from "../../components/RHFSelect";
 
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+  const { memberNo } = useParams();
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
+  const [memberUpdate] = useUpdateMemberMutation();
+  const location = useLocation();
+  const { member } = location.state || {};
 
   const {
     data: areas,
@@ -45,13 +52,33 @@ const RegisterMember = () => {
     control,
   } = useForm({
     resolver: yupResolver(memberRegisterSchema),
+    // prepopulate a select form,
+    // defaultValues: member && memberNo ? member : {},
+    defaultValues:
+      member && memberNo
+        ? {
+            names: member.names,
+            id_no: member.id_no,
+            mbr_no: member.mbr_no,
+            gender: member.gender,
+            phone_no: removeDashesFromPhoneNumber(member.phone_no),
+            residential: member.residential,
+            next_of_kin: member.next_of_kin,
+            phone_nos: removeDashesFromPhoneNumber(member.phone_nos),
+            relationship: member.relationship,
+          }
+        : {},
   });
 
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
     try {
-      const memberData = await memberRegister(data).unwrap();
-      // console.log(memberData);
+      console.log(member, "member");
+      const memberData = await (member
+        ? memberUpdate({ data }).unwrap()
+        : memberRegister(data).unwrap());
+      console.log(memberData, member ? "update input" : "registration input");
+
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
@@ -109,11 +136,16 @@ const RegisterMember = () => {
       }
     }
   };
+
   return (
     <Box m="5.5rem 2.5rem">
       <Header
-        title="MEMBER REGISTRATION"
-        subtitle="Register new members by filling their details"
+        title={member ? "MEMBER UPDATE" : "MEMBER REGISTRATION"}
+        subtitle={
+          member
+            ? "Update member details"
+            : "Register new members by filling their details"
+        }
       />
 
       <Box
@@ -234,10 +266,33 @@ const RegisterMember = () => {
             <RHFSelect
               name="residential"
               control={control}
-              errors={errors?.residential}
-              data={areas?.results}
-              label="Residential Area"
-              mt={2}
+              defaultValue=""
+              render={({ field: { onChange, value } }) => (
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  required
+                  error={!!errors?.residential}
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <InputLabel>Residential Area</InputLabel>
+
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    label="Residential Area"
+                  >
+                    {areas?.results.map((area) => (
+                      <MenuItem key={area.area_code} value={area.area_code}>
+                        {area.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errors.residential?.message}</FormHelperText>
+                </FormControl>
+              )}
             />
 
           </Box>
@@ -396,7 +451,7 @@ const RegisterMember = () => {
                 },
               }}
             >
-              Submit
+              {member ? "Update" : "Submit"}
             </Button>
           ) : (
             <LoadingButton
@@ -405,7 +460,7 @@ const RegisterMember = () => {
               variant="contained"
               sx={{ p: 1, mt: 5 }}
             >
-              <span>Submit</span>
+              <span>{member ? "Update" : "Submit"}</span>
             </LoadingButton>
           )}
         </Box>
@@ -415,6 +470,7 @@ const RegisterMember = () => {
             type="reset"
             fullWidth
             variant="contained"
+            disabled={!!member}
             sx={{
               mt: 5,
               p: 1,

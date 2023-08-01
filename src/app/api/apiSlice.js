@@ -1,8 +1,12 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { setAccessToken, logOut, setCSRFToken } from '../../features/auth/authSlice'
-
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  setAccessToken,
+  logOut,
+  setCSRFToken,
+} from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
+
     // baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
     baseUrl: 'http://127.0.0.1:8001/api',
     credentials: 'include',
@@ -21,37 +25,44 @@ const baseQuery = fetchBaseQuery({
     },
 })
 
+
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  // console.log(result.meta.response?.status)
 
-    let result = await baseQuery(args, api, extraOptions);
-    // console.log(result.meta.response?.status)
+  if (result.meta.response?.status === 401) {
+    // console.log('sending csrf token')
+    // send refresh token to get new access token
+    try {
+      const refreshResult = await baseQuery(
+        "/auth/refresh-token",
+        api,
+        extraOptions
+      );
+      api.dispatch(setAccessToken(refreshResult.data.access));
+      api.dispatch(
+        setCSRFToken(refreshResult.meta.response.headers.get("x-csrftoken"))
+      );
 
-    if (result.meta.response?.status === 401) {
-        // console.log('sending csrf token')
-        // send refresh token to get new access token 
-        try {
-            const refreshResult = await baseQuery('/auth/refresh-token/', api, extraOptions);
-            api.dispatch(setAccessToken(refreshResult.data.access))
-            api.dispatch(setCSRFToken(refreshResult.meta.response.headers.get('x-csrftoken')))
-
-            //proceed with original response
-            result = await baseQuery(args, api, extraOptions);
-        } catch (error) {
-            console.log('logging out via apiSlice')
-            await baseQuery('/auth/logout', api, extraOptions);
-            api.dispatch(logOut());
-        }
+      //proceed with original response
+      result = await baseQuery(args, api, extraOptions);
+    } catch (error) {
+      console.log("logging out via apiSlice");
+      await baseQuery("/auth/logout", api, extraOptions);
+      api.dispatch(logOut());
     }
+  }
 
-    return result
-}
-
-
+  return result;
+};
 
 export const apiSlice = createApi({
+
     reducerPath: 'authSlice',
     baseQuery: baseQueryWithReauth,
     tagTypes: ['User'],
     endpoints: builder => ({}),
     keepUnusedDataFor: 0,
 })
+
+

@@ -33,6 +33,27 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    updateMember: builder.mutation({
+      query: (credentials) => ({
+        url: `/members/member/${mbr_no}/`,
+        method: "PUT",
+        body: credentials,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    deleteMember: builder.mutation({
+      query: (mbr_no) => ({
+        url: `/members/member/${mbr_no}/`,
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
@@ -41,4 +62,6 @@ export const {
   useGetResidentialQuery,
   useGetMembersQuery,
   useGetMemberDetailsQuery,
+  useUpdateMemberMutation,
+  useDeleteMemberMutation,
 } = memberRegisterSlice;
