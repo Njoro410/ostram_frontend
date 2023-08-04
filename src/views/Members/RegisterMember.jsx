@@ -33,6 +33,7 @@ const RegisterMember = () => {
   const [memberUpdate] = useUpdateMemberMutation();
   const location = useLocation();
   const { member } = location.state || {};
+  console.log(member, "member");
 
   const {
     data: areas,
@@ -259,11 +260,19 @@ const RegisterMember = () => {
             {/* This box will occupy the second half of the parent grid */}
             {/* <Box gridColumn="2 / span 1"> */}
             {/* This box will occupy the second half of the child grid */}
-
+            {/* <RHFSelect
+              name="residential"
+              control={control}
+              errors={errors?.residential}
+              data={areas?.results}
+              label="Residential Area"
+              defaultValue={member ? member.residential : ""}
+              mt={2}
+            /> */}
             <Controller
               name="residential"
               control={control}
-              defaultValue=""
+              defaultValue={member && memberNo ? member.residential : ""}
               render={({ field: { onChange, value } }) => (
                 <FormControl
                   variant="outlined"
