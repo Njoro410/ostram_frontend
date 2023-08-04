@@ -8,20 +8,12 @@ import {
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const RHFSelect = ({
-  control,
-  errors,
-  data,
-  name,
-  label,
-  mt,
-  defaultValue,
-}) => {
+const RHFSelect = ({ control, errors, data, name, label, mt }) => {
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue || ""}
+      defaultValue=""
       render={({ field: { onChange, value } }) => (
         <FormControl
           variant="outlined"

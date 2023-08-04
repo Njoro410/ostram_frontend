@@ -75,7 +75,7 @@ const Sparkline = () => {
         series={options.series}
         type="line"
         height={50}
-        width={150}
+        width='100%'
       />
     </Box>
   );

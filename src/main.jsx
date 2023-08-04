@@ -13,7 +13,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <MantineProvider withGlobalStyles withNormalizeCSS>
-        <Notifications />
+        <Notifications position="top-right" zIndex={2077} limit={5} />
         <App />
       </MantineProvider>
     </PersistGate>

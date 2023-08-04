@@ -102,6 +102,7 @@ const MemberFile = () => {
   // fetch member
   const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
 
+
   // delete
   const [deleteMember, { isLoading: isDeleting }] = useDeleteMemberMutation();
   const handleDeleteMember = async (memberNo) => {

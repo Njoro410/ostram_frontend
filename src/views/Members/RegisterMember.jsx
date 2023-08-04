@@ -41,7 +41,8 @@ const RegisterMember = () => {
     // isSuccess,
     // isError,
     // error,
-  } = useGetResidentialQuery({ skip: true });
+  } = useGetResidentialQuery();
+  console.log(areas?.results);
 
   const {
     register,
