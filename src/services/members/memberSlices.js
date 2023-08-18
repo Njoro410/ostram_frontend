@@ -35,15 +35,32 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
     }),
 
     updateMember: builder.mutation({
-      query: (credentials) => ({
-        url: `/members/member/${mbr_no}/`,
-        method: "PUT",
-        body: credentials,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
+      query: ({ data, memberNo }) => {
+        // Log the memberNo parameter
+        console.log("Member No:", data);
+
+        // Return the query object for the mutation
+        return {
+          url: `/members/member/${memberNo}/`,
+          method: "PUT",
+          body: data,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      },
     }),
+
+    // updateMember: builder.mutation({
+    //   query: (data, memberNo) => ({
+    //     url: `/members/member/${memberNo}/`,
+    //     method: "PUT",
+    //     body: data,
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }),
+    // }),
 
     deleteMember: builder.mutation({
       query: (mbr_no) => ({

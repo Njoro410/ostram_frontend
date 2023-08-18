@@ -29,6 +29,7 @@ const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const { memberNo } = useParams();
+  console.log(memberNo, "member no wrapped ");
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
   const [memberUpdate] = useUpdateMemberMutation();
   const location = useLocation();
@@ -42,7 +43,6 @@ const RegisterMember = () => {
     // isError,
     // error,
   } = useGetResidentialQuery();
-  console.log(areas?.results);
 
   const {
     register,
@@ -73,12 +73,11 @@ const RegisterMember = () => {
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
     try {
-      console.log(member, "member");
+      console.log(memberNo, "member no before submit ");
       const memberData = await (member
-        ? memberUpdate({ data }).unwrap()
+        ? memberUpdate(data, memberNo).unwrap()
         : memberRegister(data).unwrap());
-      console.log(memberData, member ? "update input" : "registration input");
-
+      console.log(memberNo, "member no on submit ");
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
@@ -97,8 +96,6 @@ const RegisterMember = () => {
       });
       reset();
     } catch (err) {
-      // console.log(err);
-      // console.log(err.data.errors.mbr_no);
       if (err.status === 400) {
         toast.error(err.data.errors.mbr_no, {
           duration: 8000,

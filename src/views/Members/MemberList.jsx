@@ -70,7 +70,7 @@ const Memberlist = () => {
       minWidth: 100,
     },
     {
-      field: "residential",
+      field: "residential_name",
       headerName: "Residential",
       minWidth: 100,
       ...columnProperties,
