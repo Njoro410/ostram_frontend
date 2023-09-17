@@ -1,10 +1,11 @@
-import React from "react";
-import { Tooltip, Button, useTheme } from "@mui/material";
+import React,{useState} from "react";
+import { Tooltip, Button, useTheme , Snackbar} from "@mui/material";
 import * as XLSX from "xlsx";
 
 const ExportExcel = ({ excelData, fileName }) => {
   const theme = useTheme();
-
+  const [exporting, setExporting] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const fileExtension = ".xlsx";
 
   const heading = [
@@ -26,8 +27,8 @@ const ExportExcel = ({ excelData, fileName }) => {
   ];
 
   const columnsToExclude = ["created_on", "created_by", "received_by", "id"];
-  // remove columns
-  const filteredData = excelData.map((data) =>
+  // remove columns to be excluded from the report
+  const filteredData = excelData?.map((data) =>
     Object.keys(data).reduce((acc, key) => {
       if (!columnsToExclude.includes(key)) {
         acc[key] = data[key];
@@ -37,9 +38,8 @@ const ExportExcel = ({ excelData, fileName }) => {
   );
 
   const exportToExcel = () => {
-    // Convert data to worksheet
+    setSnackbarOpen(true)
     const ws = XLSX.utils.json_to_sheet([]);
-    // Create workbook and add the worksheet
     const wb = XLSX.utils.book_new();
     XLSX.utils.sheet_add_aoa(ws, heading);
     XLSX.utils.sheet_add_json(ws, filteredData, {
@@ -50,28 +50,44 @@ const ExportExcel = ({ excelData, fileName }) => {
     XLSX.writeFile(wb, fileName + fileExtension);
   };
 
+  const handleCloseSnackbar = () =>{
+    setSnackbarOpen(false)
+  }
+
   return (
-    <>
-      <Tooltip title="Excel Export">
-        <Button
-          onClick={exportToExcel}
-          sx={{
-            backgroundColor: theme.palette.secondary.light,
-            color: theme.palette.background.alt,
-            fontSize: "14px",
-            fontWeight: "bold",
-            padding: "10px 20px",
-            mb: "25px",
-            "&:hover": {
-              backgroundColor: "#fff",
-              color: "#3c52b2",
-            },
-          }}
-        >
-          Export Excel
-        </Button>
-      </Tooltip>
-    </>
+    <React.Fragment><Tooltip title="Excel Export">
+    <Button
+      onClick={exportToExcel}
+      disabled={!excelData || excelData.length === 0}
+      sx={{
+        backgroundColor: theme.palette.secondary.light,
+        color: theme.palette.background.alt,
+        fontSize: "14px",
+        fontWeight: "bold",
+        padding: "10px 20px",
+        mb: "25px",
+        "&:hover": {
+          backgroundColor: "#fff",
+          color: "#3c52b2",
+        },
+      }}
+    >
+      Export Excel
+    </Button>
+  </Tooltip>
+  <Snackbar
+  open={snackbarOpen}
+  message="Spreadsheet is being downloaded..."
+  autoHideDuration={2000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+  style={{
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.background.alt,
+  }}
+  />
+</React.Fragment>
+      
   );
 };
 

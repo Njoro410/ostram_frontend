@@ -86,7 +86,7 @@ const Tabs = [
   { label: "Deposits" },
   { label: "Loans" },
   { label: "Savings" },
-  { divider: "true" },
+  {label:'Transactions'},
 ];
 
 const MemberFile = () => {
@@ -221,6 +221,9 @@ const MemberFile = () => {
                   <MemberLoans mbr_no={member?.results.mbr_no} />
                 )}
                 {activeTab === 3 && (
+                  <MemberSavings mbr_no={member?.results.mbr_no} />
+                )}
+                {activeTab === 4 && (
                   <MemberSavings mbr_no={member?.results.mbr_no} />
                 )}
               </Box>

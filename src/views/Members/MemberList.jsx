@@ -100,7 +100,7 @@ const Memberlist = () => {
 
   return (
     <Box m="5.5rem 2.5rem">
-      <Header title="MEMBER LIST" subtitle="A data grid of all members" />
+      <Header title="MEMBER LIST" subtitle="A list of all members" />
       <FlexBetween borderRadius="9px" gap="3rem">
         {isLoading ? (
           <CustomSpinner />

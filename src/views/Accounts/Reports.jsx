@@ -16,16 +16,24 @@ const Reports = () => {
   const [reportData, setReportData] = useState([]);
 
   const { data: contributions, isLoading } = useGetContributionsQuery();
+  
   const [value, setValue] = useState([null, null]);
   console.log(value, "picked value");
 
   useEffect(() => {
+    console.log('useEffect1')
     if (contributions) {
-      setReportData(contributions.results);
-    }
-  }, [contributions]);
+      // Filter reportData based on the selected date range
+      const [fromDate, toDate] = value;
+      const filteredData = contributions.results.filter((item) => {
+        const itemDate = new Date(item.received_date).getTime();
+        return (!fromDate || itemDate >= fromDate.getTime()) &&
+          (!toDate || itemDate <= toDate.getTime());
+      });
 
-  console.log(contributions, "contributions for");
+      setReportData(filteredData);
+    }
+  }, [value, contributions]); 
 
   const columns = [
     {
@@ -92,20 +100,23 @@ const Reports = () => {
     <Box m="5.5rem 2.5rem">
       <FlexBetween>
         <Header title="REPORTS" subtitle="A statement of contributions made" />
-        <ExportExcel
+        
+      </FlexBetween>
+      <FlexBetween>
+      <DatePickerInput
+        type="range"
+        // label="Filter transactions"
+        placeholder="Filter contributions by period..."
+        value={value}
+        onChange={setValue}
+        clearable={true}
+        mb={'25px'}
+      />
+      <ExportExcel
           excelData={contributions?.results}
           fileName={"Excel Export"}
         />
       </FlexBetween>
-      <DatePickerInput
-        type="range"
-        label="Filter transactions"
-        placeholder="Select month or period"
-        value={value}
-        onChange={setValue}
-        mx="auto"
-        maw={400}
-      />
       <FlexBetween borderRadius="9px" gap="3rem">
         {isLoading ? (
           <CustomSpinner />
