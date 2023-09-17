@@ -114,7 +114,7 @@ const Reports = () => {
       />
       <ExportExcel
           excelData={contributions?.results}
-          fileName={"Excel Export"}
+          fileName={"Daily contributions spreadsheet"}
         />
       </FlexBetween>
       <FlexBetween borderRadius="9px" gap="3rem">

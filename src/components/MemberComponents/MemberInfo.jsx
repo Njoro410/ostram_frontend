@@ -105,7 +105,7 @@ export const MemberInfo = ({ member }) => {
         </Typography>
         <FlexBetween>
           <InfoBox title="Phone number" value={member?.results.phone_no} />
-          <InfoBox title="Residential area" value={member?.results.residential} />
+          <InfoBox title="Residential area" value={member?.results.residential_name} />
         </FlexBetween>
       </Box>
       <Box

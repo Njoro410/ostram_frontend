@@ -78,7 +78,7 @@ const ExportExcel = ({ excelData, fileName }) => {
   <Snackbar
   open={snackbarOpen}
   message="Spreadsheet is being downloaded..."
-  autoHideDuration={2000}
+  autoHideDuration={2500}
   onClose={handleCloseSnackbar}
   anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
   style={{
