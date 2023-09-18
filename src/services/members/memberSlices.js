@@ -1,6 +1,7 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
 export const memberRegisterSlice = apiSlice.injectEndpoints({
+  tagTypes: ["Members"],
   endpoints: (builder) => ({
     registerMember: builder.mutation({
       query: (credentials) => ({
@@ -11,6 +12,7 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      invalidatesTags: ["Members"],
     }),
 
     getResidential: builder.query({
@@ -18,6 +20,7 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
         url: "/members/residential_areas/",
         method: "GET",
       }),
+      providesTags: ["Residential"],
     }),
 
     getMembers: builder.query({
@@ -25,6 +28,7 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
         url: "/members/members_list/",
         method: "GET",
       }),
+      providesTags: ["Members"],
     }),
 
     getMemberDetails: builder.query({
@@ -35,10 +39,10 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
     }),
 
     updateMember: builder.mutation({
-      query: ({ data, memberNo }) => {
+      query: ({ memberNo, data }) => {
         // Log the memberNo parameter
-        console.log("Member No:", data);
-
+        console.log("Member No:", data, memberNo);
+        console.log(`/members/member/${memberNo}/`, "url:");
         // Return the query object for the mutation
         return {
           url: `/members/member/${memberNo}/`,
@@ -49,22 +53,12 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["Members"],
     }),
 
-    // updateMember: builder.mutation({
-    //   query: (data, memberNo) => ({
-    //     url: `/members/member/${memberNo}/`,
-    //     method: "PUT",
-    //     body: data,
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   }),
-    // }),
-
     deleteMember: builder.mutation({
-      query: (mbr_no) => ({
-        url: `/members/member/${mbr_no}/`,
+      query: (memberNo) => ({
+        url: `/members/member/${memberNo}/`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

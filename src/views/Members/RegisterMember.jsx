@@ -28,12 +28,12 @@ const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const { memberNo } = useParams();
-  console.log(memberNo, "member no wrapped ");
+
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
   const [memberUpdate] = useUpdateMemberMutation();
   const location = useLocation();
   const { member } = location.state || {};
-  console.log(member, "member");
+
   const {
     data: areas,
     // isLoading,
@@ -41,7 +41,6 @@ const RegisterMember = () => {
     // isError,
     // error,
   } = useGetResidentialQuery();
-  console.log(areas?.results);
 
   const {
     register,
@@ -70,13 +69,17 @@ const RegisterMember = () => {
   });
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
+    data.mbr_no = parseInt(data.mbr_no, 10); // Assuming base 10
+    data.residential = parseInt(data.residential, 10); // Assuming base 10
     try {
-        console.log(member, "member");
-        const memberData = await (member
-          ? memberUpdate({ data }).unwrap()
-          : memberRegister(data).unwrap());
-        console.log(memberData, member ? "update input" : "registration input");
-  
+      console.log(data, "data to be sent");
+      const memberData = await (member
+        ? memberUpdate({
+            memberNo,
+            data,
+          }).unwrap()
+        : memberRegister(data).unwrap());
+      console.log(memberData, "unwrapped data");
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
@@ -93,8 +96,6 @@ const RegisterMember = () => {
       });
       reset();
     } catch (err) {
-      // console.log(err);
-      // console.log(err.data.errors.mbr_no);
       if (err.status === 400) {
         toast.error(err.data.errors.mbr_no, {
           duration: 8000,
@@ -244,19 +245,7 @@ const RegisterMember = () => {
                 mt: 2.5,
               }}
             />
-            {/* </Box> */}
-            {/* This box will occupy the second half of the parent grid */}
-            {/* <Box gridColumn="2 / span 1"> */}
-            {/* This box will occupy the second half of the child grid */}
-            {/* <RHFSelect
-              name="residential"
-              control={control}
-              errors={errors?.residential}
-              data={areas?.results}
-              label="Residential Area"
-              defaultValue={member ? member.residential : ""}
-              mt={2}
-            /> */}
+
             <Controller
               name="residential"
               control={control}

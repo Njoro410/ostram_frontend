@@ -12,6 +12,7 @@ import { columnProperties } from "../../components/Datagrid";
 import MemberLoans from "../../components/MemberComponents/MemberLoans";
 import MemberDeposits from "../../components/MemberComponents/MemberDeposits";
 import MemberSavings from "../../components/MemberComponents/MemberSavings";
+import MemberContributions from "../../components/MemberComponents/MemberContributions";
 import CustomSpinner from "../../components/CustomSpinner";
 
 const loansColumns = [
@@ -224,7 +225,7 @@ const MemberFile = () => {
                   <MemberSavings mbr_no={member?.results.mbr_no} />
                 )}
                 {activeTab === 4 && (
-                  <MemberSavings mbr_no={member?.results.mbr_no} />
+                  <MemberContributions mbr_no={member?.results.mbr_no} />
                 )}
               </Box>
             )}
