@@ -87,7 +87,7 @@ const Tabs = [
   { label: "Deposits" },
   { label: "Loans" },
   { label: "Savings" },
-  {label:'Transactions'},
+  { label: "Transactions" },
 ];
 
 const MemberFile = () => {
@@ -102,7 +102,6 @@ const MemberFile = () => {
 
   // fetch member
   const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
-
 
   // delete
   const [deleteMember, { isLoading: isDeleting }] = useDeleteMemberMutation();

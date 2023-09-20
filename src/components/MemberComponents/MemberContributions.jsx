@@ -106,12 +106,8 @@ export default function MemberContributions() {
       gridColumn="span 12"
       gridRow="span 1"
       p="1.25rem 1rem"
-      // backgroundColor={theme.palette.background.alt}
+      backgroundColor={theme.palette.background.alt}
       mb={1.5}
-      // sx={{
-      //   border: (theme) => `1px solid ${theme.palette.divider}`,
-      //   borderRadius: 1,
-      // }}
     >
       <FlexBetween>
         <DatePickerInput

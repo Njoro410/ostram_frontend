@@ -11,6 +11,7 @@ import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import CustomTabs from "../../components/CustomTabs";
 import AddNewUser from "./AddNewUser";
+import Residential from "./Residential";
 
 const Settings = () => {
   const theme = useTheme();
@@ -29,6 +30,7 @@ const Settings = () => {
     {
       label: "Add Loan Document Type",
     },
+    { label: "Update Residential Areas" },
   ];
   return (
     <Box m="5.5rem 2.5rem">
@@ -82,6 +84,7 @@ const Settings = () => {
           }}
         >
           {activeSettingsTab === 0 && <AddNewUser />}
+          {activeSettingsTab === 2 && <Residential />}
         </Box>
       </Box>
     </Box>

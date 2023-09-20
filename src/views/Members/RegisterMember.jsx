@@ -69,17 +69,16 @@ const RegisterMember = () => {
   });
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
+    console.log("form submitted");
     data.mbr_no = parseInt(data.mbr_no, 10); // Assuming base 10
     data.residential = parseInt(data.residential, 10); // Assuming base 10
     try {
-      console.log(data, "data to be sent");
       const memberData = await (member
         ? memberUpdate({
             memberNo,
             data,
           }).unwrap()
         : memberRegister(data).unwrap());
-      console.log(memberData, "unwrapped data");
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",

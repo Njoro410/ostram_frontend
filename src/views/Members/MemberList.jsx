@@ -13,13 +13,13 @@ const Memberlist = () => {
 
   const [tableData, setTabledata] = useState([]);
 
-  const { data: members, isLoading } = useGetMembersQuery();
+  const { data: members, isLoading } = useGetMembersQuery({ skip: true });
   useEffect(() => {
     if (members) {
       setTabledata(members.results);
     }
   }, [members]);
-  
+
   const columns = [
     {
       field: "mbr_no",

@@ -1,4 +1,11 @@
-import { Box, Button, TextField, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  useMediaQuery,
+  useTheme,
+  Autocomplete,
+} from "@mui/material";
 import React from "react";
 import Header from "../../components/Header";
 import RHFAutoComplete from "../../components/RHFAutoComplete";
@@ -12,6 +19,7 @@ const Contributions = () => {
   const theme = useTheme();
 
   const { data: members, isFetching } = useGetMembersQuery({ skip: true });
+  const { data: staff } = useGetMembersQuery({ skip: true });
 
   const {
     register,
@@ -59,11 +67,23 @@ const Contributions = () => {
             isFetch={isFetching}
             multiple={false}
           />
+
           <Box
-            display="flex"
+            // display="flex"
             justifyContent="space-between"
             flexWrap="inherit"
             gap="1.5rem"
+            display="grid"
+            gridTemplateColumns="repeat(3, minmax(0, 1fr))"
+            // gridAutoRows="160px"
+            // backgroundColor='red'
+            // height="100vh"
+            // pb="10rem"
+            sx={{
+              "& > div": {
+                gridColumn: isNonMediumScreens ? undefined : "span 3",
+              },
+            }}
           >
             <TextField
               margin="normal"
@@ -83,7 +103,7 @@ const Contributions = () => {
               errors={errors?.application_date}
             />
 
-            <TextField
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -92,7 +112,19 @@ const Contributions = () => {
               name="names"
               autoComplete="names"
               autoFocus
-            />
+            /> */}
+            <Box mt={2}>
+              <RHFAutoComplete
+                options={staff?.results || []}
+                control={control}
+                name="staff"
+                placeholder="Received by"
+                error={!!errors?.staff}
+                helperText={errors.staff?.message}
+                isFetch={isFetching}
+                multiple={false}
+              />
+            </Box>
           </Box>
 
           <Box

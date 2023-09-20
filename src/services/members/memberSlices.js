@@ -1,8 +1,16 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
 export const memberRegisterSlice = apiSlice.injectEndpoints({
-  tagTypes: ["Members"],
+  tagTypes: ["Member"],
   endpoints: (builder) => ({
+    getMembers: builder.query({
+      query: () => ({
+        url: "/members/members_list/",
+        method: "GET",
+      }),
+      providesTags: ["Member"],
+    }),
+
     registerMember: builder.mutation({
       query: (credentials) => ({
         url: "/members/members_list/",
@@ -12,7 +20,7 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Members"],
+      invalidatesTags: ["Member"],
     }),
 
     getResidential: builder.query({
@@ -23,14 +31,6 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
       providesTags: ["Residential"],
     }),
 
-    getMembers: builder.query({
-      query: () => ({
-        url: "/members/members_list/",
-        method: "GET",
-      }),
-      providesTags: ["Members"],
-    }),
-
     getMemberDetails: builder.query({
       query: (mbr_no) => ({
         url: `/members/member/${mbr_no}/`,
@@ -39,21 +39,15 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
     }),
 
     updateMember: builder.mutation({
-      query: ({ memberNo, data }) => {
-        // Log the memberNo parameter
-        console.log("Member No:", data, memberNo);
-        console.log(`/members/member/${memberNo}/`, "url:");
-        // Return the query object for the mutation
-        return {
-          url: `/members/member/${memberNo}/`,
-          method: "PUT",
-          body: data,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-      },
-      invalidatesTags: ["Members"],
+      query: ({ memberNo, data }) => ({
+        url: `/members/member/${memberNo}/`,
+        method: "PUT",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Member"],
     }),
 
     deleteMember: builder.mutation({
