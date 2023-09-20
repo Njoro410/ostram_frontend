@@ -30,13 +30,19 @@ const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const { memberNo } = useParams();
+
   const [memberRegister, { isLoading }] = useRegisterMemberMutation();
   const [memberUpdate] = useUpdateMemberMutation();
   const location = useLocation();
   const { member } = location.state || {};
 
-  const { data: areas } = useGetResidentialQuery();
-  // console.log(areas?.results);
+  const {
+    data: areas,
+    // isLoading,
+    // isSuccess,
+    // isError,
+    // error,
+  } = useGetResidentialQuery();
 
   const {
     register,
@@ -63,27 +69,26 @@ const RegisterMember = () => {
           }
         : {},
   });
-
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
-    // console.log(data)
+    console.log("form submitted");
+    data.mbr_no = parseInt(data.mbr_no, 10); // Assuming base 10
+    data.residential = parseInt(data.residential, 10); // Assuming base 10
     try {
-      // console.log(member, "member");
       const memberData = await (member
-        ? memberUpdate({ data }).unwrap()
+        ? memberUpdate({
+            memberNo,
+            data,
+          }).unwrap()
         : memberRegister(data).unwrap());
-      // console.log(memberData, member ? "update input" : "registration input");
-
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
-
         // Change colors of success/error/loading icon
         iconTheme: {
           primary: "#00ff1a",
           secondary: "#fff",
         },
-
         // Aria
         ariaProps: {
           role: "status",
@@ -92,19 +97,15 @@ const RegisterMember = () => {
       });
       reset();
     } catch (err) {
-      // console.log(err);
-      // console.log(err.data.errors.mbr_no);
       if (err.status === 400) {
         toast.error(err.data.errors.mbr_no, {
           duration: 8000,
           position: "top-right",
-
           // Change colors of success/error/loading icon
           iconTheme: {
             primary: "#f70707",
             secondary: "#fff",
           },
-
           // Aria
           ariaProps: {
             role: "status",
@@ -115,13 +116,11 @@ const RegisterMember = () => {
         toast.error("No server response", {
           duration: 8000,
           position: "top-right",
-
           // Change colors of success/error/loading icon
           iconTheme: {
             primary: "#f70707",
             secondary: "#fff",
           },
-
           // Aria
           ariaProps: {
             role: "status",
@@ -131,7 +130,6 @@ const RegisterMember = () => {
       }
     }
   };
-
   return (
     <Box m="5.5rem 2.5rem">
       <Header
@@ -142,7 +140,6 @@ const RegisterMember = () => {
             : "Register new members by filling their details"
         }
       />
-
       <Box
         mt="20px"
         component="form"
@@ -182,7 +179,6 @@ const RegisterMember = () => {
               error={!!errors?.names}
               helperText={errors.names?.message}
             />
-
             <TextField
               margin="normal"
               required
@@ -196,7 +192,6 @@ const RegisterMember = () => {
               error={!!errors?.id_no}
               helperText={errors.id_no?.message}
             />
-
             <TextField
               margin="normal"
               required
@@ -235,7 +230,6 @@ const RegisterMember = () => {
                 </FormControl>
               )}
             />
-
             <TextField
               margin="normal"
               required
@@ -252,18 +246,36 @@ const RegisterMember = () => {
                 mt: 2.5,
               }}
             />
-            {/* </Box> */}
-            {/* This box will occupy the second half of the parent grid */}
-            {/* <Box gridColumn="2 / span 1"> */}
-            {/* This box will occupy the second half of the child grid */}
 
-            <RHFSelect
+            <Controller
               name="residential"
               control={control}
-              errors={errors?.residential}
-              data={areas?.results}
-              label="Residential Area"
-              mt={2}
+              defaultValue={member && memberNo ? member.residential : ""}
+              render={({ field: { onChange, value } }) => (
+                <FormControl
+                  variant="outlined"
+                  fullWidth
+                  required
+                  error={!!errors?.residential}
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <InputLabel>Residential Area</InputLabel>
+                  <Select
+                    value={value}
+                    onChange={onChange}
+                    label="Residential Area"
+                  >
+                    {areas?.results.map((area) => (
+                      <MenuItem key={area.area_code} value={area.area_code}>
+                        {area.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errors.residential?.message}</FormHelperText>
+                </FormControl>
+              )}
             />
           </Box>
           <Box>
@@ -297,7 +309,6 @@ const RegisterMember = () => {
                 },
               }}
             />
-
             <TextField
               margin="normal"
               required
@@ -328,7 +339,6 @@ const RegisterMember = () => {
                 },
               }}
             />
-
             <TextField
               margin="normal"
               required
@@ -358,7 +368,6 @@ const RegisterMember = () => {
             />
           </Box>
         </Box>
-
         <Box
           backgroundColor={theme.palette.background.alt}
           gridColumn="span 4"
@@ -377,7 +386,6 @@ const RegisterMember = () => {
             autoFocus
             {...register("next_of_kin")}
           />
-
           <TextField
             margin="normal"
             fullWidth
@@ -391,7 +399,6 @@ const RegisterMember = () => {
             error={errors.phone_nos ? true : false}
             helperText={errors.phone_nos?.message}
           />
-
           <TextField
             margin="normal"
             fullWidth
@@ -403,7 +410,6 @@ const RegisterMember = () => {
             {...register("relationship")}
           />
         </Box>
-
         <Box gridColumn="span 8">
           {!isLoading ? (
             <Button
@@ -434,7 +440,6 @@ const RegisterMember = () => {
             </LoadingButton>
           )}
         </Box>
-
         <Box gridColumn="span 4">
           <Button
             type="reset"
@@ -460,5 +465,4 @@ const RegisterMember = () => {
     </Box>
   );
 };
-
 export default RegisterMember;

@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import CustomTabs from "../../components/CustomTabs";
+import AddNewUser from "./AddNewUser";
+import Residential from "./Residential";
 
 import ManageUsers from "./StaffManagement/ManageUsers";
 import ManageBranches from "./BranchManagement/ManageBranches";
@@ -69,6 +71,7 @@ const Settings = () => {
     {
       label: "Add Loan Document Type",
     },
+    { label: "Update Residential Areas" },
   ];
   return (
     <Box m="5.5rem 2.5rem">
@@ -147,6 +150,7 @@ const Settings = () => {
           {activeSettingsTab === 1 && (
             <ManageBranches activeManageBranchTab={activeManageBranchTab} />
           )}
+          {activeSettingsTab === 2 && <Residential />}
         </Box>
       </Box>
     </Box>

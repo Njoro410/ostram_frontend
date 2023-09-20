@@ -19,7 +19,15 @@ export const contributionsSlices = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getMemberContributions: builder.query({
+      query: (memberNo) => ({
+        url: `/contributions/member_contributions/${memberNo}/`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useGetContributionsQuery } = contributionsSlices;
+export const { useGetContributionsQuery, useGetMemberContributionsQuery } =
+  contributionsSlices;

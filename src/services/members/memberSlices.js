@@ -1,7 +1,16 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
 export const memberRegisterSlice = apiSlice.injectEndpoints({
+  tagTypes: ["Member"],
   endpoints: (builder) => ({
+    getMembers: builder.query({
+      query: () => ({
+        url: "/members/members_list/",
+        method: "GET",
+      }),
+      providesTags: ["Member"],
+    }),
+
     registerMember: builder.mutation({
       query: (credentials) => ({
         url: "/members/members_list/",
@@ -11,6 +20,7 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       }),
+      invalidatesTags: ["Member"],
     }),
 
     getResidential: builder.query({
@@ -18,13 +28,7 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
         url: "/members/residential_areas/",
         method: "GET",
       }),
-    }),
-
-    getMembers: builder.query({
-      query: () => ({
-        url: "/members/members_list/",
-        method: "GET",
-      }),
+      providesTags: ["Residential"],
     }),
 
     getMemberDetails: builder.query({
@@ -35,19 +39,20 @@ export const memberRegisterSlice = apiSlice.injectEndpoints({
     }),
 
     updateMember: builder.mutation({
-      query: (credentials) => ({
-        url: `/members/member/${mbr_no}/`,
+      query: ({ memberNo, data }) => ({
+        url: `/members/member/${memberNo}/`,
         method: "PUT",
-        body: credentials,
+        body: data,
         headers: {
           "Content-Type": "application/json",
         },
       }),
+      invalidatesTags: ["Member"],
     }),
 
     deleteMember: builder.mutation({
-      query: (mbr_no) => ({
-        url: `/members/member/${mbr_no}/`,
+      query: (memberNo) => ({
+        url: `/members/member/${memberNo}/`,
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

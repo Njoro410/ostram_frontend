@@ -105,7 +105,7 @@ export const MemberInfo = ({ member }) => {
         </Typography>
         <FlexBetween>
           <InfoBox title="Phone number" value={member?.results.phone_no} />
-          <InfoBox title="Residential" value={member?.results.residential} />
+          <InfoBox title="Residential area" value={member?.results.residential_name} />
         </FlexBetween>
       </Box>
       <Box
@@ -127,7 +127,7 @@ export const MemberInfo = ({ member }) => {
           Next of kin
         </Typography>
         <FlexBetween>
-          <InfoBox title="Residential" value={member?.results.next_of_kin} />
+          <InfoBox title="Name" value={member?.results.next_of_kin} />
           <InfoBox title="Relationship" value={member?.results.relationship} />
         </FlexBetween>
         <FlexBetween>

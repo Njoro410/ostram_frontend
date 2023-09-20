@@ -12,6 +12,7 @@ import { columnProperties } from "../../components/Datagrid";
 import MemberLoans from "../../components/MemberComponents/MemberLoans";
 import MemberDeposits from "../../components/MemberComponents/MemberDeposits";
 import MemberSavings from "../../components/MemberComponents/MemberSavings";
+import MemberContributions from "../../components/MemberComponents/MemberContributions";
 import CustomSpinner from "../../components/CustomSpinner";
 
 const loansColumns = [
@@ -86,7 +87,7 @@ const Tabs = [
   { label: "Deposits" },
   { label: "Loans" },
   { label: "Savings" },
-  { divider: "true" },
+  { label: "Transactions" },
 ];
 
 const MemberFile = () => {
@@ -101,7 +102,6 @@ const MemberFile = () => {
 
   // fetch member
   const { data: member, isLoading } = useGetMemberDetailsQuery(memberNo);
-
 
   // delete
   const [deleteMember, { isLoading: isDeleting }] = useDeleteMemberMutation();
@@ -222,6 +222,9 @@ const MemberFile = () => {
                 )}
                 {activeTab === 3 && (
                   <MemberSavings mbr_no={member?.results.mbr_no} />
+                )}
+                {activeTab === 4 && (
+                  <MemberContributions mbr_no={member?.results.mbr_no} />
                 )}
               </Box>
             )}

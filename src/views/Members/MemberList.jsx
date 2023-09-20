@@ -13,12 +13,13 @@ const Memberlist = () => {
 
   const [tableData, setTabledata] = useState([]);
 
-  const { data: members, isLoading } = useGetMembersQuery();
+  const { data: members, isLoading } = useGetMembersQuery({ skip: true });
   useEffect(() => {
     if (members) {
       setTabledata(members.results);
     }
   }, [members]);
+
   const columns = [
     {
       field: "mbr_no",
@@ -70,7 +71,7 @@ const Memberlist = () => {
       minWidth: 100,
     },
     {
-      field: "residential",
+      field: "residential_name",
       headerName: "Residential",
       minWidth: 100,
       ...columnProperties,
@@ -100,7 +101,7 @@ const Memberlist = () => {
 
   return (
     <Box m="5.5rem 2.5rem">
-      <Header title="MEMBER LIST" subtitle="A data grid of all members" />
+      <Header title="MEMBER LIST" subtitle="A list of all members" />
       <FlexBetween borderRadius="9px" gap="3rem">
         {isLoading ? (
           <CustomSpinner />

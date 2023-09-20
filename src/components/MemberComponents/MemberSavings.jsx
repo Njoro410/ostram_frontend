@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
 import CustomSpinner from "../CustomSpinner";
-import { Box } from "@mui/material";
 import { useGetMemberSavingsQuery } from "../../services/savings/savingsSlice";
-import { useTheme } from "@mui/material/styles";
+import { Box, Button, Divider, Typography, useMediaQuery } from "@mui/material";
+import FlexBetween from "../FlexBetween";
+import Header from "../Header";
+import { useTheme } from "@emotion/react";
+import SplineArea from "../../charts/SplineArea";
+import AccountSparkline from "../../charts/AccountSplineArea";
+import AccountSplineArea from "../../charts/AccountSplineArea";
+import ZoomableTimeseries from "../../charts/MixedYAxis";
+import BarChart from "../../charts/BarChart";
+import MixedYAxis from "../../charts/MixedYAxis";
+import AddSavingsModal from "../SavingsComponents/AddSavingsModal";
 
 const MemberSavings = ({ mbr_no }) => {
   const theme = useTheme();
