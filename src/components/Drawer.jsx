@@ -28,11 +28,14 @@ import {
   FormatListNumberedOutlined,
   PlaylistAddCheckOutlined,
   CalculateOutlined,
+  SmsOutlined
 } from "@mui/icons-material";
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import Logo from "../assets/ostlogo.png";
+// import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 
 const drawerWidth = 240;
 
@@ -100,10 +103,10 @@ const navItems = [
     text: "Member Registration",
     icon: <PersonAddOutlined />,
   },
-  {
-    text: "CRB Information",
-    icon: <LocalPoliceOutlined />,
-  },
+  // {
+  //   text: "CRB Information",
+  //   icon: <LocalPoliceOutlined />,
+  // },
   {
     text: "Accounts",
     icon: null,
@@ -145,10 +148,18 @@ const navItems = [
     text: "TODO List",
     icon: <PlaylistAddCheckOutlined />,
   },
-  // {
-  //   text: "Loan Calculator",
-  //   icon: <CalculateOutlined />,
-  // },
+  {
+    text: "SMS",
+    icon: <SmsOutlined />,
+  },
+  {
+    text: "Loan Calculator",
+    icon: <CalculateOutlined />,
+  },
+  {
+    text: "Scheduler",
+    icon: <EventNoteIcon />,
+  },
 ];
 
 export default function DrawerComponent({
@@ -226,11 +237,12 @@ export default function DrawerComponent({
                   <Typography
                     key={text}
                     sx={{
-                      m: open ? "2.25rem 0 1rem 3rem" : "",
+                      m: open ? "3rem 0 1rem 2.25rem" : "",
                       opacity: open ? 1 : 0,
+                      fontWeight: "bold",
                     }}
                   >
-                    {text}
+                    <Divider textAlign="center"> {text}</Divider>
                   </Typography>
                 );
               }
@@ -255,6 +267,10 @@ export default function DrawerComponent({
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
                       px: 2.5,
+                      "&:hover": {
+                        backgroundColor: theme.palette.primary[100],
+                        color: "#3c52b2",
+                      },
                     }}
                   >
                     <Divider />
@@ -263,7 +279,7 @@ export default function DrawerComponent({
                         color:
                           active === lcText
                             ? theme.palette.primary[600]
-                            : theme.palette.secondary[200],
+                            : theme.palette.primary[100],
                         minWidth: 0,
                         mr: open ? 3 : "auto",
                         justifyContent: "center",

@@ -29,6 +29,7 @@ import RHFAutoComplete from "../RHFAutoComplete";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loanProductSchema } from "../../utils/validationSchema";
 import { Controller, useForm } from "react-hook-form";
+import { GlassDialog } from "../GlassDialog";
 
 const AddLoanProductModal = ({ open, onClose }) => {
   const theme = useTheme();
@@ -58,7 +59,7 @@ const AddLoanProductModal = ({ open, onClose }) => {
   };
 
   return (
-    <Dialog
+    <GlassDialog
       open={open}
       onClose={onClose}
       maxWidth="md"
@@ -248,7 +249,7 @@ const AddLoanProductModal = ({ open, onClose }) => {
           </Typography>
         </Button>
       </DialogActions>
-    </Dialog>
+    </GlassDialog>
   );
 };
 

@@ -38,6 +38,7 @@ import {
   import styled from "@emotion/styled";
   import toTitleCase from "../../../utils/titleCaseConverter";
   import formatDate from "../../../utils/formatDate";
+import LoanDetailsTable from "../../../components/LoanComponents/LoanDetailsTable";
   
   const GlassCard = styled(Card)`
     background-color: rgba(87, 86, 86, 0.25);
@@ -184,58 +185,23 @@ import {
             </Button>
           </Box>
   
+          {memberId ? (
           <Box
             gridColumn="span 4"
             gridRow="span 4"
-            // backgroundColor={theme.palette.background.alt}
+            backgroundColor={theme.palette.background.alt}
             borderRadius="0.55rem"
-            // height="12rem"
             sx={{
               border: (theme) => `1px solid ${theme.palette.divider}`,
               borderRadius: 1,
             }}
           >
-            <TableContainer
-              elevation={1}
-              sx={{
-                backgroundColor: theme.palette.background.alt,
-                maxHeight: "300px",
-              }}
-              component={Paper}
-            >
-              <Table aria-label="member loans table" stickyHeader>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">ID</TableCell>
-                    <TableCell align="center">Status</TableCell>
-                    <TableCell align="center">Principal Amount</TableCell>
-                    <TableCell align="center">Remaining Balance</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {memberLoans?.results.map((loan) => (
-                    <TableRow
-                      key={loan.id}
-                      onClick={() => handleRowClick(loan.id)}
-                      sx={{
-                        "&:last-child tg,&:last-child th": { border: 0 },
-                        cursor: "pointer",
-                      }}
-                    >
-                      <TableCell align="center">{loan.id}</TableCell>
-                      <TableCell align="center">{loan.status_name}</TableCell>
-                      <TableCell align="center">
-                        {loan.principal_amount}
-                      </TableCell>
-                      <TableCell align="center">
-                        {loan.remaining_balance}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <LoanDetailsTable
+              loans={memberLoans?.results}
+              onRowClick={handleRowClick}
+            />
           </Box>
+        ) : null}
           {selectedRow ? (
             <Box
               gridColumn="span 8"

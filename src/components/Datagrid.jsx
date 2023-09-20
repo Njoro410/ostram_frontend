@@ -2,8 +2,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, useTheme } from "@mui/material";
 
 export const columnProperties = {
-  sortable: false,
-  filterable: false,
+  // sortable: false,
+  // filterable: false,
   flex: 1,
 };
 
@@ -34,6 +34,7 @@ const Datagrid = ({ columns, rows, getRowId, isLoanList }) => {
         columns={columns}
         pageSize={50}
         getRowId={getRowId}
+        
       />
     </Box>
   );

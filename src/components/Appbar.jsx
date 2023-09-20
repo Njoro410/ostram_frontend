@@ -8,32 +8,32 @@ import MenuIcon from "@mui/icons-material/Menu";
 import FlexBetween from "./FlexBetween";
 import {
   Avatar,
-  Divider,
-  InputBase,
   Menu,
-  MenuItem,
   Slide,
   Tooltip,
   useScrollTrigger,
   Autocomplete,
   TextField,
   Box,
-  InputAdornment,
+  Badge,
 } from "@mui/material";
-import {
-  DarkModeOutlined,
-  LightModeOutlined,
-  Logout,
-  PersonAdd,
-  Search,
-  Settings,
-} from "@mui/icons-material";
+import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setMode } from "../features/theme/themeSlice";
 import useUser from "../hooks/useUser";
 import ProfileMenu from "./ProfileMenu";
 import { useGetMembersQuery } from "../services/members/memberSlices";
 import { useNavigate } from "react-router-dom";
+import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
+import WifiOffOutlinedIcon from "@mui/icons-material/WifiOffOutlined";
+import { useNetwork } from "@mantine/hooks";
+import Fade from "@mui/material/Fade";
+import {
+  usePopupState,
+  bindHover,
+  bindMenu,
+} from "material-ui-popup-state/hooks";
+import NetworkMenu from "./NetworkMenu";
 
 const drawerWidth = 240;
 
@@ -62,15 +62,23 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
   const theme = useTheme();
   const trigger = useScrollTrigger();
   const navigate = useNavigate();
+  const networkStatus = useNetwork();
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const openn = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const openProfileMenu = Boolean(anchorEl);
+
+  const handleProfileMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleProfileMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const popupState = usePopupState({
+    variant: "popover",
+    popupId: "demoMenu",
+  });
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
 
@@ -82,23 +90,43 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
       navigate(`/member-details/${newValue.mbr_no}`);
     }
   };
-  const { data: members, isFetching } = useGetMembersQuery({ skip: true });
+  const { data: members, isFetching } = useGetMembersQuery();
+
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    "& .MuiBadge-badge": {
+      backgroundColor: !networkStatus.online ? "#ff2200" : "#2eb700",
+      color: !networkStatus.online ? "#ff2200" : "#2eb700",
+      "&::after": {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        borderRadius: "50%",
+        animation: "ripple 1.2s infinite ease-in-out",
+        border: "1px solid currentColor",
+        content: '""',
+      },
+    },
+    "@keyframes ripple": {
+      "0%": {
+        transform: "scale(.8)",
+        opacity: 1,
+      },
+      "100%": {
+        transform: "scale(2.4)",
+        opacity: 0,
+      },
+    },
+  }));
   return (
     <Slide appear={false} direction="down" in={!trigger}>
-      <AppBar
-        sx={{
-          // position: "static",
-          // background: "none",
-          boxShadow: "none",
-        }}
-        position="fixed"
-        open={open}
-      >
+      <AppBar open={open}>
         <Toolbar
           sx={{
             justifyContent: "space-between",
-            // color: theme.palette.secondary[200],
-            // backgroundColor: theme.palette.background.alt,
+            backgroundColor: theme.palette.background.default,
+           
           }}
         >
           {/* Left side */}
@@ -115,6 +143,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             >
               <MenuIcon />
             </IconButton>
+            
 
             <FlexBetween
               backgroundColor={theme.palette.background.default}
@@ -122,6 +151,26 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
               gap="3rem"
               component="form"
             >
+            <IconButton {...bindHover(popupState)}>
+              {networkStatus.online ? (
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                  variant="dot"
+                >
+                  <WifiOutlinedIcon sx={{ color: "#2eb700" }} />
+                </StyledBadge>
+              ) : (
+                <StyledBadge
+                  overlap="circular"
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                  variant="dot"
+                >
+                  <WifiOffOutlinedIcon sx={{ color: "#ff0000" }} />
+                </StyledBadge>
+              )}
+            </IconButton>
+
               <Autocomplete
                 id="member-select"
                 sx={{ width: 400 }}
@@ -152,8 +201,16 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             </FlexBetween>
           </FlexBetween>
 
-          {/* rigth side */}
+          {/* right side */}
           <FlexBetween gap="0rem">
+
+
+            <NetworkMenu
+              bindMenu={bindMenu}
+              networkStatus={networkStatus}
+              popupState={popupState}
+            />
+
             <Tooltip
               title={theme.palette.mode === "dark" ? "Light mode" : "Dark mode"}
             >
@@ -168,15 +225,25 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
 
             <Tooltip title="Account settings">
               <IconButton
-                onClick={handleClick}
+                onClick={handleProfileMenuClick}
                 size="small"
                 sx={{ ml: 2 }}
-                aria-controls={openn ? "account-menu" : undefined}
+                aria-controls={openProfileMenu ? "account-menu" : undefined}
                 aria-haspopup="true"
-                aria-expanded={openn ? "true" : undefined}
+                aria-expanded={openProfileMenu ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}>
-                  {user?.results.fullname?.substring(0, 1)}
+                <Avatar
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 36,
+                    height: 36,
+                  }}
+                >
+                  <Typography sx={{ fontSize: "1rem" }}>
+                    {user?.results.first_name?.substring(0, 1)}
+                  </Typography>
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -185,9 +252,15 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
           <Menu
             anchorEl={anchorEl}
             id="account-menu"
-            open={openn}
-            onClose={handleClose}
-            onClick={handleClose}
+            open={openProfileMenu}
+            onClose={handleProfileMenuClose}
+            onClick={handleProfileMenuClose}
+            sx={{
+              "& .MuiMenu-paper": {
+                backgroundColor: theme.palette.background.alt,
+                color: theme.palette.secondary[200],
+              },
+            }}
             PaperProps={{
               elevation: 0,
               sx: {
@@ -208,7 +281,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
                   right: 14,
                   width: 10,
                   height: 10,
-                  bgcolor: "background.paper",
+                  bgcolor: theme.palette.background.alt,
                   transform: "translateY(-50%) rotate(45deg)",
                   zIndex: 0,
                 },
@@ -217,7 +290,7 @@ export default function AppBarComponent({ open, handleDrawerOpen }) {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <ProfileMenu handleClose={handleClose} theme={theme} />
+            <ProfileMenu handleClose={handleProfileMenuClose} theme={theme} />
           </Menu>
         </Toolbar>
       </AppBar>

@@ -94,6 +94,30 @@ export const checkLoanDocumentSchema = Yup.object().shape({
     .required("Loan is required"),
 })
 
+export const broadcastSMSSchema = Yup.object().shape({
+  message: Yup.string()
+    .required("Message to be sent is required")
+})
+
+export const sendSMSSchema = Yup.object().shape({
+  member: Yup.string()
+    .required("Member is required"),
+  message: Yup.string()
+    .required("Message to be sent is required")
+})
+
+export const sendMultipleSMSSchema = Yup.object().shape({
+  members: Yup.array()
+    .required("Member is required"),
+  message: Yup.string()
+    .required("Message to be sent is required")
+})
+
+export const processMemberIdSchema = Yup.object().shape({
+  member: Yup.string()
+    .required("Member is required"),
+})
+
 export const loanDocumentTypeSchema = Yup.object().shape({
   name: Yup.string()
     .required("Document is required"),
@@ -116,8 +140,6 @@ export const AddLoanDocumentSchema = Yup.object().shape({
 })
 
 export const PayLoanSchema = Yup.object().shape({
-  loan: Yup.string()
-    .required("Loan is required"),
   payment_amount: Yup.string()
     .required('Minimum amount is required')
     .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
@@ -127,7 +149,11 @@ export const PayLoanSchema = Yup.object().shape({
 
 export const createTodoSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
-  description: Yup.string().required("Description is required")
+  description: Yup.string().required("Description is required"),
+  priority: Yup.string().required("Task priority is required."),
+  status: Yup.string().required("Task status is required."),
+  due_date: Yup.string()
+    .required("Due date is required")
 })
 
 export const AddSavingsSchema = Yup.object().shape({
@@ -138,3 +164,91 @@ export const AddSavingsSchema = Yup.object().shape({
     .required("Received date is required"),
 
 })
+
+export const checkStaffDetailsSchema = Yup.object().shape({
+  staff: Yup.string()
+    .required("Staff name is required"),
+})
+
+export const checkBranchDetailsSchema = Yup.object().shape({
+  branch: Yup.string()
+    .required("Branch name is required"),
+})
+
+export const addStaffSchema = Yup.object().shape({
+  username: Yup.string()
+    .required('Username is required'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Email is invalid'),
+  password: Yup.string()
+    .required('Password is required'),
+  password2: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
+  reports_to: Yup.string()
+    .required("Staff name is required"),
+  branch: Yup.string()
+    .required("Branch is required")
+
+});
+
+
+export const addBranchSchema = Yup.object().shape({
+  full_address: Yup.string()
+    .required('Full address is required'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Email is invalid'),
+  phone: Yup.string()
+    .required("Phone number is  required")
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, "Number is too short")
+    .max(10, "Number is too long"),
+  location: Yup.string()
+    .required('Location is required'),
+  status: Yup.string()
+    .required("Status is required"),
+  manager: Yup.string()
+    .required("Manager is required")
+
+});
+
+
+export const addPermissionGroupSchema = Yup.object().shape({
+  name: Yup.string()
+    .required('Group name is required'),
+  permissions: Yup.array()
+    .required('Permissions are required')
+});
+
+
+export const getPermissionGroupSchema = Yup.object().shape({
+  group: Yup.string()
+    .required('Group name is required'),
+});
+
+
+export const definedCalcSchema = Yup.object().shape({
+  loan_product: Yup.string()
+    .required("Loan type is required"),
+  amount: Yup.string()
+    .required('Borrowed amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  term: Yup.string()
+    .required('Loan term is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+});
+
+
+export const customCalcSchema = Yup.object().shape({
+  amount: Yup.string()
+    .required('Borrowed amount is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  term: Yup.string()
+    .required('Loan term is required')
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  rate: Yup.string()
+    .required("Interest rate is required")
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+});

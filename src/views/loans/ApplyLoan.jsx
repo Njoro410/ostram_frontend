@@ -27,6 +27,12 @@ import RHFAutoComplete from "../../components/RHFAutoComplete";
 import DateSelector from "../../components/DateSelector";
 import RHFSelect from "../../components/RHFSelect";
 import toast, { Toaster } from "react-hot-toast";
+import parse from "date-fns/parse";
+
+
+
+
+
 const ApplyLoan = () => {
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const theme = useTheme();
@@ -51,6 +57,7 @@ const ApplyLoan = () => {
 
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
+    console.log(data)
     try {
       const response = await createLoan(data).unwrap();
       toast.success(response.message, {
@@ -113,7 +120,7 @@ const ApplyLoan = () => {
               helperText={errors.member?.message}
               isFetch={isFetching}
               multiple={false}
-            />
+            /> 
 
             <TextField
               margin="normal"

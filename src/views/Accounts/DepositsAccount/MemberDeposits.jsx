@@ -9,6 +9,7 @@ import AccountSplineArea from "../../../charts/AccountSplineArea";
 import ZoomableTimeseries from "../../../charts/MixedYAxis";
 import BarChart from "../../../charts/BarChart";
 import MixedYAxis from "../../../charts/MixedYAxis";
+import RHFAutoComplete from "../../../components/RHFAutoComplete";
 
 const MemberDeposits = () => {
   const theme = useTheme();
@@ -19,6 +20,17 @@ const MemberDeposits = () => {
         <Header
           title="MEMBER SAVINGS"
           subtitle="Comprehensive detail about member savings"
+        />
+
+        <RHFAutoComplete
+          options={members?.results || []}
+          control={control}
+          name="member"
+          placeholder="Applicants Name"
+          error={!!errors?.member}
+          helperText={errors.member?.message}
+          isFetch={isFetching}
+          multiple={false}
         />
 
         <Box>
@@ -58,7 +70,9 @@ const MemberDeposits = () => {
             gridAutoRows="160px"
             gap="20px"
             sx={{
-              "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
+              "& > div": {
+                gridColumn: isNonMediumScreens ? undefined : "span 12",
+              },
             }}
           >
             <Box
@@ -75,13 +89,18 @@ const MemberDeposits = () => {
               }}
             >
               <Typography
-                sx={{ fontWeight: "lighter", ml: 3, mt: 5  }}
+                sx={{ fontWeight: "lighter", ml: 3, mt: 5 }}
                 variant="h6"
               >
                 Total Balance
               </Typography>
               <Typography
-                sx={{ fontWeight: "1000", ml: 3, mt: 1,color: theme.palette.secondary[400]  }}
+                sx={{
+                  fontWeight: "1000",
+                  ml: 3,
+                  mt: 1,
+                  color: theme.palette.secondary[400],
+                }}
                 variant="h2"
               >
                 Ksh 24,000
@@ -108,7 +127,12 @@ const MemberDeposits = () => {
                 Total Deposited This Month
               </Typography>
               <Typography
-                sx={{ fontWeight: "1000", ml: 3, mt: 1,color: theme.palette.secondary[400]  }}
+                sx={{
+                  fontWeight: "1000",
+                  ml: 3,
+                  mt: 1,
+                  color: theme.palette.secondary[400],
+                }}
                 variant="h2"
               >
                 Ksh 24,000
@@ -129,13 +153,23 @@ const MemberDeposits = () => {
               }}
             >
               <Typography
-                sx={{ fontWeight: "lighter", ml: 3, mt: 5,color: theme.palette.secondary[400]  }}
+                sx={{
+                  fontWeight: "lighter",
+                  ml: 3,
+                  mt: 5,
+                  color: theme.palette.secondary[400],
+                }}
                 variant="h6"
               >
                 Total Withdrawn This Month
               </Typography>
               <Typography
-                sx={{ fontWeight: "1000", ml: 3, mt: 1,color: theme.palette.secondary[400] }}
+                sx={{
+                  fontWeight: "1000",
+                  ml: 3,
+                  mt: 1,
+                  color: theme.palette.secondary[400],
+                }}
                 variant="h2"
               >
                 Ksh 24,000

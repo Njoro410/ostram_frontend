@@ -32,6 +32,8 @@ import CustomTabs from "../../components/CustomTabs";
 import { useGetResidentialQuery } from "../../services/members/memberSlices";
 import styled from "@emotion/styled";
 import jwt_decode from "jwt-decode";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../features/auth/authSlice";
 
 const PulsatingAlert = styled(Alert)`
   animation: pulse 2s infinite;
@@ -56,13 +58,13 @@ const Dashboard = () => {
   const [activeWeatherTab, setActiveWeatherTab] = useState(0);
 
   const { user, isLoading, isSuccess, isError, error } = useUser();
-  const {
-    data: areas,
-    // isLoading,
-    // isSuccess,
-    // isError,
-    // error,
-  } = useGetResidentialQuery();
+  // console.log(user)
+
+  const access = useSelector(selectCurrentToken);
+  const id = jwt_decode(access);
+  // console.log(id.user_id)
+
+  const { data: areas } = useGetResidentialQuery();
 
   const handleGraphTabChange = (event, newValue) => {
     setActiveGraphTab(newValue);
@@ -93,10 +95,11 @@ const Dashboard = () => {
 
   return (
     <Box m="5.5rem 2.5rem">
+      
       <FlexBetween>
         <Header
           title="DASHBOARD"
-          subtitle={`Welcome ${user?.results.fullname}`}
+          subtitle={`Welcome ${user?.results.first_name}`}
         />
 
         {/* <Box>
@@ -125,7 +128,7 @@ const Dashboard = () => {
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="160px"
-        gap="20px"
+        gap="5px"
         sx={{
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
@@ -160,7 +163,7 @@ const Dashboard = () => {
           description="Since last month"
           value="100,000"
           icon={
-            <SavingsOutlined 
+            <SavingsOutlined
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }

@@ -6,22 +6,25 @@ import {
 } from "../../features/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "https://web-production-7b2fc.up.railway.app/api",
-  baseUrl: "http://127.0.0.1:8000/api",
-  credentials: "include",
-  mode: "cors",
-  method: "POST",
-  prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.accesstoken;
-    const csrftoken = getState().auth.csrfToken;
-    if (token && csrftoken) {
-      headers.set("Authorization", `Bearer ${token}`);
-      headers.set("X-CSRFToken", csrftoken);
-    }
 
-    return headers;
-  },
-});
+    // baseUrl: 'https://web-production-7b2fc.up.railway.app/api',
+    baseUrl: 'http://127.0.0.1:8000/api',
+    credentials: 'include',
+    mode: 'cors',
+    method: 'POST',
+    prepareHeaders: (headers, { getState }) => {
+        const token = getState().auth.accesstoken
+        const csrftoken = getState().auth.csrfToken
+        if (token && csrftoken) {
+            headers.set("Authorization", `Bearer ${token}`)
+            headers.set('X-CSRFToken', csrftoken)
+        }
+
+
+        return headers
+    },
+})
+
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
@@ -54,9 +57,12 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 };
 
 export const apiSlice = createApi({
-  reducerPath: "authSlice",
-  baseQuery: baseQueryWithReauth,
-  tagTypes: ["User"],
-  endpoints: (builder) => ({}),
-  keepUnusedDataFor: 6000,
-});
+
+    reducerPath: 'authSlice',
+    baseQuery: baseQueryWithReauth,
+    tagTypes: ['User'],
+    endpoints: builder => ({}),
+    keepUnusedDataFor: 0,
+})
+
+

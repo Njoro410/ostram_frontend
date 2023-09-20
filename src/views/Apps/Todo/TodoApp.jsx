@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import Header from "../../../components/Header";
 import FlexBetween from "../../../components/FlexBetween";
 import AllTodo from "./AllTodo";
-import AddTodo from "./AddTodo";
 import MyTodo from "./MyTodo";
-import OverdueTodo from "./OverdueTodo";
 import CustomTabs from "../../../components/CustomTabs";
+import MyAssignedTodo from "./MyAssignedTodo";
+
 
 const TodoApp = () => {
   const theme = useTheme();
@@ -20,24 +20,21 @@ const TodoApp = () => {
 
   const todoTabs = [
     {
-      label: "Public Todos",
+      label: "My Tasks",
     },
     {
-      label: "Add Todo",
+      label: "Assigned Tasks",
     },
     {
-      label: "My Todos",
-    },
-    {
-      label: "Overdue Todos",
+      label: "General Tasks",
     },
   ];
   return (
     <Box m="5.5rem 2.5rem">
       <FlexBetween>
         <Header
-          title="TODOS APP"
-          subtitle="Create todos to always be on track"
+          title="TASK MATE"
+          subtitle="Create tasks to always be on track"
         />
       </FlexBetween>
 
@@ -45,20 +42,19 @@ const TodoApp = () => {
         mt="20px"
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
-        gridAutoRows="160px"
         gap="10px"
         sx={{
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
       >
         <Box
-          gridColumn="span 3"
+          gridColumn="span 2"
           gridRow="span 2"
           flexDirection="column"
           justifyContent="space-between"
           p="1.25rem 1rem"
           flex="1 1 100%"
-          height="15rem"
+          height="fit-content"
           backgroundColor={theme.palette.background.alt}
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
@@ -73,8 +69,8 @@ const TodoApp = () => {
           />
         </Box>
         <Box
-          gridColumn="span 9"
-          gridRow="span 3"
+          gridColumn="span 10"
+          height="fit-content"
           display="flex"
           flexDirection="column"
           justifyContent="space-between"
@@ -84,10 +80,11 @@ const TodoApp = () => {
             borderRadius: 1,
           }}
         >
-          {activeTodoTab === 0 && <AllTodo />}
-          {activeTodoTab === 1 && <AddTodo />}
-          {activeTodoTab === 2 && <MyTodo />}
-          {activeTodoTab === 3 && <OverdueTodo />}
+          {activeTodoTab === 0 && <MyTodo />}
+          {activeTodoTab === 1 && <MyAssignedTodo />}
+          {activeTodoTab === 2 && <AllTodo />}
+
+
         </Box>
       </Box>
     </Box>

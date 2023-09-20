@@ -2,7 +2,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { themeSettings } from "../src/utils/theme";
 import Dashboard from "./views/dashboard";
 import Layout from "./views/layout";
@@ -16,18 +16,23 @@ import Contributions from "./views/Accounts/Contributions";
 import ApplyLoan from "./views/loans/ApplyLoan";
 import Loans from "./views/loans/Loans";
 import TodoApp from "./views/Apps/Todo/TodoApp";
-import LoanCalculator from "./views/Apps/LoanCalculator";
 import Savings from "./views/Accounts/SavingsAccount/Savings";
 import Deposits from "./views/Accounts/DepositsAccount/Deposits";
 import Profile from "./views/userAccount/Profile";
 import Settings from "./views/settings/Settings";
 import Reports from "./views/Accounts/Reports";
+import NetworkCheck from "./components/NetworkCheck";
+import SmsApp from "./views/Apps/SMS/SmsApp";
+import LoanCalculator from "./views/Apps/LoanCalculator/LoanCalculator";
+import SchedulerComponent from "./views/Apps/Scheduler/Scheduler";
+
 
 function App() {
   const mode = useSelector((state) => state.theme.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div className="app">
+      <NetworkCheck/>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -71,6 +76,8 @@ function App() {
                 {/* Apps Link */}
                 <Route path="/todo list" element={<TodoApp />} />
                 <Route path="/loan calculator" element={<LoanCalculator />} />
+                <Route path="/sms" element={<SmsApp />} />
+                <Route path="/scheduler" element={<SchedulerComponent />} />
 
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />

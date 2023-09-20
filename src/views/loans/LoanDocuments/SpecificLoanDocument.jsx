@@ -32,7 +32,6 @@ const SpecificLoanDocument = () => {
 
   const onSubmitHandler = (data,e) => {
     e.preventDefault()
-    console.log(data)
     setLoanId(data.loan);
     setTriggerFetch(true);
   };

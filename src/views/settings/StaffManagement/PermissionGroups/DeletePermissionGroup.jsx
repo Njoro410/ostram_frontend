@@ -1,27 +1,20 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  FormGroup,
-  TextField,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { useAddTodoMutation } from "../../../services/todo/todoSlice";
-import DateSelector from "../../../components/DateSelector";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createTodoSchema } from "../../../utils/validationSchema";
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDeletePermissionGroupMutation, useGetAllPermGroupsQuery } from "../../../../services/authorization/authorizationSlices";
 import { notifications } from "@mantine/notifications";
+import { getPermissionGroupSchema } from "../../../../utils/validationSchema";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import RHFSelect from "../../../../components/RHFSelect";
 
-const AddTodo = () => {
+const DeletePermissionGroup = () => {
   const theme = useTheme();
-  const [addTodo, { isLoading }] = useAddTodoMutation();
+  const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
+
+  const { data: permGroups, isFetching } = useGetAllPermGroupsQuery();
+  const [deletePermissionGroup, { isLoading }] = useDeletePermissionGroupMutation();
 
   const {
     register,
@@ -30,11 +23,12 @@ const AddTodo = () => {
     reset,
     control,
   } = useForm({
-    resolver: yupResolver(createTodoSchema),
+    resolver: yupResolver(getPermissionGroupSchema),
   });
 
-  const onSubmitHandler = async (data, e, theme) => {
+  const onSubmitHandler = async (data, e) => {
     e.preventDefault();
+
     try {
       notifications.show({
         id: "load-data",
@@ -42,7 +36,7 @@ const AddTodo = () => {
         title: "Loading...",
         message: "Please wait as the request is being processed",
         autoClose: false,
-        withCloseButton: false,
+        withCloseButton: true,
         styles: () => ({
           root: {
             backgroundColor: "whitesmoke",
@@ -66,14 +60,14 @@ const AddTodo = () => {
         }),
       });
 
-      const response = await addTodo(data).unwrap();
+      const response = await deletePermissionGroup(data).unwrap();
 
       notifications.update({
         id: "load-data",
         color: "green",
         title: "Success",
         message: response.message,
-        autoClose: 5000,
+        autoClose: 8000,
         icon: (
           <CheckCircleIcon
             sx={{ backgroundSize: "1rem", backgroundColor: "#02d054" }}
@@ -104,13 +98,12 @@ const AddTodo = () => {
 
       reset();
     } catch (err) {
-      console.log(err);
       notifications.update({
         id: "load-data",
         color: "red",
-        title: "Error",
-        message: err.data.message,
-        autoClose: 5000,
+        title: err?.data?.message,
+        message: err?.data?.errors?.name,
+        autoClose: 8000,
         icon: <CancelIcon sx={{ backgroundSize: "1rem" }} />,
         styles: () => ({
           root: {
@@ -138,96 +131,47 @@ const AddTodo = () => {
   };
 
   return (
-    <Box>
-      <Typography
-        sx={{
-          textAlign: "center",
-          m: 3,
-          fontFamily: "monospace",
-          fontWeight: "bold",
-        }}
-        variant="h4"
-        gutterBottom
-      >
-        Add Todo
-      </Typography>
-      <Divider variant="middle" />
+    <Box
+      display="grid"
+      gridTemplateColumns="repeat(12, 1fr)"
+      component="form"
+      onSubmit={handleSubmit(onSubmitHandler)}
+      noValidate
+      backgroundColor={theme.palette.background.alt}
+      sx={{
+        "& > div": {
+          gridColumn: isNonMediumScreens ? undefined : "span 12",
+        },
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        borderRadius: 1,
+        mt: 2,
+      }}
+    >
       <Box
-        component="form"
-        onSubmit={handleSubmit(onSubmitHandler)}
-        sx={{ m: 4 }}
+        gridColumn="span 12"
+        borderRadius="0.55rem"
+        height="fit-content"
+        marginX={2}
       >
-        <TextField
-          margin="normal"
-          fullWidth
-          id="title"
-          label="Title"
-          name="title"
-          autoComplete="title"
-          autoFocus
-          {...register("title")}
-          error={!!errors?.title}
-          helperText={errors.title?.message}
-          sx={{
-            mt: 1,
-          }}
+        <RHFSelect
+          name="group"
+          control={control}
+          errors={errors?.group}
+          data={permGroups?.results || []}
+          label="Permission Group"
+          mt={1}
         />
-        <TextField
-          margin="normal"
-          fullWidth
-          id="description"
-          label="Description"
-          name="description"
-          autoComplete="description"
-          autoFocus
-          multiline
-          minRows={5}
-          maxRows={5}
-          {...register("description")}
-          error={!!errors?.description}
-          helperText={errors.description?.message}
-          sx={{
-            mt: 1,
-          }}
-        />
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box>
-            <FormGroup sx={{ display: "flex" }}>
-              <Controller
-                name="public"
-                control={control}
-                defaultValue={false}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...field}
-                        checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
-                      />
-                    }
-                    label="Set Public"
-                  />
-                )}
-              />
-            </FormGroup>
-          </Box>
-          <Box>
-            <DateSelector
-              name="due_date"
-              label="Due Date"
-              control={control}
-              errors={errors?.application_date}
-            />
-          </Box>
-        </Box>
+      </Box>
+
+      <Box gridColumn="span 12" gridRow="span 1" paddingX={2}>
         <Button
           type="submit"
           fullWidth
           variant="contained"
           sx={{
-            mt: 2,
             p: 2,
+            mb: 2.5,
+            mt: 2.5,
             backgroundColor: theme.palette.secondary[500],
             color: "black",
             fontWeight: "bold",
@@ -236,11 +180,11 @@ const AddTodo = () => {
             },
           }}
         >
-          Submit
+          Delete
         </Button>
       </Box>
     </Box>
   );
 };
 
-export default AddTodo;
+export default DeletePermissionGroup;

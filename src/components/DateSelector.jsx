@@ -1,25 +1,17 @@
+import React from "react";
 import { Box, FormControl } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import React from "react";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { Controller } from "react-hook-form";
+import format from "date-fns/format"; // Import date-fns format function
 
-const DateSelector = ({name,control, errors, label}) => {
-  function formatDateToYYYYMMDD(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  }
-
+const DateSelector = ({ name, control, errors, label }) => {
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Controller
         name={name}
         control={control}
-        defaultValue="" // add a default empty value for uncontrolled state
+        defaultValue=""
         render={({ field, fieldState }) => (
           <FormControl
             variant="outlined"
@@ -33,11 +25,11 @@ const DateSelector = ({name,control, errors, label}) => {
             <DatePicker
               openTo="day"
               views={["year", "month", "day"]}
-              value={field.value ? field.value : ""} // set value based on whether field has a value
+              value={field.value ? new Date(field.value) : null}
               onChange={(date) => {
-                field.onChange(formatDateToYYYYMMDD(date));
+                const formattedDate = date ? format(date, "yyyy-MM-dd") : ""; // Format the date
+                field.onChange(formattedDate); // Set the formatted date in the field
               }}
-              // inputFormat="DD/MM/yyyy"
               label={label}
               localeText={{ toolbarTitle: "Application Date" }}
               slotProps={{
@@ -47,7 +39,7 @@ const DateSelector = ({name,control, errors, label}) => {
                 },
                 toolbar: {
                   toolbarPlaceholder: "__",
-                  toolbarFormat: "MMM Do YYYY",
+                  toolbarFormat: "do MMMM yyyy",
                   hidden: false,
                 },
               }}
@@ -60,3 +52,6 @@ const DateSelector = ({name,control, errors, label}) => {
 };
 
 export default DateSelector;
+
+
+
