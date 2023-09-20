@@ -24,11 +24,8 @@ import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useLocation, useParams } from "react-router-dom";
 import { removeDashesFromPhoneNumber } from "../../utils/formatFormInputs";
-<<<<<<< HEAD
-=======
 import RHFSelect from "../../components/RHFSelect";
 
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
 const RegisterMember = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -39,7 +36,6 @@ const RegisterMember = () => {
   const location = useLocation();
   const { member } = location.state || {};
 
-<<<<<<< HEAD
   const {
     data: areas,
     // isLoading,
@@ -47,10 +43,6 @@ const RegisterMember = () => {
     // isError,
     // error,
   } = useGetResidentialQuery();
-=======
-  const { data: areas } = useGetResidentialQuery();
-  // console.log(areas?.results);
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
 
   const {
     register,
@@ -79,27 +71,16 @@ const RegisterMember = () => {
   });
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
-<<<<<<< HEAD
     console.log("form submitted");
     data.mbr_no = parseInt(data.mbr_no, 10); // Assuming base 10
     data.residential = parseInt(data.residential, 10); // Assuming base 10
     try {
-=======
-    // console.log(data)
-    try {
-      // console.log(member, "member");
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
       const memberData = await (member
         ? memberUpdate({
             memberNo,
             data,
           }).unwrap()
         : memberRegister(data).unwrap());
-<<<<<<< HEAD
-=======
-      // console.log(memberData, member ? "update input" : "registration input");
-
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
       toast.success(memberData.message, {
         duration: 8000,
         position: "top-right",
@@ -265,18 +246,10 @@ const RegisterMember = () => {
                 mt: 2.5,
               }}
             />
-<<<<<<< HEAD
-=======
-            {/* </Box> */}
-            {/* This box will occupy the second half of the parent grid */}
-            {/* <Box gridColumn="2 / span 1"> */}
-            {/* This box will occupy the second half of the child grid */}
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
 
             <Controller
               name="residential"
               control={control}
-<<<<<<< HEAD
               defaultValue={member && memberNo ? member.residential : ""}
               render={({ field: { onChange, value } }) => (
                 <FormControl
@@ -303,12 +276,6 @@ const RegisterMember = () => {
                   <FormHelperText>{errors.residential?.message}</FormHelperText>
                 </FormControl>
               )}
-=======
-              errors={errors?.residential}
-              data={areas?.results}
-              label="Residential Area"
-              mt={2}
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
             />
           </Box>
           <Box>

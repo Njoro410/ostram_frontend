@@ -3,14 +3,11 @@ import React, { useState } from "react";
 import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import CustomTabs from "../../components/CustomTabs";
-<<<<<<< HEAD
 import AddNewUser from "./AddNewUser";
 import Residential from "./Residential";
-=======
 
 import ManageUsers from "./StaffManagement/ManageUsers";
 import ManageBranches from "./BranchManagement/ManageBranches";
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
 
 const Settings = () => {
   const theme = useTheme();
@@ -147,17 +144,13 @@ const Settings = () => {
           flexDirection="column"
           justifyContent="space-between"
         >
-<<<<<<< HEAD
-          {activeSettingsTab === 0 && <AddNewUser />}
-          {activeSettingsTab === 2 && <Residential />}
-=======
           {activeSettingsTab === 0 && (
             <ManageUsers activeManageStaffTab={activeManageStaffTab} />
           )}
           {activeSettingsTab === 1 && (
             <ManageBranches activeManageBranchTab={activeManageBranchTab} />
           )}
->>>>>>> f880a8091150580518fca62bcd3ca7128dd2735b
+          {activeSettingsTab === 2 && <Residential />}
         </Box>
       </Box>
     </Box>
