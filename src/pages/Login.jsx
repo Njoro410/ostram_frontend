@@ -10,6 +10,11 @@ import {
   Box,
   Typography,
   Container,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import Logo from "../assets/ostlogo.png";
 
@@ -19,18 +24,25 @@ import {
   setCSRFToken,
   setAccessToken,
   setRefreshToken,
-  setUserId,
 } from "../features/auth/authSlice";
 import { useLoginMutation } from "../features/auth/authApiSlice";
-import toast, { Toaster } from "react-hot-toast";
+import { notifications } from "@mantine/notifications";
 import LoadingButton from "@mui/lab/LoadingButton";
-import jwt_decode from "jwt-decode";
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function SignIn() {
   const theme = useTheme();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const {
     register,
@@ -48,48 +60,39 @@ export default function SignIn() {
       dispatch(setAccessToken(userData.data.accessToken));
       dispatch(setRefreshToken(userData.data.refreshToken));
       dispatch(setCSRFToken(userData.token));
-      var token = userData.data.accessToken;
-      var decoded = jwt_decode(token);
-      dispatch(setUserId(decoded.user_id));
 
       reset();
       navigate("/dashboard");
     } catch (err) {
-      if (err.status === 400) {
-        toast.error(err.data.message, {
-          duration: 8000,
-          position: "top-right",
-
-          // Change colors of success/error/loading icon
-          iconTheme: {
-            primary: "#f70707",
-            secondary: "#fff",
+      notifications.show({
+        id: "load-data",
+        color: "red",
+        title: err?.data?.message,
+        message: "Please confirm your email or password is correct.",
+        autoClose: 8000,
+        icon: <CancelIcon sx={{ backgroundSize: "1rem" }} />,
+        styles: () => ({
+          root: {
+            backgroundColor: "#f94c18",
+            borderColor: "white",
+            "&::before": { backgroundColor: "white" },
           },
-
-          // Aria
-          ariaProps: {
-            role: "status",
-            "aria-live": "polite",
+          title: {
+            color: "white",
+            fontWeight: "bolder",
+            fontSize: "0.95rem",
           },
-        });
-      } else {
-        toast.error("No server response", {
-          duration: 8000,
-          position: "top-right",
-
-          // Change colors of success/error/loading icon
-          iconTheme: {
-            primary: "#f70707",
-            secondary: "#fff",
+          description: {
+            color: "white",
+            fontWeight: "bolder",
+            fontSize: "0.8rem",
           },
-
-          // Aria
-          ariaProps: {
-            role: "status",
-            "aria-live": "polite",
+          closeButton: {
+            color: "white",
+            "&:hover": { backgroundColor: "gray" },
           },
-        });
-      }
+        }),
+      });
     }
   };
 
@@ -147,54 +150,35 @@ export default function SignIn() {
             {...register("email")}
             error={errors.email ? true : false}
             helperText={errors.email?.message}
-            // defaultValue="admin1@test.com"
-            sx={{
-              "& label": {
-                color: theme.palette.secondary[500],
-                "&.Mui-focused": {
-                  color: theme.palette.secondary[500],
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: theme.palette.secondary[500],
-                },
-                "&:hover fieldset": {
-                  borderColor: "green",
-                },
-              },
-            }}
           />
+
           <TextField
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
-            // defaultValue="123456"
             autoComplete="current-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             {...register("password")}
             error={errors.password ? true : false}
             helperText={errors.password?.message}
-            sx={{
-              "& label": {
-                color: theme.palette.secondary[500],
-                "&.Mui-focused": {
-                  color: theme.palette.secondary[500],
-                },
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: theme.palette.secondary[500],
-                },
-                "&:hover fieldset": {
-                  borderColor: "green",
-                },
-              },
-            }}
           />
+          
           {!isLoading ? (
             <Button
               type="submit"
@@ -202,7 +186,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{
-                mt: 3,
+                mt: 2,
                 mb: 2,
                 backgroundColor: theme.palette.secondary[500],
                 color: "black",
@@ -222,7 +206,6 @@ export default function SignIn() {
         </Box>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
-      <Toaster />
     </Container>
   );
 }

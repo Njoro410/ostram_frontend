@@ -37,6 +37,7 @@ import Header from "../../../components/Header";
 import styled from "@emotion/styled";
 import toTitleCase from "../../../utils/titleCaseConverter";
 import formatDate from "../../../utils/formatDate";
+import RHFCheckbox from "../../../components/RHFCheckbox";
 
 const GlassCard = styled(Card)`
   background-color: rgba(87, 86, 86, 0.25);
@@ -55,7 +56,7 @@ const StyledCardHeader = styled(CardHeader)`
 
 const StyledChip = styled(Chip)`
   font-weight: bold;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 `;
 
 const GuaranteeLoan = () => {
@@ -77,9 +78,7 @@ const GuaranteeLoan = () => {
     formState: { errors },
     reset,
     control,
-  } = useForm({
-    resolver: yupResolver(checkLoanDocumentSchema),
-  });
+  } = useForm({});
 
   const onSubmitHandler = (data, e) => {
     e.preventDefault();
@@ -97,7 +96,7 @@ const GuaranteeLoan = () => {
         setSelectedRow(response.data?.results);
       });
     }
-  }, [loanId]);
+  }, [loanId, triggerFetch]);
 
   const onSubmitGuarantorsHandler = async (data, e) => {
     e.preventDefault();
@@ -106,7 +105,7 @@ const GuaranteeLoan = () => {
         loanId,
         data,
       }).unwrap();
-      console.log(response);
+      setTriggerFetch(true);
     } catch (error) {
       console.error("Loan status update failed:", error);
     }
@@ -117,8 +116,8 @@ const GuaranteeLoan = () => {
       getMemberLoans(memberId).then((response) => {
         setMemberLoans(response.data);
       });
-      setTriggerFetch(false);
     }
+    setTriggerFetch(false);
   }, [triggerFetch]);
 
   const formatToKES = (amount) => {
@@ -206,8 +205,8 @@ const GuaranteeLoan = () => {
               <TableHead>
                 <TableRow>
                   <TableCell align="center">ID</TableCell>
+                  <TableCell align="center">Guaranteed</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Principal Amount</TableCell>
                   <TableCell align="center">Remaining Balance</TableCell>
                 </TableRow>
               </TableHead>
@@ -222,10 +221,40 @@ const GuaranteeLoan = () => {
                     }}
                   >
                     <TableCell align="center">{loan.id}</TableCell>
-                    <TableCell align="center">{loan.status_name}</TableCell>
                     <TableCell align="center">
-                      {loan.principal_amount}
+                      {loan.guarantors.length > 0 ? (
+                        <Chip
+                          label="YES"
+                          color="success"
+                          variant="filled"
+                          sx={{
+                            border: (theme) =>
+                              `1px solid ${theme.palette.divider}`,
+                            borderRadius: 1,
+                            "& .MuiChip-label": {
+                              textTransform: "uppercase",
+                              fontWeight: "bold",
+                            },
+                          }}
+                        />
+                      ) : (
+                        <Chip
+                          label="NO"
+                          color="warning"
+                          variant="filled"
+                          sx={{
+                            border: (theme) =>
+                              `1px solid ${theme.palette.divider}`,
+                            borderRadius: 1,
+                            "& .MuiChip-label": {
+                              textTransform: "uppercase",
+                              fontWeight: "bold",
+                            },
+                          }}
+                        />
+                      )}
                     </TableCell>
+                    <TableCell align="center">{loan.status_name}</TableCell>
                     <TableCell align="center">
                       {loan.remaining_balance}
                     </TableCell>
@@ -253,7 +282,7 @@ const GuaranteeLoan = () => {
               Guarantors
             </Typography>
             <Divider />
-            <Box display="flex" gap={1} mt={1}>
+            <Box display="flex" gap={1} my={1}>
               {selectedRow?.guarantors_list.length === 0 ? (
                 <p>No guarantors</p>
               ) : (
@@ -282,12 +311,27 @@ const GuaranteeLoan = () => {
               isFetch={isFetching}
               multiple={true}
             />
+            <Box display="flex" justifyContent="space-between">
+              <RHFCheckbox
+                // disabled={selectedRow?.guarantors_list.length === 0}
+                label="Notify chosen members via text?"
+                control={control}
+                name="text"
+                padding={3}
+              />
+              <RHFCheckbox
+                disabled={selectedRow?.guarantors_list.length === 0}
+                label="Clear existing guarantors if any present?"
+                control={control}
+                name="clear"
+                padding={3}
+              />
+            </Box>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{
-                mt: 2,
                 p: 2,
                 backgroundColor: theme.palette.secondary[500],
                 color: "black",
@@ -300,9 +344,7 @@ const GuaranteeLoan = () => {
               Submit
             </Button>
           </Box>
-        ) : (
-          ""
-        )}
+        ) : null}
       </Box>
     </Box>
   );

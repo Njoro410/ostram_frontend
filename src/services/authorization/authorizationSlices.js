@@ -27,6 +27,18 @@ export const authorizationSlices = apiSlice.injectEndpoints({
       }),
     }),
 
+    updateStaff: builder.mutation({
+      query: (staffId, data) => ({
+        url: `/auth/user_id/${staffId}/`,
+        method: "PUT",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    
+
     getAllPerms: builder.query({
       query: () => ({
         url: "/auth/permissions/",
@@ -40,6 +52,28 @@ export const authorizationSlices = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    createPermissionGroup: builder.mutation({
+      query: (data) => ({
+        url: "/auth/all_permission_groups/",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    deletePermissionGroup: builder.mutation({
+      query: (data) => ({
+        url: "/auth/delete_permission_group/",
+        method: "DELETE",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    })
   }),
 });
 
@@ -47,5 +81,9 @@ export const {
   useLazyGetStaffQuery,
   useGetAllStaffQuery,
   useRegisterStaffMutation,
+  useUpdateStaffMutation,
   useGetAllPermsQuery,
-  useGetAllPermGroupsQuery } = authorizationSlices;
+  useGetAllPermGroupsQuery,
+  useCreatePermissionGroupMutation,
+  useDeletePermissionGroupMutation
+} = authorizationSlices;

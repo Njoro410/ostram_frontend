@@ -27,7 +27,7 @@ const ExportExcel = ({ excelData, fileName }) => {
 
   const columnsToExclude = ["created_on", "created_by", "received_by", "id"];
   // remove columns
-  const filteredData = excelData.map((data) =>
+  const filteredData = excelData?.map((data) =>
     Object.keys(data).reduce((acc, key) => {
       if (!columnsToExclude.includes(key)) {
         acc[key] = data[key];

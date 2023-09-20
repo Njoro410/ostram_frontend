@@ -21,19 +21,20 @@ import { notifications } from "@mantine/notifications";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import RHFAutoComplete from "../../../components/RHFAutoComplete";
-import TransferList from "../../../components/TransferList";
+import RHFSelect from "../../../components/RHFSelect";
+import { useGetAllBranchesQuery } from "../../../services/administration/administrationSlices";
 
 const AddStaff = ({ users, isFetching }) => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [permGroups, setPermGroups] = useState([]);
   const [userPerms, setUserPerms] = useState([]);
-  
 
   const [registerStaff, { isLoading }] = useRegisterStaffMutation();
 
   const { data: groups } = useGetAllPermGroupsQuery();
   const { data: permissions } = useGetAllPermsQuery();
+  const { data: branches } = useGetAllBranchesQuery();
 
   useEffect(() => {
     if (groups && permissions) {
@@ -128,7 +129,7 @@ const AddStaff = ({ users, isFetching }) => {
       notifications.update({
         id: "load-data",
         color: "red",
-        title: "Error",
+        title: err?.data?.message,
         message: err?.data?.results?.email,
         autoClose: 8000,
         icon: <CancelIcon sx={{ backgroundSize: "1rem" }} />,
@@ -159,19 +160,19 @@ const AddStaff = ({ users, isFetching }) => {
 
   return (
     <Box
-      display="grid"
+      display="grid" 
       gridTemplateColumns="repeat(12, 1fr)"
       component="form"
       onSubmit={handleSubmit(onSubmitHandler)}
       noValidate
       backgroundColor={theme.palette.background.alt}
+      height="fit-content"
       sx={{
         "& > div": {
           gridColumn: isNonMediumScreens ? undefined : "span 12",
         },
         border: (theme) => `1px solid ${theme.palette.divider}`,
         borderRadius: 1,
-        mt: 2,
       }}
     >
       <Box gridColumn="span 12" gridRow="span 2" paddingX={2}>
@@ -377,7 +378,7 @@ const AddStaff = ({ users, isFetching }) => {
           }}
         >
           <Box
-            gridColumn="span 6"
+            gridColumn="span 4"
             gridRow="span 1"
             backgroundColor={theme.palette.background.alt}
           >
@@ -393,7 +394,7 @@ const AddStaff = ({ users, isFetching }) => {
             />
           </Box>
           <Box
-            gridColumn="span 6"
+            gridColumn="span 4"
             gridRow="span 1"
             backgroundColor={theme.palette.background.alt}
           >
@@ -406,6 +407,15 @@ const AddStaff = ({ users, isFetching }) => {
               helperText={errors.permissions?.message}
               isFetch={isFetching}
               multiple={true}
+            />
+          </Box>
+          <Box gridColumn="span 4" gridRow="span 1">
+            <RHFSelect
+              name="branch"
+              control={control}
+              errors={errors?.branch}
+              data={branches?.results}
+              label="Branch"
             />
           </Box>
         </Box>

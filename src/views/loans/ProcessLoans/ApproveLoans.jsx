@@ -39,6 +39,8 @@ import toTitleCase from "../../../utils/titleCaseConverter";
 import formatDate from "../../../utils/formatDate";
 import { Toaster, toast } from "react-hot-toast";
 import { LoadingButton } from "@mui/lab";
+import RHFCheckbox from "../../../components/RHFCheckbox";
+import LoanDetailsTable from "../../../components/LoanComponents/LoanDetailsTable";
 
 const GlassCard = styled(Card)`
   background-color: rgba(87, 86, 86, 0.25);
@@ -75,9 +77,9 @@ const ApproveLoans = () => {
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
-    reset,
     control,
   } = useForm({});
 
@@ -97,7 +99,7 @@ const ApproveLoans = () => {
         setSelectedRow(response.data?.results);
       });
     }
-  }, [loanId]);
+  }, [loanId, triggerFetch]);
 
   useEffect(() => {
     if (triggerFetch) {
@@ -120,26 +122,13 @@ const ApproveLoans = () => {
         (s) => s.status_name === "APPROVED"
       );
       if (approvedLoan) {
+        const textNotify = watch("text");
+
         const response = await updateLoan({
           loanId,
-          data: { id: approvedLoan.id }, // Update data property to send object with id key
+          data: { id: approvedLoan.id, text: textNotify }, // Update data property to send object with id key
         }).unwrap();
-        toast.success(response.message, {
-          duration: 5000,
-          position: "top-right",
-
-          // Change colors of success/error/loading icon
-          iconTheme: {
-            primary: "#00ff1a",
-            secondary: "#fff",
-          },
-
-          // Aria
-          ariaProps: {
-            role: "status",
-            "aria-live": "polite",
-          },
-        });
+        setTriggerFetch(true);
       } else {
         console.log("No loan found with an APPROVED status");
       }
@@ -199,58 +188,23 @@ const ApproveLoans = () => {
           </Button>
         </Box>
 
-        <Box
-          gridColumn="span 4"
-          gridRow="span 4"
-          // backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
-          // height="12rem"
-          sx={{
-            border: (theme) => `1px solid ${theme.palette.divider}`,
-            borderRadius: 1,
-          }}
-        >
-          <TableContainer
-            elevation={1}
+        {memberId ? (
+          <Box
+            gridColumn="span 4"
+            gridRow="span 4"
+            backgroundColor={theme.palette.background.alt}
+            borderRadius="0.55rem"
             sx={{
-              backgroundColor: theme.palette.background.alt,
-              maxHeight: "300px",
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 1,
             }}
-            component={Paper}
           >
-            <Table aria-label="member loans table" stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">ID</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Principal Amount</TableCell>
-                  <TableCell align="center">Remaining Balance</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {memberLoans?.results.map((loan) => (
-                  <TableRow
-                    key={loan.id}
-                    onClick={() => handleRowClick(loan.id)}
-                    sx={{
-                      "&:last-child tg,&:last-child th": { border: 0 },
-                      cursor: "pointer",
-                    }}
-                  >
-                    <TableCell align="center">{loan.id}</TableCell>
-                    <TableCell align="center">{loan.status_name}</TableCell>
-                    <TableCell align="center">
-                      {loan.principal_amount}
-                    </TableCell>
-                    <TableCell align="center">
-                      {loan.remaining_balance}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+            <LoanDetailsTable
+              loans={memberLoans?.results}
+              onRowClick={handleRowClick}
+            />
+          </Box>
+        ) : null}
         {selectedRow ? (
           <Box
             gridColumn="span 8"
@@ -419,15 +373,24 @@ const ApproveLoans = () => {
                 </FlexBetween>
               </CardContent>
             </GlassCard>
-            {selectedRow?.status_name == "APPROVED" ? (
+
+            <RHFCheckbox
+              disabled={selectedRow?.status_name === "APPROVED"}
+              label={`Notify ${toTitleCase(
+                selectedRow?.lendee
+              )} via text message`}
+              control={control}
+              name="text"
+              padding={3}
+            />
+            {selectedRow?.status_name === "APPROVED" ? (
               <Button
                 type="submit"
                 fullWidth
                 disabled
-                onClick={() => handleUpdateStatus(loanId)}
                 variant="contained"
                 sx={{
-                  mt: 2,
+                  // mt: 2,
                   p: 2,
                   backgroundColor: theme.palette.secondary[500],
                   color: "black",
@@ -440,8 +403,16 @@ const ApproveLoans = () => {
                 Approved
               </Button>
             ) : isLoading ? (
-              <LoadingButton loading fullWidth variant="contained">
-                <span>Submit</span>
+              <LoadingButton
+                loading
+                fullWidth
+                variant="contained"
+                sx={{
+                  // mt: 2,
+                  p: 2,
+                }}
+              >
+                <span>Loading</span>
               </LoadingButton>
             ) : (
               <Button
@@ -450,7 +421,7 @@ const ApproveLoans = () => {
                 onClick={() => handleUpdateStatus(loanId)}
                 variant="contained"
                 sx={{
-                  mt: 2,
+                  // mt: 2,
                   p: 2,
                   backgroundColor: theme.palette.secondary[500],
                   color: "black",
@@ -464,9 +435,7 @@ const ApproveLoans = () => {
               </Button>
             )}
           </Box>
-        ) : (
-          ""
-        )}
+        ) : null}
       </Box>
     </Box>
   );

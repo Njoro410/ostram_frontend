@@ -18,7 +18,6 @@ const RHFSelect = ({ control, errors, data, name, label, mt }) => {
         <FormControl
           variant="outlined"
           fullWidth
-          required
           error={errors}
           sx={{
             mt: mt,
@@ -27,7 +26,7 @@ const RHFSelect = ({ control, errors, data, name, label, mt }) => {
           <InputLabel>{label}</InputLabel>
           <Select value={value} onChange={onChange} label={label}>
             {data?.map((item) => (
-              <MenuItem key={item.id} value={item.id}>
+              <MenuItem key={item.id || item.area_code} value={item.id || item.area_code}>
                 {item.status_name || item.name}
               </MenuItem>
             ))}

@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { useGetWeatherDataQuery } from "../app/api/weatherSlice";
-import {
-  Box,
-  Divider,
-  LinearProgress,
-  Typography,
-  alpha,
-  useTheme,
-} from "@mui/material";
+import { Box, Divider, Typography, alpha, useTheme } from "@mui/material";
 import Sunny from "../assets/weather/sunny.jpg";
 import Rainy from "../assets/weather/rainy.jpg";
 import Cloudy from "../assets/weather/cloudy.jpg";
@@ -16,6 +9,7 @@ import FlexBetween from "./FlexBetween";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import CustomLinearProgress from "./CustomLinearProgress";
 
 const WeatherData = ({ location }) => {
   const theme = useTheme();
@@ -100,19 +94,13 @@ const WeatherData = ({ location }) => {
         position: "relative",
       }}
     >
-      {isLoading ? (
-        <LinearProgress
-          sx={{
-            backgroundColor: theme.palette.background.alt,
-          }}
-        />
-      ) : null}
+      {isLoading ? <CustomLinearProgress /> : null}
       {imageUrl && (
         <Box
           component="img"
           sx={{
             width: "100%",
-            height: "18.1rem",
+            height: "17rem",
             objectFit: "cover",
             opacity: 0.5,
             filter: `blur(1px)`,
@@ -141,7 +129,7 @@ const WeatherData = ({ location }) => {
             {weather?.location.name}
           </Typography>
         </Box>
-        <FlexBetween sx={{ mt: 2 }}>
+        <FlexBetween sx={{ mt: 1 }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box
               component="img"
@@ -165,7 +153,6 @@ const WeatherData = ({ location }) => {
             }}
           >
             {weather?.current.temp_c && `${weather?.current.temp_c}°C`}
-
           </Typography>
         </FlexBetween>
         <Box width="100%">
@@ -173,9 +160,7 @@ const WeatherData = ({ location }) => {
             {filterForecastWeather(forecastWeather).map((hour) => (
               <Box
                 sx={{
-                  // padding: "0.3rem",
                   width: "100%",
-                  marginTop: "1rem",
                 }}
                 key={hour.time_epoch}
               >

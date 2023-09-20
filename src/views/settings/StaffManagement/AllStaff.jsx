@@ -101,8 +101,7 @@ const AllStaff = ({ users }) => {
           sx={{
             border: (theme) => `2px solid ${theme.palette.divider}`,
             borderRadius: 1,
-            maxHeight: 500,
-            mt: 2,
+            maxHeight: 600,
           }}
         >
           <Table stickyHeader aria-label="sticky table">
@@ -217,7 +216,7 @@ const AllStaff = ({ users }) => {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Box>{" "}
+      </Box>
     </Collapse>
   );
 };

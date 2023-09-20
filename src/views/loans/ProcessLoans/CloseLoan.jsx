@@ -30,7 +30,7 @@ import {
 } from "../../../services/loans/loanSlices";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { checkLoanDocumentSchema } from "../../../utils/validationSchema";
+import { processMemberIdSchema } from "../../../utils/validationSchema";
 import LoanDocumentCard from "../../../components/LoanComponents/LoanDocumentCard";
 import { useGetMembersQuery } from "../../../services/members/memberSlices";
 import FlexBetween from "../../../components/FlexBetween";
@@ -38,6 +38,8 @@ import Header from "../../../components/Header";
 import styled from "@emotion/styled";
 import toTitleCase from "../../../utils/titleCaseConverter";
 import formatDate from "../../../utils/formatDate";
+import RHFCheckbox from "../../../components/RHFCheckbox";
+import LoanDetailsTable from "../../../components/LoanComponents/LoanDetailsTable";
 
 const GlassCard = styled(Card)`
   background-color: rgba(87, 86, 86, 0.25);
@@ -74,17 +76,18 @@ const CloseLoan = () => {
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
     reset,
     control,
   } = useForm({
-    resolver: yupResolver(checkLoanDocumentSchema),
+    resolver: yupResolver(processMemberIdSchema),
   });
 
   const onSubmitHandler = (data, e) => {
     e.preventDefault();
-    setMemberId(data.loan);
+    setMemberId(data.member);
     setTriggerFetch(true);
   };
 
@@ -98,7 +101,7 @@ const CloseLoan = () => {
         setSelectedRow(response.data?.results);
       });
     }
-  }, [loanId]);
+  }, [loanId,triggerFetch]);
 
   useEffect(() => {
     if (triggerFetch) {
@@ -112,17 +115,18 @@ const CloseLoan = () => {
   const { data: status } = useGetLoanStatusQuery();
   const handleUpdateStatus = async (loanId) => {
     try {
-      const approvedLoan = status?.results.find(
+      const closedLoan = status?.results.find(
         (s) => s.status_name === "CLOSED"
       );
-      if (approvedLoan) {
+      if (closedLoan) {
+        const textNotify = watch("text");
         const response = await updateLoan({
           loanId,
-          data: { id: approvedLoan.id }, // Update data property to send object with id key
+          data: { id: closedLoan.id, text: textNotify }, // Update data property to send object with id key
         });
         console.log(response);
       } else {
-        console.log("No loan found with an APPROVED status");
+        console.log("No loan found with an CLOSED status");
       }
     } catch (error) {
       console.error("Loan status update failed:", error);
@@ -157,10 +161,10 @@ const CloseLoan = () => {
           <RHFAutoComplete
             options={members?.results || []}
             control={control}
-            name="loan"
+            name="member"
             placeholder="Choose a member to see their loans"
-            error={!!errors?.loan}
-            helperText={errors.loan?.message}
+            error={!!errors?.member}
+            helperText={errors.member?.message}
             isFetch={isFetching}
             multiple={false}
           />
@@ -184,58 +188,23 @@ const CloseLoan = () => {
           </Button>
         </Box>
 
-        <Box
-          gridColumn="span 4"
-          gridRow="span 4"
-          // backgroundColor={theme.palette.background.alt}
-          borderRadius="0.55rem"
-          // height="12rem"
-          sx={{
-            border: (theme) => `1px solid ${theme.palette.divider}`,
-            borderRadius: 1,
-          }}
-        >
-          <TableContainer
-            elevation={1}
+        {memberId ? (
+          <Box
+            gridColumn="span 4"
+            gridRow="span 4"
+            backgroundColor={theme.palette.background.alt}
+            borderRadius="0.55rem"
             sx={{
-              backgroundColor: theme.palette.background.alt,
-              maxHeight: "300px",
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 1,
             }}
-            component={Paper}
           >
-            <Table aria-label="member loans table" stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">ID</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Principal Amount</TableCell>
-                  <TableCell align="center">Remaining Balance</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {memberLoans?.results.map((loan) => (
-                  <TableRow
-                    key={loan.id}
-                    onClick={() => handleRowClick(loan.id)}
-                    sx={{
-                      "&:last-child tg,&:last-child th": { border: 0 },
-                      cursor: "pointer",
-                    }}
-                  >
-                    <TableCell align="center">{loan.id}</TableCell>
-                    <TableCell align="center">{loan.status_name}</TableCell>
-                    <TableCell align="center">
-                      {loan.principal_amount}
-                    </TableCell>
-                    <TableCell align="center">
-                      {loan.remaining_balance}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+            <LoanDetailsTable
+              loans={memberLoans?.results}
+              onRowClick={handleRowClick}
+            />
+          </Box>
+        ) : null}
         {selectedRow ? (
           <Box
             gridColumn="span 8"
@@ -404,6 +373,15 @@ const CloseLoan = () => {
                 </FlexBetween>
               </CardContent>
             </GlassCard>
+            <RHFCheckbox
+              disabled={selectedRow?.status_name === "CLOSED"}
+              label={`Notify ${toTitleCase(
+                selectedRow?.lendee
+              )} via text message`}
+              control={control}
+              name="text"
+              padding={3}
+            />
             {selectedRow?.status_name == "CLOSED" ? (
               <Button
                 type="submit"
@@ -412,7 +390,6 @@ const CloseLoan = () => {
                 disabled
                 variant="contained"
                 sx={{
-                  mt: 2,
                   p: 2,
                   backgroundColor: theme.palette.secondary[500],
                   color: "black",
@@ -431,7 +408,6 @@ const CloseLoan = () => {
                 fullWidth
                 variant="contained"
                 sx={{
-                  mt: 2,
                   p: 2,
                   backgroundColor: theme.palette.secondary[500],
                   color: "black",

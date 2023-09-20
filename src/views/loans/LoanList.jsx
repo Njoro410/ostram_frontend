@@ -120,11 +120,6 @@ const LoanList = () => {
       tooltip: " The loan amount has been disbursed to the borrower.",
     },
     {
-      label: "Denied",
-      tooltip:
-        "The loan application has been reviewed and denied for disbursement.",
-    },
-    {
       label: "Repaid",
       tooltip: " The loan has been fully repaid by the borrower.",
     },
@@ -147,6 +142,11 @@ const LoanList = () => {
       label: "On Hold",
       tooltip:
         " The loan processing or repayment has been put on hold temporarily.",
+    },
+    {
+      label: "Denied",
+      tooltip:
+        "The loan application has been reviewed and denied for disbursement.",
     },
   ];
 

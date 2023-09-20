@@ -20,26 +20,27 @@ const ProcessLoans = () => {
 
   const loanProcessingTabs = [
     {
-      label: "Approve Loans",
+      label: "Approve Application",
     },
     {
-      label: "Guarantee Loans",
+      label: "Guarantee Loan",
     },
     {
-      label: "Disberse Loans",
+      label: "Disberse Loan",
     },
     {
-      label: "Cancel Loans",
+      label: "Cancel Application",
     },
     {
-      label: "Close Loans",
+      label: "Close Loan",
     },
     {
       label: "Put On Hold",
     },
     {
-      label: "Reject Loans",
+      label: "Reject Application",
     },
+    
   ];
   const theme = useTheme();
   return (

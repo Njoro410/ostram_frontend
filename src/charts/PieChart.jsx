@@ -2,21 +2,22 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 import { useSelector } from "react-redux";
 
-const PieChart = () => {
-    const tmode = useSelector((state) => state.theme.mode);
+const PieChart = ({ labels, series, height }) => {
+  const tmode = useSelector((state) => state.theme.mode);
   const options = {
     chart: {
       type: "donut",
-      background: 'transparent',
+      background: "transparent",
     },
     theme: {
-        mode: tmode,
-      },
-      legend: {
-        position: "bottom",
-        horizontalAlign: "center",
-      },
-      labels: ['Wezesha', 'Development', 'Self'],
+      mode: tmode,
+    },
+    legend: {
+      position: "bottom",
+      horizontalAlign: "center",
+    },
+    // labels: ['Wezesha', 'Development', 'Self'],
+    labels: labels,
     responsive: [
       {
         breakpoint: 480,
@@ -31,14 +32,15 @@ const PieChart = () => {
       },
     ],
 
-    series: [44, 85, 15],
+    // series: [44, 85, 15],
+    series: series,
   };
   return (
     <ReactApexChart
       options={options}
-      series={options.series}
+      series={series}
       type="pie"
-      height={350}
+      height={height}
     />
   );
 };

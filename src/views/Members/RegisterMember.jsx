@@ -24,7 +24,7 @@ import toast, { Toaster } from "react-hot-toast";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useLocation, useParams } from "react-router-dom";
 import { removeDashesFromPhoneNumber } from "../../utils/formatFormInputs";
-
+import RHFSelect from "../../components/RHFSelect";
 
 const RegisterMember = () => {
   const theme = useTheme();
@@ -35,14 +35,8 @@ const RegisterMember = () => {
   const location = useLocation();
   const { member } = location.state || {};
 
-  const {
-    data: areas,
-    // isLoading,
-    // isSuccess,
-    // isError,
-    // error,
-  } = useGetResidentialQuery();
-  console.log(areas?.results)
+  const { data: areas } = useGetResidentialQuery();
+  // console.log(areas?.results);
 
   const {
     register,
@@ -72,12 +66,13 @@ const RegisterMember = () => {
 
   const onSubmitHandler = async (data, e) => {
     e.preventDefault();
+    // console.log(data)
     try {
-      console.log(member, "member");
+      // console.log(member, "member");
       const memberData = await (member
         ? memberUpdate({ data }).unwrap()
         : memberRegister(data).unwrap());
-      console.log(memberData, member ? "update input" : "registration input");
+      // console.log(memberData, member ? "update input" : "registration input");
 
       toast.success(memberData.message, {
         duration: 8000,
@@ -261,40 +256,15 @@ const RegisterMember = () => {
             {/* This box will occupy the second half of the parent grid */}
             {/* <Box gridColumn="2 / span 1"> */}
             {/* This box will occupy the second half of the child grid */}
-            
 
             <RHFSelect
               name="residential"
               control={control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <FormControl
-                  variant="outlined"
-                  fullWidth
-                  required
-                  error={!!errors?.residential}
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  <InputLabel>Residential Area</InputLabel>
-
-                  <Select
-                    value={value}
-                    onChange={onChange}
-                    label="Residential Area"
-                  >
-                    {areas?.results.map((area) => (
-                      <MenuItem key={area.area_code} value={area.area_code}>
-                        {area.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.residential?.message}</FormHelperText>
-                </FormControl>
-              )}
+              errors={errors?.residential}
+              data={areas?.results}
+              label="Residential Area"
+              mt={2}
             />
-
           </Box>
           <Box>
             <TextField

@@ -60,17 +60,11 @@ const Dashboard = () => {
   const { user, isLoading, isSuccess, isError, error } = useUser();
   // console.log(user)
 
-  const access = useSelector(selectCurrentToken)
-  const id = jwt_decode(access)
-  console.log(id.user_id)
+  const access = useSelector(selectCurrentToken);
+  const id = jwt_decode(access);
+  // console.log(id.user_id)
 
-  const {
-    data: areas,
-    // isLoading,
-    // isSuccess,
-    // isError,
-    // error,
-  } = useGetResidentialQuery();
+  const { data: areas } = useGetResidentialQuery();
 
   const handleGraphTabChange = (event, newValue) => {
     setActiveGraphTab(newValue);
@@ -101,6 +95,7 @@ const Dashboard = () => {
 
   return (
     <Box m="5.5rem 2.5rem">
+      
       <FlexBetween>
         <Header
           title="DASHBOARD"
@@ -133,7 +128,7 @@ const Dashboard = () => {
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="160px"
-        gap="20px"
+        gap="5px"
         sx={{
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
@@ -168,7 +163,7 @@ const Dashboard = () => {
           description="Since last month"
           value="100,000"
           icon={
-            <SavingsOutlined 
+            <SavingsOutlined
               sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
             />
           }

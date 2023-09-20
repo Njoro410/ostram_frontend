@@ -7,7 +7,7 @@ import CustomTabs from "../../components/CustomTabs";
 import PersonalInformation from "./PersonalInformation";
 import ChangePassword from "./ChangePassword";
 import UpdateProfile from "./UpdateProfile";
-import ManageUsers from "./StaffManagement/ManageUsers";
+import ManageUsers from "../settings/StaffManagement/ManageUsers";
 
 const Profile = () => {
   const { user, isLoading, isSuccess, isError, error } = useUser();
@@ -31,9 +31,9 @@ const Profile = () => {
     {
       label: "Security",
     },
-    {
-      label: "Manage Users",
-    },
+    // {
+    //   label: "Manage Users",
+    // },
   ];
   return (
     <Box m="5.5rem 2.5rem">
@@ -56,11 +56,12 @@ const Profile = () => {
       >
         <Box
           gridColumn="span 3"
-          gridRow="span 3"
+          gridRow="span 2"
           flexDirection="column"
           justifyContent="space-between"
           p="1.25rem 1rem"
           flex="1 1 100%"
+          height="11.5rem"
           backgroundColor={theme.palette.background.alt}
           sx={{
             border: (theme) => `1px solid ${theme.palette.divider}`,
@@ -96,7 +97,7 @@ const Profile = () => {
               {activeProfileTab === 0 && <PersonalInformation user={user} />}
               {activeProfileTab === 1 && <UpdateProfile />}
               {activeProfileTab === 2 && <ChangePassword />}
-              {activeProfileTab === 3 && <ManageUsers />}
+              {/* {activeProfileTab === 3 && <ManageUsers />} */}
             </Box>
           </Box>
         </Box>

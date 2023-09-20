@@ -30,13 +30,31 @@ const RHFAutoComplete = ({
             <Autocomplete
               multiple
               value={selectedOptions}
-              getOptionLabel={(option) => option.names || option.name}
+              getOptionLabel={(option) =>
+                option.names || option.name || option.full_name
+              }
               filterSelectedOptions
-              renderOption={(props, option) => (
-                <Typography {...props} key={option.mbr_no || option.id}>
-                  {option.names || option.name}
-                </Typography>
-              )}
+              // renderOption={(props, option) => (
+              //   <Typography {...props} key={option.mbr_no || option.id}>
+              //     {option.names || option.name || option.full_name}
+              //   </Typography>
+              // )}
+
+              renderOption={(props, option) => {
+                let display = option.names || option.name || option.full_name;
+                if (display === option.full_name) {
+                  display = option.full_name;
+                } else {
+                  display = `${option.names || option.name} (${
+                    option.mbr_no || option.id
+                  })`;
+                }
+                return (
+                  <Box key={option.mbr_no || option.id}>
+                    <p {...props}>{display}</p>
+                  </Box>
+                );
+              }}
               onChange={(e, newValue) => {
                 onChange(newValue.map((option) => option.mbr_no || option.id));
               }}
@@ -63,6 +81,12 @@ const RHFAutoComplete = ({
                   }}
                 />
               )}
+              sx={{
+                "& .MuiFormHelperText-root":{
+                  fontSize:"0.855rem",
+                  fontWeight:"light"
+                },
+              }}
             />
           );
         }}
@@ -92,9 +116,9 @@ const RHFAutoComplete = ({
               if (display === option.full_name) {
                 display = option.full_name;
               } else {
-                display = `${option.names || option.lendee} (${
+                display = `${option.names || option.lendee} [${
                   option.mbr_no || option.member
-                })`;
+                }]`;
               }
               return (
                 <Box key={option.mbr_no || option.id}>
@@ -107,6 +131,7 @@ const RHFAutoComplete = ({
             }}
             id="controllable-states"
             options={options}
+            autoSelect
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -124,6 +149,12 @@ const RHFAutoComplete = ({
                       {params.InputProps.endAdornment}
                     </>
                   ),
+                }}
+                sx={{
+                  "& .MuiFormHelperText-root":{
+                    fontSize:"0.855rem",
+                    fontWeight:"light"
+                  },
                 }}
               />
             )}
