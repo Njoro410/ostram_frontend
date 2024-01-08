@@ -6,6 +6,7 @@ import { React } from "react"
 const RequireAuth = () => {
     const token = useSelector(selectCurrentToken)
     const location = useLocation()
+   
 
     return (
         token

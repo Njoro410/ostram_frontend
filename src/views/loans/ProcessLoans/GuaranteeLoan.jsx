@@ -318,6 +318,7 @@ const GuaranteeLoan = () => {
                 control={control}
                 name="text"
                 padding={3}
+                defaultValue={true}
               />
               <RHFCheckbox
                 disabled={selectedRow?.guarantors_list.length === 0}
@@ -325,6 +326,7 @@ const GuaranteeLoan = () => {
                 control={control}
                 name="clear"
                 padding={3}
+                defaultValue={true}
               />
             </Box>
             <Button

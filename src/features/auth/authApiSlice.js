@@ -4,14 +4,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         login: builder.mutation({
             query: credentials => ({
-                url: '/auth/login',
+                url: '/auth/login/',
                 method: 'POST',
                 body: credentials,
                 headers: {
                     "Content-Type": "application/json"
                 },
             }),
-            providesTags: ['User'],
+            invalidatesTags: ['User'],
             transformResponse: async (response, meta) => {
                 // Extract the value of the "X-CSRF-Token" header from the response
 

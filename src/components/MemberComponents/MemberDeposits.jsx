@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CustomSpinner from "../CustomSpinner";
-import { useGetMemberDepositsQuery } from "../../services/deposits/depositSlice";
+import { useLazyGetMemberDepositsQuery } from "../../services/deposits/depositSlice";
 import { Box, Divider, Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import AccountSplineArea from "../../charts/AccountSplineArea";
@@ -12,7 +12,7 @@ const MemberDeposits = ({ mbr_no }) => {
 
   // fetch deposits
   const [depositsData, setDeposits] = useState([]);
-  const { data: deposits, isLoading } = useGetMemberDepositsQuery(mbr_no);
+  const { data: deposits, isLoading } = useLazyGetMemberDepositsQuery(mbr_no);
   useEffect(() => {
     if (deposits) {
       setDeposits(deposits.data);

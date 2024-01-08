@@ -8,17 +8,58 @@ export const savingsSlices = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getSavingsAccounts: builder.query({
+      query: () => ({
+        url: `/savings/saving_accounts/`,
+        method: "GET",
+      }),
+    }),
+
     addMemberSavings: builder.mutation({
       query: ({ memberId, data }) => ({
         url: `/savings/add_savings/${memberId}/`,
         method: "POST",
-        body: data,
+        body: data, 
         headers: {
           "Content-Type": "application/json",
         },
       }),
     }),
+
+    WithdrawMemberSavings: builder.mutation({
+      query: ({ memberId, data }) => ({
+        url: `/savings/withdraw_savings/${memberId}/`,
+        method: "POST",
+        body: data, 
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
+    getSavingHistory: builder.query({
+      query: (mbr_no) => ({
+        url: `/savings/members/${mbr_no}/savings_received/`,
+        method: "GET",
+      })
+    }),
+
+    getSavingWithdrawal: builder.query({
+      query: (mbr_no) => ({
+        url: `/savings/members/${mbr_no}/savings_withdrawals/`,
+        method: "GET",
+      })
+    })
+
+
   }),
 });
 
-export const { useGetMemberSavingsQuery, useAddMemberSavingsMutation } = savingsSlices;
+export const {
+  useLazyGetMemberSavingsQuery,
+  useGetSavingsAccountsQuery,
+  useAddMemberSavingsMutation,
+  useWithdrawMemberSavingsMutation,
+  useLazyGetSavingHistoryQuery,
+  useLazyGetSavingWithdrawalQuery } = savingsSlices;

@@ -2,13 +2,13 @@ import { Checkbox, FormControlLabel, useTheme } from "@mui/material";
 import React from "react";
 import { Controller } from "react-hook-form";
 
-const RHFCheckbox = ({ control, label, name, disabled, padding }) => {
+const RHFCheckbox = ({ control, label, name, disabled, padding, defaultValue }) => {
   const theme = useTheme();
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={true}
+      defaultValue={defaultValue}
       render={({ field }) => (
         <FormControlLabel
           control={

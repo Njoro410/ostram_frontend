@@ -40,6 +40,7 @@ const ApplyLoan = () => {
   const { data: status } = useGetLoanStatusQuery();
 
   const { data: types } = useGetLoanTypesQuery();
+  console.log(types)
 
   const { data: members, isFetching } = useGetMembersQuery();
 

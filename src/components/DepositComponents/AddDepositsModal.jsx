@@ -13,20 +13,24 @@ import {
 import React from "react";
 import RHFAutoComplete from "../RHFAutoComplete";
 import DateSelector from "../DateSelector";
+import RHFSelect from "../RHFSelect";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useGetMembersQuery } from "../../services/members/memberSlices";
 import { AddSavingsSchema } from "../../utils/validationSchema";
 import {
-  useAddMemberSavingsMutation,
-  useGetSavingsAccountsQuery,
-} from "../../services/savings/savingsSlice";
+  useAddMemberDepositsMutation,
+  useGetDepositsAccountsQuery,
+} from "../../services/deposits/depositSlice";
 
-const AddSavingsModal = ({ open, onClose }) => {
+const AddDepositsModal = ({ open, onClose }) => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
-  const { data: members, isFetching } = useGetSavingsAccountsQuery();
+  const { data: members, isFetching } = useGetDepositsAccountsQuery();
 
-  const [addMemberSavings, { isLoading }] = useAddMemberSavingsMutation();
+  console.log(members);
+
+  const [addMemberSavings, { isLoading }] = useAddMemberDepositsMutation();
 
   const {
     register,
@@ -60,7 +64,7 @@ const AddSavingsModal = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md">
-      <DialogTitle>Add Savings</DialogTitle>
+      <DialogTitle>Add Deposits</DialogTitle>
       <DialogContent>
         <Box
           mt="20px"
@@ -89,6 +93,12 @@ const AddSavingsModal = ({ open, onClose }) => {
               isFetch={isFetching}
               multiple={false}
             />
+            <DateSelector
+              name="received_date"
+              label="Received Date"
+              control={control}
+              errors={errors?.received_date}
+            />
             <TextField
               margin="normal"
               required
@@ -101,13 +111,6 @@ const AddSavingsModal = ({ open, onClose }) => {
               {...register("received_amount")}
               error={!!errors?.received_amount}
               helperText={errors.received_amount?.message}
-            />
-
-            <DateSelector
-              name="received_date"
-              label="Received Date"
-              control={control}
-              errors={errors?.received_date}
             />
           </Box>
         </Box>
@@ -140,4 +143,4 @@ const AddSavingsModal = ({ open, onClose }) => {
   );
 };
 
-export default AddSavingsModal;
+export default AddDepositsModal;

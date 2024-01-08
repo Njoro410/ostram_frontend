@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CustomSpinner from "../CustomSpinner";
-import { useGetMemberSavingsQuery } from "../../services/savings/savingsSlice";
+import { useLazyGetMemberSavingsQuery } from "../../services/savings/savingsSlice";
 import { Box, Button, Divider, Typography, useMediaQuery } from "@mui/material";
 import FlexBetween from "../FlexBetween";
 import Header from "../Header";
@@ -17,7 +17,7 @@ const MemberSavings = ({ mbr_no }) => {
   const theme = useTheme();
   // fetch savings
   const [savingsData, setSavings] = useState([]);
-  const { data: savings, isLoading } = useGetMemberSavingsQuery(mbr_no);
+  const { data: savings, isLoading } = useLazyGetMemberSavingsQuery(mbr_no);
   useEffect(() => {
     if (savings) {
       setSavings(savings.data);

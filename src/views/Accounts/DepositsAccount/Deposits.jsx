@@ -8,18 +8,18 @@ import DepositsDashboard from "./DepositDashboard";
 
 
 const Deposits = () => {
-  const [activeSavingsTab, setActiveSavingsTab] = useState(0);
+  const [activeDepositsTab, setActiveDepositsTab] = useState(0);
 
-  const handleSavingsTabChange = (event, newValue) => {
-    setActiveSavingsTab(newValue);
+  const handleDepositsTabChange = (event, newValue) => {
+    setActiveDepositsTab(newValue);
   };
 
-  const savingsTabs = [
+  const depositsTabs = [
     {
       label: "Savings Dashboard",
     },
     {
-      label: "Member Savings",
+      label: "Member Deposits",
     },
 
   ];
@@ -27,12 +27,12 @@ const Deposits = () => {
   return (
     <Box m="5.5rem 2.5rem">
       <CustomTabs
-        tabs={savingsTabs}
-        value={activeSavingsTab}
-        onChange={handleSavingsTabChange}
+        tabs={depositsTabs}
+        value={activeDepositsTab}
+        onChange={handleDepositsTabChange}
       />
-      {activeSavingsTab === 0 && <DepositsDashboard />}
-      {activeSavingsTab === 1 && <MemberDeposits />}
+      {activeDepositsTab === 0 && <DepositsDashboard />}
+      {activeDepositsTab === 1 && <MemberDeposits />}
 
     </Box>
   );

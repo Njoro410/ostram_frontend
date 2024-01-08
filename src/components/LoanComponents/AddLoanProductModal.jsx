@@ -44,7 +44,7 @@ const AddLoanProductModal = ({ open, onClose }) => {
     formState: { errors },
     reset,
     control,
-  } = useForm({
+  } = useForm({ 
     resolver: yupResolver(loanProductSchema),
   });
 

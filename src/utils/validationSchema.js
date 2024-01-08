@@ -9,6 +9,11 @@ export const loginValidationSchema = Yup.object().shape({
     .required('Password is required'),
 });
 
+export const authenticatorValidationSchema = Yup.object().shape({
+  otp: Yup.string()
+    .required('Code is required'),
+});
+
 
 export const memberRegisterSchema = Yup.object().shape({
   names: Yup.string()
@@ -165,6 +170,15 @@ export const AddSavingsSchema = Yup.object().shape({
 
 })
 
+export const WithdrawSavingsSchema = Yup.object().shape({
+  account: Yup.string()
+    .required("Account is required"),
+  withdrawn_amount: Yup.string().required("Amount is required"),
+  withdrawn_date: Yup.string()
+    .required("Received date is required"),
+
+})
+
 export const checkStaffDetailsSchema = Yup.object().shape({
   staff: Yup.string()
     .required("Staff name is required"),
@@ -252,3 +266,67 @@ export const customCalcSchema = Yup.object().shape({
     .required("Interest rate is required")
     .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
 });
+
+
+export const individualSavings = Yup.object().shape({
+  member: Yup.string()
+    .required("Member is required"),
+})
+
+export const individualDeposits = Yup.object().shape({
+  member: Yup.string()
+    .required("Member is required"),
+})
+
+
+export const contributionsSchema = Yup.object().shape({
+  member: Yup.string()
+    .required("Member is required"),
+  total_amount: Yup.string()
+    .required("Total amount is required")
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  collection_date: Yup.string()
+    .required("Collection Date is required"),
+  received_by: Yup.string()
+    .required("Received by is required"),
+  savings: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  deposits: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  loan_interest: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  loan_repayment: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  maintenance_fee: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  late_charges: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  registration_fee: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  loan_processing_fee: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  loan_insurance_fee: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  affidavit_fee: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  loan_form: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  passbook: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+  general_charges: Yup.string()
+    .notRequired()
+    .test('is-number', 'Can only be a number', (value) => !value || !isNaN(value)),
+
+})

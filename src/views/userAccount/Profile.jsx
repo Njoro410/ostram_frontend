@@ -5,9 +5,10 @@ import FlexBetween from "../../components/FlexBetween";
 import Header from "../../components/Header";
 import CustomTabs from "../../components/CustomTabs";
 import PersonalInformation from "./PersonalInformation";
-import ChangePassword from "./ChangePassword";
+import ChangePassword from "./Security/ChangePassword";
 import UpdateProfile from "./UpdateProfile";
 import ManageUsers from "../settings/StaffManagement/ManageUsers";
+import Security from "./Security/Security";
 
 const Profile = () => {
   const { user, isLoading, isSuccess, isError, error } = useUser();
@@ -31,16 +32,35 @@ const Profile = () => {
     {
       label: "Security",
     },
-    // {
-    //   label: "Manage Users",
-    // },
   ];
+
+  const [activeSecurityTab, setActiveSecurityTab] = useState(0);
+
+  const handleSecurityTabChange = (event, newValue) => {
+    setActiveSecurityTab(newValue);
+  };
+
+  const securityTabs = [
+    {
+      label: "Change Password",
+    },
+    {
+      label: "Enable 2FA",
+    },
+  ];
+
   return (
     <Box m="5.5rem 2.5rem">
       <FlexBetween>
         <Header
           title={user?.results?.first_name?.toUpperCase()}
           subtitle="Welcome to your profile"
+        />
+
+        <CustomTabs
+          tabs={activeProfileTab === 2 ? securityTabs : null}
+          value={activeSecurityTab}
+          onChange={handleSecurityTabChange}
         />
       </FlexBetween>
 
@@ -96,8 +116,7 @@ const Profile = () => {
             <Box gridColumn="span 12">
               {activeProfileTab === 0 && <PersonalInformation user={user} />}
               {activeProfileTab === 1 && <UpdateProfile />}
-              {activeProfileTab === 2 && <ChangePassword />}
-              {/* {activeProfileTab === 3 && <ManageUsers />} */}
+              {activeProfileTab === 2 && <Security user={user} activeSecurityTab={activeSecurityTab}/>}
             </Box>
           </Box>
         </Box>

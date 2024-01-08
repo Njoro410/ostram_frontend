@@ -381,6 +381,7 @@ const DisburseLoan = () => {
               control={control}
               name="text"
               padding={3}
+              defaultValue={true}
             />
             {selectedRow?.status_name === "DISBURSED" ? (
               <Button

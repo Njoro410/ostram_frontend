@@ -4,7 +4,7 @@ export const contributionsSlices = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     makeContributions: builder.mutation({
       query: (credentials) => ({
-        url: "/contributions/daily_contributions/",
+        url: "/contributions/add_contributions/",
         method: "POST",
         body: credentials,
         headers: {
@@ -29,5 +29,8 @@ export const contributionsSlices = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetContributionsQuery, useGetMemberContributionsQuery } =
+export const {
+  useMakeContributionsMutation,
+  useGetContributionsQuery,
+  useGetMemberContributionsQuery } =
   contributionsSlices;

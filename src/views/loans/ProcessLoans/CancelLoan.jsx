@@ -380,6 +380,7 @@ const CancelLoan = () => {
               control={control}
               name="text"
               padding={3}
+              defaultValue={true}
             />
             {selectedRow?.status_name == "CANCELLED" ? (
               <Button

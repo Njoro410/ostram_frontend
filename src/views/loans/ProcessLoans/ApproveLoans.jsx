@@ -148,6 +148,7 @@ const ApproveLoans = () => {
         onSubmit={handleSubmit(onSubmitHandler)}
         p="1rem"
         mt="1rem"
+        
         sx={{
           "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
         }}
@@ -380,6 +381,7 @@ const ApproveLoans = () => {
                 selectedRow?.lendee
               )} via text message`}
               control={control}
+              defaultValue={true}
               name="text"
               padding={3}
             />

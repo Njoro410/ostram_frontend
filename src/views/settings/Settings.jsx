@@ -71,7 +71,7 @@ const Settings = () => {
     {
       label: "Add Loan Document Type",
     },
-    { label: "Update Residential Areas" },
+    // { label: "Update Residential Areas" },
   ];
   return (
     <Box m="5.5rem 2.5rem">
@@ -150,7 +150,7 @@ const Settings = () => {
           {activeSettingsTab === 1 && (
             <ManageBranches activeManageBranchTab={activeManageBranchTab} />
           )}
-          {activeSettingsTab === 2 && <Residential />}
+          {/* {activeSettingsTab === 2 && <Residential />} */}
         </Box>
       </Box>
     </Box>

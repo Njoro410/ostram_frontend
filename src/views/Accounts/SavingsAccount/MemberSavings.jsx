@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Typography, useMediaQuery } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FlexBetween from "../../../components/FlexBetween";
 import Header from "../../../components/Header";
 import { useTheme } from "@emotion/react";
@@ -10,13 +10,82 @@ import ZoomableTimeseries from "../../../charts/MixedYAxis";
 import BarChart from "../../../charts/BarChart";
 import MixedYAxis from "../../../charts/MixedYAxis";
 import AddSavingsModal from "../../../components/SavingsComponents/AddSavingsModal";
+import RHFAutoComplete from "../../../components/RHFAutoComplete";
+import { useGetMembersQuery } from "../../../services/members/memberSlices";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { individualSavings } from "../../../utils/validationSchema";
+import {
+  useLazyGetMemberSavingsQuery,
+  useLazyGetSavingHistoryQuery,
+  useLazyGetSavingWithdrawalQuery,
+} from "../../../services/savings/savingsSlice";
+import WithdrawSavingsModal from "../../../components/SavingsComponents/WithdrawSavingsModal";
 
 const MemberSavings = () => {
   const theme = useTheme();
   const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
   const [openModal, setOpenModal] = useState(false);
+  const [openModal2, setOpenModal2] = useState(false);
   const handleModalOpen = () => setOpenModal(true);
+  const handleModalOpen2 = () => setOpenModal2(true);
   const handleModalClose = () => setOpenModal(false);
+  const handleModalClose2 = () => setOpenModal2(false);
+  const { data: members, isFetching } = useGetMembersQuery();
+  const [getMemberSavings] = useLazyGetMemberSavingsQuery();
+  const [getSavingHistory] = useLazyGetSavingHistoryQuery();
+  const [getSavingWithdrawal] = useLazyGetSavingWithdrawalQuery();
+  const [memberId, setMemberId] = useState("");
+  const [triggerFetch, setTriggerFetch] = useState(false);
+  const [savingsDetails, setSavingDetails] = useState([]);
+  const [savingsHistory, setSavingHistory] = useState([]);
+  const [savingsWithdrawal, setSavingWithdrawal] = useState([]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    control,
+  } = useForm({
+    resolver: yupResolver(individualSavings),
+  });
+
+  const onSubmitHandler = (data, e) => {
+    e.preventDefault();
+    setMemberId(data.member);
+    setTriggerFetch(true);
+  };
+
+  useEffect(() => {
+    if (triggerFetch) {
+      getMemberSavings(memberId).then((response) => {
+        console.log(response.data);
+        setSavingDetails(response.data);
+      });
+      setTriggerFetch(false);
+    }
+  }, [triggerFetch]);
+
+  useEffect(() => {
+    if (triggerFetch) {
+      getSavingHistory(memberId).then((response) => {
+        console.log(response.data);
+        setSavingHistory(response.data);
+      });
+      setTriggerFetch(false);
+    }
+  }, [triggerFetch]);
+
+  useEffect(() => {
+    if (triggerFetch) {
+      getSavingWithdrawal(memberId).then((response) => {
+        console.log(response.data);
+        setSavingWithdrawal(response.data);
+      });
+      setTriggerFetch(false);
+    }
+  }, [triggerFetch]);
 
   const series1 = [
     {
@@ -39,7 +108,9 @@ const MemberSavings = () => {
   return (
     <Box mt="1rem">
       <AddSavingsModal open={openModal} onClose={handleModalClose} />
-      <FlexBetween>
+      <WithdrawSavingsModal open={openModal2} onClose={handleModalClose2} />
+      {/* <FlexBetween> */}
+      <Box display="flex" justifyContent="space-between">
         <Header
           title="MEMBER SAVINGS"
           subtitle="Comprehensive detail about member savings"
@@ -63,8 +134,71 @@ const MemberSavings = () => {
           >
             Add Savings
           </Button>
+        {/* </Box>
+
+        <Box> */}
+          <Button
+            onClick={handleModalOpen2}
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.background.alt,
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+              mb: "25px",
+              ml: "10px",
+              "&:hover": {
+                backgroundColor: "#fff",
+                color: "#3c52b2",
+              },
+            }}
+          >
+            WIthdraw Savings
+          </Button>
+        </Box></Box>
+      {/* </FlexBetween> */}
+      <Box
+        mt="20px"
+        display="grid"
+        gridTemplateColumns="repeat(12, 1fr)"
+        component="form"
+        onSubmit={handleSubmit(onSubmitHandler)}
+        gap="20px"
+      >
+        {/* <FlexBetween> */}
+        <Box gridColumn="span 8">
+          <RHFAutoComplete
+            options={members?.results || []}
+            control={control}
+            name="member"
+            placeholder="Member Name"
+            error={!!errors?.member}
+            helperText={errors?.member?.message}
+            isFetch={isFetching}
+            multiple={false}
+          />
         </Box>
-      </FlexBetween>
+        <Box gridColumn="span 4">
+          <Button
+            type="submit"
+            sx={{
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.background.alt,
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "12px 25px",
+              "&:hover": {
+                backgroundColor: "#fff",
+                color: "#3c52b2",
+              },
+            }}
+          >
+            View Account
+          </Button>
+        </Box>
+      </Box>
+
+      {/* {savingsDetails.length != 0 ? ( */}
       <Box
         mt="20px"
         display="grid"
@@ -73,7 +207,9 @@ const MemberSavings = () => {
         pb="5rem"
         gap="20px"
         sx={{
-          "& > div": { gridColumn: isNonMediumScreens ? undefined : "span 12" },
+          "& > div": {
+            gridColumn: isNonMediumScreens ? undefined : "span 12",
+          },
         }}
       >
         <Box gridColumn="span 8" borderRadius="0.55rem" height="16rem">
@@ -116,7 +252,7 @@ const MemberSavings = () => {
                 }}
                 variant="h2"
               >
-                Ksh 37,000
+                Ksh 65,000
               </Typography>
               <AccountSplineArea series={series1} />
             </Box>
@@ -145,7 +281,7 @@ const MemberSavings = () => {
                   ml: 3,
                   // mt: 1,
                   color: theme.palette.secondary[400],
-                  fontSize:"2rem"
+                  fontSize: "2rem",
                 }}
                 variant="p"
               >
@@ -223,6 +359,9 @@ const MemberSavings = () => {
           <MixedYAxis />
         </Box>
       </Box>
+      {/* ) : (
+        ""
+      )} */}
     </Box>
   );
 };

@@ -25,6 +25,10 @@ const LoanProducts = () => {
     // error,
   } = useGetLoanTypesQuery();
 
+  const labels = ["Wezesha", "Self", "Development"];
+
+  const series = [24000,50000,48000];
+
   return (
     <Box mt="1rem">
       <AddLoanProductModal open={openModal} onClose={handleModalClose} />
@@ -90,7 +94,7 @@ const LoanProducts = () => {
             borderRadius: 1,
           }}
         >
-          <PieChart />
+          <PieChart labels={labels} series={series} height={350} />
         </Box>
         {loan_types?.results.map((type) => (
           <Box

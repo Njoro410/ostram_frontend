@@ -37,7 +37,7 @@ export const authorizationSlices = apiSlice.injectEndpoints({
         },
       }),
     }),
-    
+
 
     getAllPerms: builder.query({
       query: () => ({
@@ -73,7 +73,31 @@ export const authorizationSlices = apiSlice.injectEndpoints({
           "Content-Type": "application/json",
         },
       })
-    })
+    }),
+
+    enable2FA: builder.mutation({
+      query: ({ data }) => ({
+        url: "/auth/set_two_factor_auth/",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ['User'],
+    }),
+
+    verify2FA: builder.mutation({
+      query: ({ data }) => ({
+        url: "/auth/verify_two_factor/",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+
   }),
 });
 
@@ -85,5 +109,7 @@ export const {
   useGetAllPermsQuery,
   useGetAllPermGroupsQuery,
   useCreatePermissionGroupMutation,
-  useDeletePermissionGroupMutation
+  useDeletePermissionGroupMutation,
+  useEnable2FAMutation,
+  useVerify2FAMutation
 } = authorizationSlices;

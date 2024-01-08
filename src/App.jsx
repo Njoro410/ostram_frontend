@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { themeSettings } from "../src/utils/theme";
 import Dashboard from "./views/dashboard";
 import Layout from "./views/layout";
-import Login from "./pages/Login";
+import Login from "./pages/Login/SignInMain";
 import RequireAuth from "./features/auth/RequireAuth";
 import MemberList from "./views/Members/MemberList";
 import RegisterMember from "./views/Members/RegisterMember";

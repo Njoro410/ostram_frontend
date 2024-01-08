@@ -378,6 +378,7 @@ const RejectLoan = () => {
                 selectedRow?.lendee
               )} via text message`}
               control={control}
+              defaultValue={true}
               name="text"
               padding={3}
             />
