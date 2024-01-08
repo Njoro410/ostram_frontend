@@ -31,6 +31,7 @@ import InstallmentsCard from "../../components/LoanComponents/InstallmentsCard";
 import PayLoanModal from "../../components/LoanComponents/PayLoanModal";
 import LoanDetailsTable from "../../components/LoanComponents/LoanDetailsTable";
 import formatToKes from "../../utils/formatToKes";
+import CustomLinearProgress from "../../components/CustomLinearProgress";
 
 const GlassCard = styled(Card)`
   background-color: rgba(87, 86, 86, 0.25);
@@ -64,7 +65,7 @@ const ViewLoan = () => {
   const { data: members, isFetching } = useGetMembersQuery();
   const [getLoanInstallmentsById] = useLazyGetLoanInstallmentsByIdQuery();
   const [getMemberLoans, { isLoading }] = useLazyGetMemberLoansQuery();
-  const [getLoanById] = useLazyGetLoanByIdQuery();
+  const [getLoanById, { isLoading: isLoanLoading }] = useLazyGetLoanByIdQuery();
 
   const [openModal, setOpenModal] = useState(false);
   const handleModalOpen = () => setOpenModal(true);
@@ -90,6 +91,8 @@ const ViewLoan = () => {
     setLoanId(loan_Id);
   };
 
+  console.log(isLoanLoading);
+
   useEffect(() => {
     if (loanId) {
       Promise.all([getLoanById(loanId), getLoanInstallmentsById(loanId)])
@@ -109,7 +112,6 @@ const ViewLoan = () => {
       setTriggerFetch(false);
     }
   }, [triggerFetch]);
-
 
   return (
     <Box mt="1rem">
@@ -192,7 +194,17 @@ const ViewLoan = () => {
                 Submit
               </Button>
             </Box>
-            {selectedRow ? (
+            {isLoanLoading ? (
+              <Box
+                gridColumn="span 12"
+                borderRadius="0.55rem"
+                marginTop={2}
+                marginRight={2}
+              >
+                {" "}
+                <CustomLinearProgress />
+              </Box>
+            ) : selectedRow ? (
               <Box
                 gridColumn="span 12"
                 borderRadius="0.55rem"
@@ -653,7 +665,20 @@ const ViewLoan = () => {
                 </GlassCard>
               </Box>
             ) : (
-              ""
+              <Box
+                gridColumn="span 12"
+                borderRadius="0.55rem"
+                marginTop={2}
+                marginRight={2}
+              >
+                <Typography
+                  sx={{ fontWeight: "bold" }}
+                  variant="h4"
+                  gutterBottom
+                >
+                  Select a loan from the right pane
+                </Typography>
+              </Box>
             )}
 
             <Box

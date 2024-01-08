@@ -53,40 +53,45 @@ const LoanDetailsTable = ({ loans, onRowClick, isLoading }) => {
       }}
       component={Paper}
     >
-      {isLoading ? <CustomLinearProgress/>:      <Table aria-label="member loans table" stickyHeader>
-        <TableHead>
-          <StyledTableRow>
-            <StyledTableCell align="center">ID</StyledTableCell>
-            <StyledTableCell align="center">Status</StyledTableCell>
-            <StyledTableCell align="center">Principal Amount</StyledTableCell>
-            <StyledTableCell align="center">Remaining Balance</StyledTableCell>
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
-          {loans?.map((loan) => (
-            <StyledTableRow
-              key={loan.id}
-              onClick={() => onRowClick(loan.id)}
-              sx={{
-                "&:last-child tg,&:last-child th": { border: 0 },
-                cursor: "pointer",
-              }}
-            >
-              <StyledTableCell align="center">{loan.id}</StyledTableCell>
+      {isLoading ? (
+        <CustomLinearProgress />
+      ) : (
+        <Table aria-label="member loans table" stickyHeader>
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell align="center">ID</StyledTableCell>
+              <StyledTableCell align="center">Status</StyledTableCell>
+              <StyledTableCell align="center">Principal Amount</StyledTableCell>
               <StyledTableCell align="center">
-                {loan.status_name}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {loan.principal_amount}
-              </StyledTableCell>
-              <StyledTableCell align="center">
-                {loan.remaining_balance}
+                Remaining Balance
               </StyledTableCell>
             </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>}
-
+          </TableHead>
+          <TableBody>
+            {loans?.map((loan) => (
+              <StyledTableRow
+                key={loan.id}
+                onClick={() => onRowClick(loan.id)}
+                sx={{
+                  "&:last-child tg,&:last-child th": { border: 0 },
+                  cursor: "pointer",
+                }}
+              >
+                <StyledTableCell align="center">{loan.id}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {loan.status_name}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {loan.principal_amount}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {loan.remaining_balance}
+                </StyledTableCell>
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </TableContainer>
   );
 };
